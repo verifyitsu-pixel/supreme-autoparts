@@ -60,7 +60,7 @@ export function Navbar() {
         <div className="max-w-[1280px] mx-auto px-4 flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src="/manus-storage/supreme-logo_94a05c1f.png" alt="Supreme Autoparts Logo" className="h-14 md:h-16 w-auto object-contain" />
+            <img src="/manus-storage/supreme-logo-final_8b909b5d.png" alt="Supreme Autoparts Logo" className="h-14 md:h-16 w-auto object-contain" />
           </Link>
 
           {/* Desktop nav */}
