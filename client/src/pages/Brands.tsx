@@ -127,7 +127,7 @@ export default function Brands() {
                   CONTACT US
                 </Link>
                 <a
-                  href="https://wa.me/254714498451"
+                  href="https://wa.me/254714498451?text=Hello,%20I%20need%20auto%20spare%20parts"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-[#25D366] text-white font-bold uppercase tracking-widest text-xs px-6 py-3 hover:bg-[#1DA851] transition-colors flex items-center justify-center gap-2"
