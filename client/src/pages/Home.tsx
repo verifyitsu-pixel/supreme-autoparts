@@ -106,9 +106,6 @@ function HeroSlider() {
 
       {/* Slides */}
       <div className="relative z-10 max-w-[1280px] mx-auto px-6 flex flex-col justify-center" style={{ minHeight: 520 }}>
-        {/* Large brand title */}
-        <p className="text-white/80 font-black text-xl md:text-2xl lg:text-3xl tracking-[0.35em] uppercase mb-5" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>SUPREME AUTOPARTS</p>
-
         {SLIDES.map((slide, i) => (
           <div
             key={i}
