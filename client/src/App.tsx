@@ -9,6 +9,9 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Products from "./pages/Products";
 import Brands from "./pages/Brands";
+import Terms from "./pages/Terms";
+import RefundPolicy from "./pages/RefundPolicy";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 function Router() {
   return (
@@ -18,6 +21,9 @@ function Router() {
       <Route path="/contact" component={Contact} />
       <Route path="/products" component={Products} />
       <Route path="/brands" component={Brands} />
+      <Route path="/terms-and-conditions" component={Terms} />
+      <Route path="/refund-policy" component={RefundPolicy} />
+      <Route path="/privacy-policy" component={PrivacyPolicy} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
