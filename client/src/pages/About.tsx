@@ -1,183 +1,154 @@
 import { Navbar, Footer, FloatingButtons } from "@/components/Layout";
-import { Link } from "wouter";
-import { CheckCircle } from "lucide-react";
-
-// Parts supplier brand logos for the about page
-const PART_BRANDS = [
-  { name: "ZF", src: "/manus-storage/brand-zf_f563f099.png" },
-  { name: "Wahler", src: "/manus-storage/brand-wahler_5cba2942.jpg" },
-  { name: "Valeo", src: "/manus-storage/brand-valeo_e32920c8.png" },
-  { name: "Vaico", src: "/manus-storage/brand-vaico_9d715da1.jpg" },
-  { name: "TRW", src: "/manus-storage/brand-trw_1532b379.jpg" },
-  { name: "Trucktec", src: "/manus-storage/brand-trucktec_93b6c5ec.jpg" },
-  { name: "Shell", src: "/manus-storage/brand-shell_3f58e290.png" },
-  { name: "Remsa", src: "/manus-storage/brand-remsa_e88ecde0.png" },
-  { name: "Osram", src: "/manus-storage/brand-osram_51e5f6a5.jpg" },
-  { name: "Nissens", src: "/manus-storage/brand-nissens_32bf6f2d.jpg" },
-  { name: "Mobil 1", src: "/manus-storage/brand-mobil1_82c40baa.jpg" },
-  { name: "Meyle", src: "/manus-storage/brand-meyle_96ec8d61.png" },
-  { name: "Magneti Marelli", src: "/manus-storage/brand-magneti_2eb1f068.png" },
-  { name: "Lemforder", src: "/manus-storage/brand-lemforder_31697e15.jpg" },
-  { name: "Hella", src: "/manus-storage/brand-hella_bb2643e2.jpg" },
-  { name: "Castrol", src: "/manus-storage/brand-castrol_bc5092ce.jpg" },
-  { name: "Bosch", src: "/manus-storage/brand-bosch_27d7b8b6.png" },
-  { name: "Behr", src: "/manus-storage/brand-behr_118e71a7.jpg" },
-];
-
-const TESTIMONIALS = [
-  {
-    name: "James Mwangi",
-    text: "I needed spare parts for my Range Rover and found exactly what I was looking for at Supreme Autoparts. The staff were incredibly knowledgeable and helpful. Highly recommend!",
-    rating: 5,
-  },
-  {
-    name: "Sarah Njoroge",
-    text: "Best auto parts supplier in Nairobi! They had the exact BMW parts I needed and delivered quickly. Prices are very competitive.",
-    rating: 5,
-  },
-  {
-    name: "Peter Ochieng",
-    text: "Supreme Autoparts has been my go-to for all my Toyota parts. Quality is always top-notch and the team is very professional.",
-    rating: 5,
-  },
-  {
-    name: "Grace Wanjiku",
-    text: "Excellent service and genuine parts. I've been a customer for 3 years and they never disappoint. Highly recommended for Mercedes parts.",
-    rating: 5,
-  },
-];
+import { ShieldCheck, Users, Truck, Award, CheckCircle2, Settings, History, Globe } from "lucide-react";
 
 export default function About() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
       <main className="flex-1">
-        {/* Page Hero */}
-        <div
-          className="relative flex items-center justify-center"
-          style={{
-            minHeight: 280,
-            background: "linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=1600&q=80') center/cover no-repeat",
-          }}
-        >
-          <div className="text-center text-white z-10">
-            <h1 className="text-4xl md:text-5xl font-black" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>About</h1>
-            <p className="mt-2 text-gray-300 text-sm">
-              <Link href="/" className="hover:text-white">Home</Link>
-              <span className="mx-2">›</span>
-              <span>About Us</span>
-            </p>
+        {/* Hero Section */}
+        <section className="bg-gray-900 py-24 md:py-32 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-1/2 h-full bg-[oklch(0.45_0.22_27)] opacity-10 skew-x-12 translate-x-1/4" />
+          <div className="max-w-[1280px] mx-auto px-6 relative z-10">
+            <div className="max-w-3xl">
+              <p className="text-[oklch(0.45_0.22_27)] font-black text-[10px] uppercase tracking-[0.4em] mb-4">Our Legacy & Mission</p>
+              <h1 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tight mb-8 leading-[0.9]" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
+                Defining Automotive Standards Since 1987
+              </h1>
+              <p className="text-gray-400 text-lg md:text-xl leading-relaxed max-w-2xl">
+                Supreme Autoparts Kenya is more than a supplier; we are a strategic partner to the Kenyan automotive industry, dedicated to the uncompromising supply of genuine and premium OEM components.
+              </p>
+            </div>
           </div>
-        </div>
+        </section>
 
-        {/* About Content */}
-        <section className="py-16 bg-white">
-          <div className="max-w-[1280px] mx-auto px-4">
-            <p className="section-label mb-2">ABOUT US</p>
-            <h2 className="text-3xl md:text-4xl font-black mb-8" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
-              Know about the Home of Genuine Spare Parts
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-              <div>
-                <h3 className="text-xl font-bold mb-4">Trusted Legacy. Proven Performance.</h3>
-                <p className="text-gray-600 leading-relaxed mb-4">
-                  Founded in <strong>1996</strong>, <strong>Supreme Autoparts Kenya</strong> has grown into one of the <strong>leading suppliers and traders</strong> of automotive spare parts in Kenya and beyond. Our company is officially registered and operates as a trusted business entity serving the Kenyan automotive market.
-                </p>
-                <p className="text-gray-600 leading-relaxed mb-4">
-                  With a wide-ranging portfolio that includes <strong>auto spare parts, dry batteries, engine oil</strong>, and various automotive components, we serve customers through <strong>retail, wholesale</strong>, and <strong>re-export</strong> channels.
-                </p>
-                <p className="text-gray-600 leading-relaxed mb-6">
-                  We are part of the <strong>Supreme Group</strong>, a respected business conglomerate established in <strong>1987</strong> by <strong>Mr. KC Usman</strong>, whose deep understanding of the automotive market and entrepreneurial drive laid the foundation for what would become one of the most trusted names in the industry.
-                </p>
-
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  {[
-                    "Genuine OEM Parts",
-                    "Aftermarket Components",
-                    "Dry Batteries",
-                    "Engine Oils & Lubricants",
-                    "Retail & Wholesale",
-                    "Re-export Services",
-                  ].map((item) => (
-                    <div key={item} className="flex items-center gap-2 text-sm text-gray-700">
-                      <CheckCircle size={16} className="text-[oklch(0.45_0.22_27)] shrink-0" />
-                      <span>{item}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <Link href="/contact" className="btn-primary inline-flex">
-                  CONTACT US <span className="ml-1">+</span>
-                </Link>
+        {/* Vision & Mission */}
+        <section className="py-24 border-b border-gray-100">
+          <div className="max-w-[1280px] mx-auto px-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+              <div className="relative">
+                <div className="absolute -inset-4 border-2 border-[oklch(0.45_0.22_27)] opacity-20 rounded-sm" />
+                <img 
+                  src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800&q=80" 
+                  alt="Supreme Autoparts Operations" 
+                  className="relative z-10 w-full rounded-sm shadow-2xl"
+                />
               </div>
-
-              {/* Stats */}
-              <div>
-                <div className="grid grid-cols-2 gap-6 mb-8">
-                  {[
-                    { value: "1987", label: "Founded (Supreme Group)" },
-                    { value: "30+", label: "Years of Experience" },
-                    { value: "10,000+", label: "Parts in Stock" },
-                    { value: "50+", label: "Car Brands Covered" },
-                  ].map((stat) => (
-                    <div key={stat.label} className="bg-gray-50 border border-gray-100 p-6 text-center rounded-sm">
-                      <p className="text-3xl font-black text-[oklch(0.45_0.22_27)]" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>{stat.value}</p>
-                      <p className="text-xs text-gray-500 uppercase tracking-wide mt-1 font-semibold">{stat.label}</p>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="bg-[oklch(0.45_0.22_27)] p-6 text-white rounded-sm">
-                  <h4 className="font-bold text-lg mb-2">Our Mission</h4>
-                  <p className="text-red-100 text-sm leading-relaxed">
-                    To be Kenya's most trusted automotive spare parts supplier by providing genuine, high-quality components at competitive prices — keeping every Kenyan vehicle on the road with confidence.
+              <div className="space-y-12">
+                <div>
+                  <h2 className="text-3xl font-black text-gray-900 uppercase tracking-tight mb-6" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
+                    The Supreme Philosophy
+                  </h2>
+                  <p className="text-gray-600 leading-relaxed mb-6">
+                    In an industry often clouded by counterfeit components, Supreme Autoparts was founded on a singular principle: <strong>Trust through Authenticity</strong>. We understand that every part we supply is critical to the safety and performance of your vehicle.
+                  </p>
+                  <p className="text-gray-600 leading-relaxed">
+                    Our procurement team works directly with manufacturer-authorized distributors in Europe, Japan, and the UAE to ensure that every SKU in our warehouse meets the exact specifications of the original equipment manufacturer.
                   </p>
                 </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                  <div className="flex gap-4">
+                    <div className="w-10 h-10 bg-gray-50 flex items-center justify-center shrink-0 rounded-sm">
+                      <ShieldCheck className="text-[oklch(0.45_0.22_27)]" size={20} />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-gray-900 uppercase text-xs tracking-widest mb-2">Quality First</h4>
+                      <p className="text-xs text-gray-500 leading-relaxed">Zero-tolerance policy for counterfeit or substandard components.</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-4">
+                    <div className="w-10 h-10 bg-gray-50 flex items-center justify-center shrink-0 rounded-sm">
+                      <Globe className="text-[oklch(0.45_0.22_27)]" size={20} />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-gray-900 uppercase text-xs tracking-widest mb-2">Global Network</h4>
+                      <p className="text-xs text-gray-500 leading-relaxed">Direct supply lines from Germany, Japan, and the United Kingdom.</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Parts Brands Grid */}
-        <section className="py-16 bg-gray-50">
-          <div className="max-w-[1280px] mx-auto px-4">
-            <p className="section-label text-center mb-2">OUR SUPPLIERS</p>
-            <h2 className="text-3xl font-black text-center mb-10" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
-              Trusted Parts Brands We Stock
-            </h2>
-            <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
-              {PART_BRANDS.map((brand) => (
-                <div key={brand.name} className="bg-white border border-gray-100 p-4 flex items-center justify-center hover:shadow-md transition-shadow rounded-sm" style={{ height: 90 }}>
-                  <img
-                    src={brand.src}
-                    alt={brand.name}
-                    className="max-h-12 max-w-full object-contain grayscale hover:grayscale-0 transition-all duration-300"
-                  />
-                </div>
-              ))}
+        {/* Stats */}
+        <section className="py-20 bg-gray-50">
+          <div className="max-w-[1280px] mx-auto px-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 text-center">
+              <div>
+                <p className="text-5xl font-black text-gray-900 mb-2" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>35+</p>
+                <p className="text-[10px] font-black text-[oklch(0.45_0.22_27)] uppercase tracking-[0.3em]">Years of Excellence</p>
+              </div>
+              <div>
+                <p className="text-5xl font-black text-gray-900 mb-2" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>15k+</p>
+                <p className="text-[10px] font-black text-[oklch(0.45_0.22_27)] uppercase tracking-[0.3em]">Parts in Stock</p>
+              </div>
+              <div>
+                <p className="text-5xl font-black text-gray-900 mb-2" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>24hr</p>
+                <p className="text-[10px] font-black text-[oklch(0.45_0.22_27)] uppercase tracking-[0.3em]">Rapid Dispatch</p>
+              </div>
+              <div>
+                <p className="text-5xl font-black text-gray-900 mb-2" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>100%</p>
+                <p className="text-[10px] font-black text-[oklch(0.45_0.22_27)] uppercase tracking-[0.3em]">Genuine Guaranteed</p>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Testimonials */}
-        <section className="py-16 bg-white">
-          <div className="max-w-[1280px] mx-auto px-4">
-            <p className="section-label text-center mb-2">TESTIMONIALS</p>
-            <h2 className="text-3xl font-black text-center mb-10" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
-              What Our Customers Say
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {TESTIMONIALS.map((t) => (
-                <div key={t.name} className="bg-gray-50 border border-gray-100 p-6 rounded-sm">
-                  <div className="flex gap-1 mb-3">
-                    {Array.from({ length: t.rating }).map((_, i) => (
-                      <span key={i} className="text-yellow-400 text-lg">★</span>
-                    ))}
-                  </div>
-                  <p className="text-gray-600 text-sm leading-relaxed mb-4 italic">"{t.text}"</p>
-                  <p className="font-bold text-gray-900 text-sm">— {t.name}</p>
+        {/* Why Choose Us Detailed */}
+        <section className="py-24">
+          <div className="max-w-[1280px] mx-auto px-6">
+            <div className="text-center max-w-2xl mx-auto mb-20">
+              <p className="section-label mb-4">The Professional Edge</p>
+              <h2 className="text-4xl font-black text-gray-900 uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
+                Why Leading Garages Choose Supreme
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+              <div className="space-y-6 group">
+                <div className="w-16 h-16 bg-white border border-gray-100 flex items-center justify-center rounded-sm shadow-xl group-hover:bg-[oklch(0.45_0.22_27)] group-hover:text-white transition-all duration-500">
+                  <Settings size={28} />
                 </div>
-              ))}
+                <h3 className="text-2xl font-black uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>Advanced VIN Verification</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  We eliminate the "trial and error" of part ordering. Our team uses factory-level chassis number matching to ensure 100% fitment accuracy before any part leaves our facility.
+                </p>
+              </div>
+              <div className="space-y-6 group">
+                <div className="w-16 h-16 bg-white border border-gray-100 flex items-center justify-center rounded-sm shadow-xl group-hover:bg-[oklch(0.45_0.22_27)] group-hover:text-white transition-all duration-500">
+                  <Truck size={28} />
+                </div>
+                <h3 className="text-2xl font-black uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>Nationwide Logistics</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  Whether you are in Nairobi, Mombasa, Kisumu, or Eldoret, our dedicated logistics network ensures your vehicle is back on the road with minimal downtime.
+                </p>
+              </div>
+              <div className="space-y-6 group">
+                <div className="w-16 h-16 bg-white border border-gray-100 flex items-center justify-center rounded-sm shadow-xl group-hover:bg-[oklch(0.45_0.22_27)] group-hover:text-white transition-all duration-500">
+                  <Award size={28} />
+                </div>
+                <h3 className="text-2xl font-black uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>Specialist Support</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  Our staff consists of automotive technical experts, not just sales clerks. We provide technical insights and advice to ensure you get the right solution for your vehicle.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Call to Action */}
+        <section className="bg-[oklch(0.45_0.22_27)] py-20">
+          <div className="max-w-[1280px] mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-10">
+            <div className="max-w-2xl text-center md:text-left">
+              <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight leading-tight mb-4" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
+                Ready to Experience Supreme Quality?
+              </h2>
+              <p className="text-white/80 font-bold text-sm uppercase tracking-widest">Connect with our parts specialists today for a professional quote.</p>
+            </div>
+            <div className="flex gap-4">
+              <a href="tel:+254714498451" className="bg-white text-[oklch(0.45_0.22_27)] px-10 py-4 font-black text-xs uppercase tracking-[0.2em] hover:bg-gray-100 transition-all shadow-xl">
+                CALL EXPERTS
+              </a>
             </div>
           </div>
         </section>
