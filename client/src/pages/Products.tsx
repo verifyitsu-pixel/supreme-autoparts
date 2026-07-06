@@ -8,18 +8,103 @@ const CATEGORIES = [
   "Transmission & Gear", "Lubricants & Fluids", "Steering Systems", "Suspension & Chassis", "Body Kits & Styling", "Glass & Windscreens", "Certified Used Parts",
 ];
 
-const VEHICLE_MODELS: Record<string, string[]> = {
-  "Toyota": ["Fielder", "Premio", "Prado (J120/J150)", "Hilux (Vigo/Revo)", "Vitz", "Land Cruiser (V8/300)", "Corolla", "Axio", "Probox", "Noah/Voxy", "Harrier", "Rav4", "Hiace", "Wish"],
-  "BMW": ["3 Series (E90/F30/G20)", "5 Series (F10/G30)", "7 Series (F01/G11)", "X1 (E84/F48)", "X3 (F25/G01)", "X5 (E70/F15/G05)", "X6", "1 Series", "M3/M4/M5 Performance"],
-  "Mercedes-Benz": ["C-Class (W204/W205/W206)", "E-Class (W212/W213)", "S-Class (W221/W222)", "GLC-Class", "GLE-Class", "GLA-Class", "G-Wagon", "CLA-Class", "Vito/V-Class", "Sprinter"],
-  "Honda": ["Civic (FD/FB/FC)", "CR-V", "Fit/Jazz", "Accord", "Insight", "Vezel/HR-V", "Stream"],
-  "Ford": ["Ranger (T6/T7/T8)", "Everest", "F-150 Raptor", "Focus", "Fiesta", "Explorer"],
-  "Hyundai": ["Tucson", "Santa Fe", "Elantra", "Accent", "Kona", "Sonata"],
-  "Suzuki": ["Swift", "Vitara", "Jimny", "Alto", "Ertiga"],
-  "Lexus": ["RX350/RX450h", "NX200t/NX300", "LX570/LX600", "IS250/IS300", "ES300h", "GX460"],
-  "Infiniti": ["Q50", "QX70", "QX80", "G37"],
-  "Chevrolet": ["Cruze", "Captiva", "Trailblazer"],
-  "Mopar": ["Jeep Grand Cherokee", "Jeep Wrangler (JK/JL)", "Dodge Ram 1500", "Chrysler 300C"],
+const VEHICLE_MODELS: Record<string, { name: string; img?: string }[]> = {
+  "Toyota": [
+    { name: "Fielder", img: "/assets/images/models/fielder.jpg" },
+    { name: "Harrier", img: "/assets/images/models/harrier.png" },
+    { name: "Vitz", img: "/assets/images/models/vitz.jpg" },
+    { name: "Prado (J120/J150)", img: "/assets/images/models/prado.jpg" },
+    { name: "Premio" },
+    { name: "Hilux (Vigo/Revo)" },
+    { name: "Land Cruiser (V8/300)" },
+    { name: "Corolla" },
+    { name: "Axio" },
+    { name: "Probox" },
+    { name: "Noah/Voxy" },
+    { name: "Rav4" },
+    { name: "Hiace" },
+    { name: "Wish" }
+  ],
+  "BMW": [
+    { name: "3 Series (E90/F30/G20)", img: "/assets/images/models/bmw3.jpg" },
+    { name: "5 Series (F10/G30)" },
+    { name: "7 Series (F01/G11)" },
+    { name: "X1 (E84/F48)" },
+    { name: "X3 (F25/G01)" },
+    { name: "X5 (E70/F15/G05)" },
+    { name: "X6" },
+    { name: "1 Series" },
+    { name: "M3/M4/M5 Performance" }
+  ],
+  "Mercedes-Benz": [
+    { name: "C-Class (W204/W205/W206)", img: "/assets/images/models/mercedesc.png" },
+    { name: "E-Class (W212/W213)" },
+    { name: "S-Class (W221/W222)" },
+    { name: "GLC-Class" },
+    { name: "GLE-Class" },
+    { name: "GLA-Class" },
+    { name: "G-Wagon" },
+    { name: "CLA-Class" },
+    { name: "Vito/V-Class" },
+    { name: "Sprinter" }
+  ],
+  "Honda": [
+    { name: "Civic (FD/FB/FC)" },
+    { name: "CR-V" },
+    { name: "Fit/Jazz" },
+    { name: "Accord" },
+    { name: "Insight" },
+    { name: "Vezel/HR-V" },
+    { name: "Stream" }
+  ],
+  "Ford": [
+    { name: "Ranger (T6/T7/T8)" },
+    { name: "Everest" },
+    { name: "F-150 Raptor" },
+    { name: "Focus" },
+    { name: "Fiesta" },
+    { name: "Explorer" }
+  ],
+  "Hyundai": [
+    { name: "Tucson" },
+    { name: "Santa Fe" },
+    { name: "Elantra" },
+    { name: "Accent" },
+    { name: "Kona" },
+    { name: "Sonata" }
+  ],
+  "Suzuki": [
+    { name: "Swift" },
+    { name: "Vitara" },
+    { name: "Jimny" },
+    { name: "Alto" },
+    { name: "Ertiga" }
+  ],
+  "Lexus": [
+    { name: "RX350/RX450h" },
+    { name: "NX200t/NX300" },
+    { name: "LX570/LX600" },
+    { name: "IS250/IS300" },
+    { name: "ES300h" },
+    { name: "GX460" }
+  ],
+  "Infiniti": [
+    { name: "Q50" },
+    { name: "QX70" },
+    { name: "QX80" },
+    { name: "G37" }
+  ],
+  "Chevrolet": [
+    { name: "Cruze" },
+    { name: "Captiva" },
+    { name: "Trailblazer" }
+  ],
+  "Mopar": [
+    { name: "Jeep Grand Cherokee" },
+    { name: "Jeep Wrangler (JK/JL)" },
+    { name: "Dodge Ram 1500" },
+    { name: "Chrysler 300C" }
+  ],
 };
 
 const PRODUCTS = [
@@ -283,7 +368,7 @@ export default function Products() {
         {/* Vehicle Selector Modal */}
         {showSelector && (
           <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fadeIn">
-            <div className="bg-white w-full max-w-4xl rounded-sm shadow-2xl overflow-hidden relative max-h-[90vh] flex flex-col">
+            <div className="bg-white w-full max-w-5xl rounded-sm shadow-2xl overflow-hidden relative max-h-[90vh] flex flex-col">
               <div className="bg-gray-900 p-8 flex-shrink-0">
                 <p className="text-[oklch(0.45_0.22_27)] font-black text-[10px] uppercase tracking-[0.4em] mb-2">Vehicle Specification</p>
                 <h3 className="text-3xl font-black text-white uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
@@ -294,14 +379,14 @@ export default function Products() {
                 </button>
               </div>
               
-              <div className="flex-1 overflow-y-auto p-10">
+              <div className="flex-1 overflow-y-auto p-10 bg-gray-50">
                 {!activeBrand ? (
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
                     {Object.keys(VEHICLE_MODELS).map(brand => (
                       <button 
                         key={brand}
                         onClick={() => setActiveBrand(brand)}
-                        className="group border border-gray-100 p-8 flex flex-col items-center justify-center gap-4 hover:border-[oklch(0.45_0.22_27)] hover:shadow-xl transition-all"
+                        className="group bg-white border border-gray-100 p-8 flex flex-col items-center justify-center gap-4 hover:border-[oklch(0.45_0.22_27)] hover:shadow-xl transition-all"
                       >
                         <img 
                           src={`/assets/images/brands/${brand.toLowerCase().replace(' ', '')}.png`} 
@@ -316,29 +401,48 @@ export default function Products() {
                   <div>
                     <button 
                       onClick={() => { setActiveBrand(null); setActiveModel(null); }}
-                      className="text-[10px] font-black uppercase tracking-widest text-[oklch(0.45_0.22_27)] mb-8 hover:underline"
+                      className="text-[10px] font-black uppercase tracking-widest text-[oklch(0.45_0.22_27)] mb-8 hover:underline flex items-center gap-2"
                     >
                       ← BACK TO BRANDS
                     </button>
-                    <h4 className="text-xs font-black uppercase tracking-[0.2em] text-gray-400 mb-6 border-l-2 border-[oklch(0.45_0.22_27)] pl-4">
+                    <h4 className="text-xs font-black uppercase tracking-[0.2em] text-gray-400 mb-8 border-l-2 border-[oklch(0.45_0.22_27)] pl-4">
                       {activeBrand} Models
                     </h4>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                       {VEHICLE_MODELS[activeBrand].map(model => (
                         <button 
-                          key={model}
+                          key={model.name}
                           onClick={() => {
-                            setActiveModel(model);
+                            setActiveModel(model.name);
                             setShowSelector(false);
-                            setLocation(`/products?brand=${encodeURIComponent(activeBrand)}&model=${encodeURIComponent(model)}&category=${encodeURIComponent(activeCategory)}`);
+                            setLocation(`/products?brand=${encodeURIComponent(activeBrand)}&model=${encodeURIComponent(model.name)}&category=${encodeURIComponent(activeCategory)}`);
                           }}
-                          className={`p-4 text-left border rounded-sm text-xs font-bold uppercase tracking-widest transition-all ${
-                            activeModel === model 
-                              ? "bg-[oklch(0.45_0.22_27)] text-white border-[oklch(0.45_0.22_27)]" 
-                              : "border-gray-100 text-gray-600 hover:border-gray-900 hover:text-gray-900"
+                          className={`group relative flex flex-col bg-white border rounded-sm overflow-hidden transition-all ${
+                            activeModel === model.name 
+                              ? "border-[oklch(0.45_0.22_27)] shadow-xl" 
+                              : "border-gray-100 hover:border-gray-900 hover:shadow-lg"
                           }`}
                         >
-                          {model}
+                          <div className="h-32 bg-gray-50 overflow-hidden">
+                            {model.img ? (
+                              <img 
+                                src={model.img} 
+                                alt={model.name} 
+                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                                <Car className="text-gray-300" size={32} />
+                              </div>
+                            )}
+                          </div>
+                          <div className="p-4 bg-white">
+                            <span className={`text-[10px] font-black uppercase tracking-widest ${
+                              activeModel === model.name ? "text-[oklch(0.45_0.22_27)]" : "text-gray-900"
+                            }`}>
+                              {model.name}
+                            </span>
+                          </div>
                         </button>
                       ))}
                     </div>
