@@ -115,6 +115,7 @@ const PRODUCTS = [
   { name: "Toyota Hilux/Land Cruiser Carburetor Assembly", category: "Engine Components", brand: "Toyota", price: "KES 18,000", img: "/assets/images/products/toyota-carburetor.jpg", condition: "New", models: ["Hilux (Vigo/Revo)", "Land Cruiser (V8/300)"] },
   { name: "Toyota Laminated Front Windscreen (OEM)", category: "Glass & Windscreens", brand: "Toyota", price: "KES 15,000", img: "/assets/images/products/toyota-windscreen.webp", condition: "New", models: ["All Models"] },
   { name: "Toyota Vitz CVT Automatic Gearbox (K410)", category: "Transmission & Gear", brand: "Toyota", price: "KES 45,000", img: "/assets/images/products/toyota-vitz-gearbox.png", condition: "Certified Used", models: ["Vitz"] },
+  { name: "Toyota Fielder LED Headlight Assembly", category: "Electrical & Sensors", brand: "Toyota", price: "KES 14,000", img: "/assets/images/products/toyota-fielder-headlight.jpg", condition: "New", models: ["Fielder"] },
 
   // BMW
   { name: "BMW Genuine Oil Filter Kit (N20/N54/N55)", category: "Engine Components", brand: "BMW", price: "KES 3,500", img: "/assets/images/products/bmw-oil-filter.jpg", condition: "New", models: ["3 Series (E90/F30/G20)", "5 Series (F10/G30)", "X3 (F25/G01)", "X5 (E70/F15/G05)"] },
@@ -133,10 +134,14 @@ const PRODUCTS = [
   { name: "Mercedes-Benz 7G-Tronic Plus Transmission", category: "Transmission & Gear", brand: "Mercedes-Benz", price: "KES 95,000", img: "/assets/images/products/mercedes-gearbox.jpg", condition: "Certified Used", models: ["C-Class (W204/W205/W206)", "E-Class (W212/W213)"] },
 
   // OTHERS
+  { name: "Honda Civic High-Performance Brake Rotors", category: "Braking Systems", brand: "Honda", price: "KES 15,500", img: "/assets/images/products/honda-civic-brake-disc.jpg", condition: "New", models: ["Civic (FD/FB/FC)"] },
+  { name: "Honda Civic Genuine Front Brake Pads", category: "Braking Systems", brand: "Honda", price: "KES 6,500", img: "/assets/images/products/honda-civic-brake-pads.jpg", condition: "New", models: ["Civic (FD/FB/FC)"] },
   { name: "Honda Civic LED Headlight Assembly", category: "Electrical & Sensors", brand: "Honda", price: "KES 12,000", img: "/assets/images/products/honda-headlight.jpg", condition: "New", models: ["Civic (FD/FB/FC)"] },
-  { name: "Ford Ranger T6 Heavy Duty Radiator", category: "Engine Components", brand: "Ford", price: "KES 16,000", img: "/assets/images/products/ford-radiator.jpg", condition: "New", models: ["Ranger (T6/T7/T8)", "Everest"] },
-  { name: "Hyundai Santa Fe High-Output Alternator", category: "Electrical & Sensors", brand: "Hyundai", price: "KES 18,500", img: "/assets/images/products/hyundai-alternator.jpg", condition: "New", models: ["Santa Fe", "Tucson"] },
-  { name: "Suzuki Swift Exedy Clutch Kit", category: "Transmission & Gear", brand: "Suzuki", price: "KES 15,000", img: "/assets/images/products/suzuki-clutch-kit.jpg", condition: "New", models: ["Swift"] },
+  { name: "Ford Ranger T6/T7 Heavy Duty Radiator", category: "Engine Components", brand: "Ford", price: "KES 16,000", img: "/assets/images/products/ford-ranger-radiator.jpg", condition: "New", models: ["Ranger (T6/T7/T8)", "Everest"] },
+  { name: "Ford Ranger T6 Front Brake Pad Set", category: "Braking Systems", brand: "Ford", price: "KES 5,800", img: "/assets/images/products/honda-civic-brake-pads.jpg", condition: "New", models: ["Ranger (T6/T7/T8)"] },
+  { name: "Hyundai Tucson/Elantra High-Output Alternator", category: "Electrical & Sensors", brand: "Hyundai", price: "KES 18,500", img: "/assets/images/products/hyundai-tucson-alternator.jpg", condition: "New", models: ["Tucson", "Elantra", "Santa Fe"] },
+  { name: "Suzuki Swift Exedy Clutch Kit", category: "Transmission & Gear", brand: "Suzuki", price: "KES 15,000", img: "/assets/images/products/suzuki-swift-clutch.jpg", condition: "New", models: ["Swift"] },
+  { name: "Lexus RX350 KYB Gas-A-Just Shock Absorber", category: "Suspension & Chassis", brand: "Lexus", price: "KES 18,000", img: "/assets/images/products/lexus-rx350-shock.jpg", condition: "New", models: ["RX350/RX450h"] },
   { name: "Lexus RX Series 18\" Machine-Face Alloy Rim", category: "Alloys & Rims", brand: "Lexus", price: "KES 45,000", img: "/assets/images/products/lexus-alloy-rim.jpg", condition: "New", models: ["RX350/RX450h"] },
   { name: "Infiniti Q50 Akebono Brake Pads", category: "Braking Systems", brand: "Infiniti", price: "KES 6,500", img: "/assets/images/products/infiniti-brake-pads.jpg", condition: "New", models: ["Q50"] },
   { name: "Chevrolet Cruze Ignition Coil Pack", category: "Electrical & Sensors", brand: "Chevrolet", price: "KES 8,000", img: "/assets/images/products/chevrolet-ignition-coil.jpg", condition: "New", models: ["Cruze"] },
