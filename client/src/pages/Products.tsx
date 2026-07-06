@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Navbar, Footer, FloatingButtons } from "@/components/Layout";
 import { Link, useLocation } from "wouter";
-import { Search, Filter, X, ChevronRight, ShieldCheck, Truck, Clock, Car, Settings2 } from "lucide-react";
+import { Search, Filter, X, ChevronRight, ShieldCheck, Truck, Clock, Car, Settings2, ArrowRight } from "lucide-react";
 
 const CATEGORIES = [
   "All Components", "Alloys & Rims", "Braking Systems", "Electrical & Sensors", "Engine Components",
@@ -114,6 +114,7 @@ const PRODUCTS = [
   { name: "Toyota Genuine Oil Filter (Spin-on)", category: "Engine Components", brand: "Toyota", price: "KES 1,200", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New", models: ["All Models"] },
   { name: "Toyota Hilux/Land Cruiser Carburetor Assembly", category: "Engine Components", brand: "Toyota", price: "KES 18,000", img: "/assets/images/products/toyota-carburetor.jpg", condition: "New", models: ["Hilux (Vigo/Revo)", "Land Cruiser (V8/300)"] },
   { name: "Toyota Laminated Front Windscreen (OEM)", category: "Glass & Windscreens", brand: "Toyota", price: "KES 15,000", img: "/assets/images/products/toyota-windscreen.webp", condition: "New", models: ["All Models"] },
+  { name: "Toyota Vitz CVT Automatic Gearbox (K410)", category: "Transmission & Gear", brand: "Toyota", price: "KES 45,000", img: "/assets/images/products/toyota-vitz-gearbox.png", condition: "Certified Used", models: ["Vitz"] },
 
   // BMW
   { name: "BMW Genuine Oil Filter Kit (N20/N54/N55)", category: "Engine Components", brand: "BMW", price: "KES 3,500", img: "/assets/images/products/bmw-oil-filter.jpg", condition: "New", models: ["3 Series (E90/F30/G20)", "5 Series (F10/G30)", "X3 (F25/G01)", "X5 (E70/F15/G05)"] },
@@ -121,12 +122,15 @@ const PRODUCTS = [
   { name: "BMW Performance Camshaft (N54 Twin Turbo)", category: "Engine Components", brand: "BMW", price: "KES 35,000", img: "/assets/images/products/bmw-camshaft.jpg", condition: "New", models: ["3 Series (E90/F30/G20)", "5 Series (F10/G30)", "M3/M4/M5 Performance"] },
   { name: "BMW Electronic Steering Rack Assembly", category: "Steering Systems", brand: "BMW", price: "KES 35,000", img: "/assets/images/products/bmw-steering-rack.jpg", condition: "Certified Used", models: ["3 Series (E90/F30/G20)", "5 Series (F10/G30)"] },
   { name: "BMW Headlight Auto-Leveling Sensor", category: "Electrical & Sensors", brand: "BMW", price: "KES 8,500", img: "/assets/images/products/bmw-sensor.jpg", condition: "New", models: ["All Models"] },
+  { name: "BMW 8-Speed Automatic Transmission (ZF 8HP)", category: "Transmission & Gear", brand: "BMW", price: "KES 120,000", img: "/assets/images/products/bmw-gearbox.jpg", condition: "Certified Used", models: ["3 Series (E90/F30/G20)", "5 Series (F10/G30)", "X5 (E70/F15/G05)"] },
+  { name: "BMW ZF 8HP Transmission Service Kit", category: "Transmission & Gear", brand: "BMW", price: "KES 22,000", img: "/assets/images/products/bmw-gear-service-kit.jpg", condition: "New", models: ["All Models"] },
 
   // MERCEDES-BENZ
   { name: "Mercedes-Benz Bilstein Shock Absorber (Rear)", category: "Suspension & Chassis", brand: "Mercedes-Benz", price: "KES 14,500", img: "/assets/images/products/mercedes-shock-absorber.jpg", condition: "New", models: ["C-Class (W204/W205/W206)", "E-Class (W212/W213)"] },
   { name: "Mercedes-Benz Ceramic Brake Pads (W205/W213)", category: "Braking Systems", brand: "Mercedes-Benz", price: "KES 5,500", img: "/assets/images/products/mercedes-brake-pads.jpg", condition: "New", models: ["C-Class (W204/W205/W206)", "E-Class (W212/W213)", "GLC-Class"] },
   { name: "Mercedes-Benz High-Pressure Fuel Filter", category: "Engine Components", brand: "Mercedes-Benz", price: "KES 2,000", img: "/assets/images/products/mercedes-fuel-filter.jpg", condition: "New", models: ["All Models"] },
   { name: "Mercedes-Benz AMG Styling Front Bumper", category: "Body Kits & Styling", brand: "Mercedes-Benz", price: "KES 25,000", img: "/assets/images/products/mercedes-bumper.jpg", condition: "New", models: ["C-Class (W204/W205/W206)", "E-Class (W212/W213)"] },
+  { name: "Mercedes-Benz 7G-Tronic Plus Transmission", category: "Transmission & Gear", brand: "Mercedes-Benz", price: "KES 95,000", img: "/assets/images/products/mercedes-gearbox.jpg", condition: "Certified Used", models: ["C-Class (W204/W205/W206)", "E-Class (W212/W213)"] },
 
   // OTHERS
   { name: "Honda Civic LED Headlight Assembly", category: "Electrical & Sensors", brand: "Honda", price: "KES 12,000", img: "/assets/images/products/honda-headlight.jpg", condition: "New", models: ["Civic (FD/FB/FC)"] },
@@ -189,6 +193,13 @@ export default function Products() {
     setLocation("/products");
   };
 
+  const handleCategorySelect = (cat: string) => {
+    setActiveCategory(cat);
+    if (cat !== "All Components" && !activeBrand) {
+      setShowSelector(true);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
@@ -199,7 +210,7 @@ export default function Products() {
           <div className="max-w-[1280px] mx-auto px-6 relative z-10">
             <p className="text-[oklch(0.45_0.22_27)] font-black text-[10px] uppercase tracking-[0.4em] mb-4">Professional Parts Catalog</p>
             <h1 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
-              {activeModel ? `${activeModel} Components` : activeBrand ? `${activeBrand} Specialized Parts` : "Automotive Components"}
+              {activeModel ? `${activeModel} ${activeCategory}` : activeBrand ? `${activeBrand} ${activeCategory}` : activeCategory}
             </h1>
             
             <div className="mt-10 flex flex-wrap gap-4">
@@ -249,7 +260,7 @@ export default function Products() {
                       {CATEGORIES.map((cat) => (
                         <li key={cat}>
                           <button
-                            onClick={() => setActiveCategory(cat)}
+                            onClick={() => handleCategorySelect(cat)}
                             className={`w-full text-left px-4 py-2.5 text-xs font-bold uppercase tracking-widest rounded-sm transition-all ${
                               activeCategory === cat
                                 ? "bg-[oklch(0.45_0.22_27)] text-white shadow-lg shadow-red-900/10"
@@ -272,10 +283,11 @@ export default function Products() {
                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">
                       Found <span className="text-gray-900">{filtered.length}</span> Components
                     </p>
-                    {activeModel && (
-                      <p className="text-xs font-bold text-[oklch(0.45_0.22_27)] uppercase tracking-widest mt-1">
-                        Filtering for: {activeBrand} {activeModel}
-                      </p>
+                    {(activeBrand || activeModel) && (
+                      <div className="flex items-center gap-2 mt-2">
+                        <span className="text-[10px] font-black bg-gray-900 text-white px-2 py-0.5 rounded-sm uppercase tracking-widest">{activeBrand}</span>
+                        {activeModel && <span className="text-[10px] font-black bg-[oklch(0.45_0.22_27)] text-white px-2 py-0.5 rounded-sm uppercase tracking-widest">{activeModel}</span>}
+                      </div>
                     )}
                   </div>
                   <div className="flex items-center gap-4">
@@ -365,14 +377,19 @@ export default function Products() {
           </div>
         </section>
 
-        {/* Vehicle Selector Modal */}
+        {/* Multi-Step Vehicle Selector Modal */}
         {showSelector && (
           <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fadeIn">
             <div className="bg-white w-full max-w-5xl rounded-sm shadow-2xl overflow-hidden relative max-h-[90vh] flex flex-col">
               <div className="bg-gray-900 p-8 flex-shrink-0">
-                <p className="text-[oklch(0.45_0.22_27)] font-black text-[10px] uppercase tracking-[0.4em] mb-2">Vehicle Specification</p>
+                <div className="flex items-center gap-4 mb-2">
+                  <div className={`h-1 w-12 rounded-full ${activeCategory ? "bg-[oklch(0.45_0.22_27)]" : "bg-white/20"}`} />
+                  <div className={`h-1 w-12 rounded-full ${activeBrand ? "bg-[oklch(0.45_0.22_27)]" : "bg-white/20"}`} />
+                  <div className={`h-1 w-12 rounded-full ${activeModel ? "bg-[oklch(0.45_0.22_27)]" : "bg-white/20"}`} />
+                </div>
+                <p className="text-[oklch(0.45_0.22_27)] font-black text-[10px] uppercase tracking-[0.4em] mb-1">Step {activeBrand ? "3: Select Model" : "2: Select Brand"}</p>
                 <h3 className="text-3xl font-black text-white uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
-                  Select Your Vehicle
+                  {activeBrand ? `Refining for ${activeBrand}` : "Identify Your Vehicle"}
                 </h3>
                 <button onClick={() => setShowSelector(false)} className="absolute top-8 right-8 text-white/50 hover:text-white transition-colors">
                   <X size={24} />
@@ -405,9 +422,6 @@ export default function Products() {
                     >
                       ← BACK TO BRANDS
                     </button>
-                    <h4 className="text-xs font-black uppercase tracking-[0.2em] text-gray-400 mb-8 border-l-2 border-[oklch(0.45_0.22_27)] pl-4">
-                      {activeBrand} Models
-                    </h4>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                       {VEHICLE_MODELS[activeBrand].map(model => (
                         <button 
@@ -436,12 +450,13 @@ export default function Products() {
                               </div>
                             )}
                           </div>
-                          <div className="p-4 bg-white">
+                          <div className="p-4 bg-white flex justify-between items-center">
                             <span className={`text-[10px] font-black uppercase tracking-widest ${
                               activeModel === model.name ? "text-[oklch(0.45_0.22_27)]" : "text-gray-900"
                             }`}>
                               {model.name}
                             </span>
+                            <ArrowRight size={14} className="text-gray-300 group-hover:text-[oklch(0.45_0.22_27)] transition-colors" />
                           </div>
                         </button>
                       ))}
