@@ -74,14 +74,19 @@ export default function Brands() {
             </h2>
             <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-6">
               {CAR_BRANDS.map((brand) => (
-                <div key={brand.name} className="bg-gray-50 border border-gray-100 p-6 flex flex-col items-center justify-center gap-3 hover:shadow-md transition-shadow rounded-sm" style={{ minHeight: 120 }}>
+                <Link
+                  key={brand.name}
+                  href={`/products?brand=${encodeURIComponent(brand.name)}`}
+                  className="bg-gray-50 border border-gray-100 p-6 flex flex-col items-center justify-center gap-3 hover:shadow-md transition-shadow rounded-sm"
+                  style={{ minHeight: 120 }}
+                >
                   <img
                     src={brand.src}
                     alt={brand.name}
                     className="max-h-12 max-w-[100px] object-contain grayscale hover:grayscale-0 transition-all duration-300"
                   />
                   <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">{brand.name}</span>
-                </div>
+                </Link>
               ))}
             </div>
           </div>

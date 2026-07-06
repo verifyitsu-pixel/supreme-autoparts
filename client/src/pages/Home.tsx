@@ -195,7 +195,7 @@ function CategoryGrid() {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-1">
           {CATEGORIES.map((cat) => (
-            <Link key={cat.label} href="/products" className="category-card block" style={{ height: 180 }}>
+            <Link key={cat.label} href={`/products?category=${encodeURIComponent(cat.label)}`} className="category-card block" style={{ height: 180 }}>
               <img src={cat.img} alt={cat.label} />
               <span className="label">{cat.label}</span>
             </Link>
@@ -230,13 +230,13 @@ function BrandsCarousel() {
           style={{ transform: `translateX(${offset}px)`, transition: "none", width: "max-content" }}
         >
           {[...CAR_BRANDS, ...CAR_BRANDS, ...CAR_BRANDS].map((brand, i) => (
-            <div key={i} className="shrink-0 flex items-center justify-center" style={{ width: 140 }}>
+            <Link key={i} href={`/products?brand=${encodeURIComponent(brand.name)}`} className="shrink-0 flex items-center justify-center" style={{ width: 140 }}>
               <img
                 src={brand.src}
                 alt={brand.name}
                 className="max-h-12 max-w-[120px] object-contain grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100"
               />
-            </div>
+            </Link>
           ))}
         </div>
       </div>

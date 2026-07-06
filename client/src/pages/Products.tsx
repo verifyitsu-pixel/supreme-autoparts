@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navbar, Footer, FloatingButtons } from "@/components/Layout";
-import { Link } from "wouter";
-import { Search, Filter } from "lucide-react";
+import { Link, useLocation } from "wouter";
+import { Search, Filter, X } from "lucide-react";
 
 const CATEGORIES = [
   "All Parts", "Alloys & Rims", "Brakes", "Electricals", "Engine Parts",
@@ -9,63 +9,97 @@ const CATEGORIES = [
 ];
 
 const PRODUCTS = [
-  { name: "AC Blower Motor", category: "Electricals", price: "KES 8,500", img: "/manus-storage/B64ZG02QbuFg_daace09a.jpg" },
-  { name: "AC Compressor A8", category: "Electricals", price: "KES 25,000", img: "/manus-storage/cEsPpRjEmNXJ_c112695d.jpg" },
-  { name: "Antilock Braking System", category: "Brakes", price: "KES 15,000", img: "/manus-storage/qe91vSqdJL9S_1d3c6406.jpg" },
-  { name: "Automatic Transmission Fluid", category: "Lubricants", price: "KES 2,800", img: "/manus-storage/lICQCnHriqD6_a6ef8f18.jpeg" },
-  { name: "BMW Railing Carrier Roof Rack", category: "Body Kits", price: "KES 45,000", img: "/manus-storage/GXZUdoXVzqPQ_5abad503.jpg" },
-  { name: "Ball Joint Volkswagen", category: "Suspension Parts", price: "KES 3,200", img: "/manus-storage/BAK11LsdYal3_c70d17ff.jpg" },
-  { name: "Battery Charger Cable", category: "Electricals", price: "KES 1,500", img: "/manus-storage/YEfgDBCI1loC_ab2f4ef9.jpg" },
-  { name: "Brake Pads Mercedes-Benz", category: "Brakes", price: "KES 5,500", img: "/manus-storage/TgbmGhpPhcaO_67125cf6.jpg" },
-  { name: "Camshaft BMW N54", category: "Engine Parts", price: "KES 35,000", img: "/manus-storage/Cj14kqW0EFHE_663f6f7b.jpg" },
-  { name: "Carburetor Toyota Hilux", category: "Engine Parts", price: "KES 18,000", img: "/manus-storage/GO7ybAG0jxp4_8f770ca8.webp" },
-  { name: "Clutch Kit Ford Ranger", category: "Gear Parts", price: "KES 12,000", img: "/manus-storage/RXcTD4AjzfOZ_e4689606.jpg" },
-  { name: "Crankshaft Sensor", category: "Engine Parts", price: "KES 4,500", img: "/manus-storage/YtqlqKHTJrg0_eb776a2a.jpg" },
-  { name: "Differential Gear Set", category: "Gear Parts", price: "KES 22,000", img: "/manus-storage/AvULsuW9NDrm_5a7b2ecb.webp" },
-  { name: "Disc Brake Rotors Audi", category: "Brakes", price: "KES 7,000", img: "/manus-storage/GsXjhKiBYVt2_82d1e305.jpg" },
-  { name: "Engine Oil 5W-30 Shell", category: "Lubricants", price: "KES 3,500", img: "/manus-storage/zx3mpd38mqwh_1dd516ab.jpg" },
-  { name: "Engine Oil Castrol 10W-40", category: "Lubricants", price: "KES 3,200", img: "/manus-storage/lyq8mGbYVNzx_980b6d3c.jpg" },
-  { name: "Exhaust Manifold VW Golf", category: "Engine Parts", price: "KES 9,500", img: "/manus-storage/OetrSOrGWyiL_8d86a5d2.jpg" },
-  { name: "Front Lower Arm BMW", category: "Suspension Parts", price: "KES 11,000", img: "/manus-storage/PFo1pre5XNwy_22a198d0.png" },
-  { name: "Fuel Filter Mercedes", category: "Engine Parts", price: "KES 2,000", img: "/manus-storage/qycEYakJQzm7_80a8344c.jpg" },
-  { name: "Fuse Box Toyota", category: "Electricals", price: "KES 6,500", img: "/manus-storage/dYYk704pp5FU_59bcbaf8.jpg" },
-  { name: "Gearbox Mountings", category: "Gear Parts", price: "KES 4,000", img: "/manus-storage/8P7K1N9gzZV2_ef24ce0e.jpg" },
-  { name: "Headlight Assembly Honda", category: "Electricals", price: "KES 8,000", img: "/manus-storage/aJsvLyMxhLRS_a37af656.jpg" },
-  { name: "Motor Engine Oil", category: "Lubricants", price: "KES 4,000", img: "/manus-storage/zx3mpd38mqwh_1dd516ab.jpg" },
-  { name: "Oil Filter Universal", category: "Engine Parts", price: "KES 800", img: "/manus-storage/zPFMUNhMi0Ew_b44d9215.jpg" },
-  { name: "Power Steering Pump", category: "Steering", price: "KES 14,000", img: "/manus-storage/zz0xcWQ26Pwl_81008dae.jpg" },
-  { name: "Radiator Ford Ranger", category: "Engine Parts", price: "KES 16,000", img: "/manus-storage/7Mqp7V5ZxJh2_e77a6f26.jpg" },
-  { name: "Rear Shock Absorbers", category: "Suspension Parts", price: "KES 8,500", img: "/manus-storage/3jMDoiAxEfqq_c26088b5.jpg" },
-  { name: "Side Mirror Assembly", category: "Body Kits", price: "KES 5,000", img: "/manus-storage/coLfollQiSKK_f0a3f74f.webp" },
-  { name: "Starter Motor Toyota", category: "Engine Parts", price: "KES 12,500", img: "/manus-storage/H327vhS6DEWU_1cbc3c60.jpg" },
-  { name: "Steering Rack BMW", category: "Steering", price: "KES 35,000", img: "/manus-storage/zkPNJza6nOuS_759a5d60.jpg" },
-  { name: "Strut Assembly Front", category: "Suspension Parts", price: "KES 12,000", img: "/manus-storage/4VBTguBYc4vw_c9f002dd.jpg" },
-  { name: "Tie Rod End", category: "Steering", price: "KES 2,500", img: "/manus-storage/rWxrDUWj696m_08afe19b.jpg" },
-  { name: "Torque Converter", category: "Gear Parts", price: "KES 28,000", img: "/manus-storage/YMVAngtBcdAv_946f3813.jpg" },
-  { name: "Turbocharger Kit", category: "Engine Parts", price: "KES 65,000", img: "/manus-storage/Cj14kqW0EFHE_663f6f7b.jpg" },
-  { name: "Water Pump BMW", category: "Engine Parts", price: "KES 7,500", img: "/manus-storage/UsHolq2JTjAa_d9faff3e.jpg" },
-  { name: "Wheel Bearing Kit", category: "Suspension Parts", price: "KES 4,800", img: "/manus-storage/gDwKUitReI9b_08158cb0.jpg" },
-  { name: "Window Motor Regulator", category: "Electricals", price: "KES 6,000", img: "/manus-storage/HzxjcSIFbkng_aef4f673.jpg" },
-  { name: "Alloy Rim 18-inch BMW", category: "Alloys & Rims", price: "KES 35,000", img: "/manus-storage/uheUzyXJXuab_451facf8.jpg" },
-  { name: "Alloy Rim 20-inch Mercedes", category: "Alloys & Rims", price: "KES 48,000", img: "/manus-storage/YkTorajED7yL_485d744f.jpg" },
-  { name: "Caliper Assembly", category: "Brakes", price: "KES 9,500", img: "/manus-storage/W0MxcL27GIGe_b7fad523.png" },
-  { name: "Control Arm Bushing", category: "Suspension Parts", price: "KES 1,800", img: "/manus-storage/PFo1pre5XNwy_22a198d0.png" },
-  { name: "Cylinder Head Gasket", category: "Engine Parts", price: "KES 5,500", img: "/manus-storage/HOyy74wWyWJl_2f14285a.png" },
-  { name: "Door Handle Exterior", category: "Body Kits", price: "KES 3,500", img: "/manus-storage/dk6nReWkXBNM_cceba880.jpg" },
-  { name: "Alternator 12V", category: "Electricals", price: "KES 18,000", img: "/manus-storage/HaFM2sWAoRy2_8006e9b2.webp" },
-  { name: "Drive Shaft CV Joint", category: "Gear Parts", price: "KES 15,000", img: "/manus-storage/2wQyfgOJuAjU_8fd4f7d7.jpg" },
-  { name: "Timing Belt Kit", category: "Engine Parts", price: "KES 12,000", img: "/manus-storage/RqwWjTiEZFY7_8832939f.jpg" },
+  // TOYOTA
+  { name: "Toyota Genuine Brake Pads", category: "Brakes", brand: "Toyota", price: "KES 5,500", img: "/assets/images/products/toyota-brake-pads.jpg" },
+  { name: "Toyota Air Filter", category: "Engine Parts", brand: "Toyota", price: "KES 1,800", img: "/manus-storage/zPFMUNhMi0Ew_b44d9215.jpg" },
+  { name: "Toyota Oil Filter", category: "Engine Parts", brand: "Toyota", price: "KES 1,200", img: "/manus-storage/zPFMUNhMi0Ew_b44d9215.jpg" },
+  { name: "Toyota Hilux Carburetor", category: "Engine Parts", brand: "Toyota", price: "KES 18,000", img: "/manus-storage/GO7ybAG0jxp4_8f770ca8.webp" },
+  { name: "Toyota Fuse Box", category: "Electricals", brand: "Toyota", price: "KES 6,500", img: "/manus-storage/dYYk704pp5FU_59bcbaf8.jpg" },
+  { name: "Toyota Starter Motor", category: "Engine Parts", brand: "Toyota", price: "KES 12,500", img: "/manus-storage/H327vhS6DEWU_1cbc3c60.jpg" },
+
+  // BMW
+  { name: "BMW Genuine Oil Filter Kit", category: "Engine Parts", brand: "BMW", price: "KES 3,500", img: "/assets/images/products/bmw-oil-filter.jpg" },
+  { name: "BMW Railing Carrier Roof Rack", category: "Body Kits", brand: "BMW", price: "KES 45,000", img: "/manus-storage/GXZUdoXVzqPQ_5abad503.jpg" },
+  { name: "BMW Camshaft N54", category: "Engine Parts", brand: "BMW", price: "KES 35,000", img: "/manus-storage/Cj14kqW0EFHE_663f6f7b.jpg" },
+  { name: "BMW Front Lower Arm", category: "Suspension Parts", brand: "BMW", price: "KES 11,000", img: "/manus-storage/PFo1pre5XNwy_22a198d0.png" },
+  { name: "BMW Steering Rack", category: "Steering", brand: "BMW", price: "KES 35,000", img: "/manus-storage/zkPNJza6nOuS_759a5d60.jpg" },
+  { name: "BMW Water Pump", category: "Engine Parts", brand: "BMW", price: "KES 7,500", img: "/manus-storage/UsHolq2JTjAa_d9faff3e.jpg" },
+  { name: "BMW Alloy Rim 18-inch", category: "Alloys & Rims", brand: "BMW", price: "KES 35,000", img: "/manus-storage/uheUzyXJXuab_451facf8.jpg" },
+
+  // MERCEDES-BENZ
+  { name: "Mercedes-Benz Shock Absorber", category: "Suspension Parts", brand: "Mercedes-Benz", price: "KES 14,500", img: "/assets/images/products/mercedes-shock-absorber.jpg" },
+  { name: "Mercedes-Benz Brake Pads", category: "Brakes", brand: "Mercedes-Benz", price: "KES 5,500", img: "/manus-storage/TgbmGhpPhcaO_67125cf6.jpg" },
+  { name: "Mercedes Fuel Filter", category: "Engine Parts", brand: "Mercedes-Benz", price: "KES 2,000", img: "/manus-storage/qycEYakJQzm7_80a8344c.jpg" },
+  { name: "Mercedes Alloy Rim 20-inch", category: "Alloys & Rims", brand: "Mercedes-Benz", price: "KES 48,000", img: "/manus-storage/YkTorajED7yL_485d744f.jpg" },
+
+  // HONDA
+  { name: "Honda Headlight Assembly", category: "Electricals", brand: "Honda", price: "KES 12,000", img: "/assets/images/products/honda-headlight.jpg" },
+  { name: "Honda Civic Brake Discs", category: "Brakes", brand: "Honda", price: "KES 9,000", img: "/manus-storage/GsXjhKiBYVt2_82d1e305.jpg" },
+
+  // FORD
+  { name: "Ford Ranger Radiator", category: "Engine Parts", brand: "Ford", price: "KES 16,000", img: "/assets/images/products/ford-radiator.jpg" },
+  { name: "Ford Ranger Clutch Kit", category: "Gear Parts", brand: "Ford", price: "KES 12,000", img: "/manus-storage/RXcTD4AjzfOZ_e4689606.jpg" },
+
+  // HYUNDAI
+  { name: "Hyundai Alternator", category: "Electricals", brand: "Hyundai", price: "KES 18,500", img: "/assets/images/products/hyundai-alternator.jpg" },
+
+  // SUZUKI
+  { name: "Suzuki Swift Clutch Kit", category: "Gear Parts", brand: "Suzuki", price: "KES 15,000", img: "/assets/images/products/suzuki-clutch-kit.jpg" },
+
+  // LEXUS
+  { name: "Lexus RX Alloy Rim", category: "Alloys & Rims", brand: "Lexus", price: "KES 45,000", img: "/assets/images/products/lexus-alloy-rim.jpg" },
+
+  // INFINITI
+  { name: "Infiniti Q50 Brake Pads", category: "Brakes", brand: "Infiniti", price: "KES 6,500", img: "/assets/images/products/infiniti-brake-pads.jpg" },
+
+  // CHEVROLET
+  { name: "Chevrolet Ignition Coil", category: "Electricals", brand: "Chevrolet", price: "KES 8,000", img: "/assets/images/products/chevrolet-ignition-coil.jpg" },
+
+  // MOPAR (Jeep, Dodge, Chrysler)
+  { name: "Mopar Oil Filter", category: "Engine Parts", brand: "Mopar", price: "KES 1,500", img: "/assets/images/products/mopar-oil-filter.jpg" },
+
+  // UNIVERSAL / OTHER
+  { name: "AC Blower Motor", category: "Electricals", brand: "Universal", price: "KES 8,500", img: "/manus-storage/B64ZG02QbuFg_daace09a.jpg" },
+  { name: "Antilock Braking System", category: "Brakes", brand: "Universal", price: "KES 15,000", img: "/manus-storage/qe91vSqdJL9S_1d3c6406.jpg" },
+  { name: "Automatic Transmission Fluid", category: "Lubricants", brand: "Universal", price: "KES 2,800", img: "/manus-storage/lICQCnHriqD6_a6ef8f18.jpeg" },
+  { name: "Engine Oil 5W-30 Shell", category: "Lubricants", brand: "Universal", price: "KES 3,500", img: "/manus-storage/zx3mpd38mqwh_1dd516ab.jpg" },
+  { name: "Engine Oil Castrol 10W-40", category: "Lubricants", brand: "Universal", price: "KES 3,200", img: "/manus-storage/lyq8mGbYVNzx_980b6d3c.jpg" },
+  { name: "Power Steering Pump", category: "Steering", brand: "Universal", price: "KES 14,000", img: "/manus-storage/zz0xcWQ26Pwl_81008dae.jpg" },
+  { name: "Turbocharger Kit", category: "Engine Parts", brand: "Universal", price: "KES 65,000", img: "/manus-storage/Cj14kqW0EFHE_663f6f7b.jpg" },
 ];
 
 export default function Products() {
+  const [location, setLocation] = useLocation();
   const [activeCategory, setActiveCategory] = useState("All Parts");
+  const [activeBrand, setActiveBrand] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState<"name" | "price" | "category">("name");
   const [page, setPage] = useState(1);
   const ITEMS_PER_PAGE = 12;
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const brand = params.get("brand");
+    const category = params.get("category");
+    
+    if (brand) {
+      setActiveBrand(brand);
+      setPage(1);
+    } else {
+      setActiveBrand(null);
+    }
+
+    if (category) {
+      setActiveCategory(category);
+      setPage(1);
+    } else {
+      setActiveCategory("All Parts");
+    }
+  }, [location]);
+
   const filtered = PRODUCTS
     .filter((p) => activeCategory === "All Parts" || p.category === activeCategory)
+    .filter((p) => !activeBrand || p.brand.toLowerCase() === activeBrand.toLowerCase() || p.brand === "Universal")
     .filter((p) => p.name.toLowerCase().includes(searchTerm.toLowerCase()))
     .sort((a, b) => {
       if (sortBy === "name") return a.name.localeCompare(b.name);
@@ -86,6 +120,14 @@ export default function Products() {
     setPage(1);
   };
 
+  const clearBrandFilter = () => {
+    setActiveBrand(null);
+    const params = new URLSearchParams(window.location.search);
+    params.delete("brand");
+    const newPath = window.location.pathname + (params.toString() ? `?${params.toString()}` : "");
+    setLocation(newPath);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -99,17 +141,38 @@ export default function Products() {
           }}
         >
           <div className="text-center text-white z-10">
-            <h1 className="text-4xl md:text-5xl font-black" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>Products</h1>
+            <h1 className="text-4xl md:text-5xl font-black uppercase" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
+              {activeBrand ? `${activeBrand} Parts` : "Our Products"}
+            </h1>
             <p className="mt-2 text-gray-300 text-sm">
               <Link href="/" className="hover:text-white">Home</Link>
               <span className="mx-2">›</span>
-              <span>Products</span>
+              <Link href="/products" className="hover:text-white">Products</Link>
+              {activeBrand && (
+                <>
+                  <span className="mx-2">›</span>
+                  <span className="text-white font-bold">{activeBrand}</span>
+                </>
+              )}
             </p>
           </div>
         </div>
 
         <section className="py-12 bg-white">
           <div className="max-w-[1280px] mx-auto px-4">
+            {/* Active Filters */}
+            {activeBrand && (
+              <div className="flex items-center gap-2 mb-6">
+                <span className="text-sm font-bold text-gray-500 uppercase tracking-wider">Active Filter:</span>
+                <div className="bg-[oklch(0.45_0.22_27)] text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-2">
+                  Brand: {activeBrand}
+                  <button onClick={clearBrandFilter} className="hover:text-gray-200">
+                    <X size={14} />
+                  </button>
+                </div>
+              </div>
+            )}
+
             {/* Search & Sort Bar */}
             <div className="flex flex-col md:flex-row gap-4 mb-8">
               <form onSubmit={handleSearch} className="flex-1 flex gap-2">
@@ -165,12 +228,13 @@ export default function Products() {
                 <p className="text-sm text-gray-500 mb-4">
                   Showing {pageItems.length} of {filtered.length} products
                   {activeCategory !== "All Parts" && ` in ${activeCategory}`}
+                  {activeBrand && ` for ${activeBrand}`}
                 </p>
 
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {pageItems.map((product) => (
+                  {pageItems.map((product, idx) => (
                     <div
-                      key={product.name}
+                      key={`${product.name}-${idx}`}
                       className="bg-white border border-gray-200 rounded-sm overflow-hidden hover:shadow-md transition-shadow group"
                     >
                       <div className="overflow-hidden h-40 bg-gray-100">
@@ -181,10 +245,15 @@ export default function Products() {
                         />
                       </div>
                       <div className="p-3">
-                        <p className="text-xs text-[oklch(0.45_0.22_27)] font-semibold uppercase tracking-wide mb-1">
-                          {product.category}
-                        </p>
-                        <h3 className="text-sm font-bold text-gray-800 leading-tight mb-2">{product.name}</h3>
+                        <div className="flex justify-between items-start mb-1">
+                          <p className="text-[10px] text-[oklch(0.45_0.22_27)] font-semibold uppercase tracking-wide">
+                            {product.category}
+                          </p>
+                          <span className="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded text-gray-500 font-bold uppercase">
+                            {product.brand}
+                          </span>
+                        </div>
+                        <h3 className="text-sm font-bold text-gray-800 leading-tight mb-2 h-10 overflow-hidden">{product.name}</h3>
                         <p className="text-sm font-bold text-[oklch(0.45_0.22_27)]">{product.price}</p>
                         <Link
                           href={`/order?product=${encodeURIComponent(product.name)}&price=${encodeURIComponent(product.price)}`}
@@ -250,7 +319,7 @@ export default function Products() {
                     </a>
                     <Link
                       href="/contact"
-                      className="bg-white text-[oklch(0.45_0.22_27)] font-bold uppercase tracking-widest text-xs px-6 py-3 hover:bg-gray-100 transition-colors"
+                      className="bg-white text-[oklch(0.45_0.22_27)] font-bold uppercase tracking-widest text-xs px-6 py-3 hover:bg-gray-100 transition-colors flex items-center justify-center"
                     >
                       SEND INQUIRY
                     </Link>
