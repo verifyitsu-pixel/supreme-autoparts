@@ -1,178 +1,149 @@
 import { useState, useEffect, useRef } from "react";
-import { Link } from "wouter";
 import { Navbar, Footer, FloatingButtons } from "@/components/Layout";
-import { Phone, Globe, CreditCard, Tag, Star, ChevronLeft, ChevronRight, Send } from "lucide-react";
+import { Link } from "wouter";
+import { ChevronLeft, ChevronRight, CheckCircle2, Phone, Mail, MapPin, Send, Instagram } from "lucide-react";
 
-// Hero slides
-const SLIDES = [
+// Hero slider data
+const HERO_SLIDES = [
   {
-    tag: "WHERE KENYA GOES FOR THE",
-    title: "Your Trusted Source for Auto Spare Parts in Nairobi, Mombasa & Across Kenya",
-    bg: "from-gray-900 to-gray-800",
+    title: "PREMIUM AUTO SPARE PARTS",
+    subtitle: "FOR ALL MAJOR BRANDS",
+    description: "Quality parts for Toyota, BMW, Mercedes, and more. Genuine and OEM parts at competitive prices.",
+    image: "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=1600&q=80",
+    bg: "from-black/80 to-black/40",
   },
   {
-    tag: "LEADING AUTOSPARE PARTS IN KENYA",
-    title: "Quality components to keep you moving with confidence",
-    bg: "from-gray-900 to-gray-800",
-  },
-  {
-    tag: "COST-EFFECTIVE ALTERNATIVES WITHOUT COMPROMISING ON RELIABILITY",
-    title: "Quality Used Auto Parts You Can Trust",
+    title: "EXPERT PARTS SOURCING",
+    subtitle: "WE FIND WHAT YOU NEED",
+    description: "Can't find a specific part? Our sourcing experts will track it down for you across our global network.",
+    image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1600&q=80",
     bg: "from-gray-900 to-gray-800",
   },
 ];
 
 // Product categories
 const CATEGORIES = [
-  { label: "BRAKES", img: "/manus-storage/TgbmGhpPhcaO_67125cf6.jpg" },
-  { label: "GEAR PARTS", img: "/manus-storage/YMVAngtBcdAv_946f3813.jpg" },
-  { label: "STEERING", img: "/manus-storage/zkPNJza6nOuS_759a5d60.jpg" },
-  { label: "LUBRICANTS", img: "/manus-storage/zx3mpd38mqwh_1dd516ab.jpg" },
-  { label: "BODY KITS", img: "/manus-storage/dk6nReWkXBNM_cceba880.jpg" },
-  { label: "ENGINE PARTS", img: "/manus-storage/GO7ybAG0jxp4_8f770ca8.webp" },
-  { label: "ELECTRICALS", img: "/manus-storage/dYYk704pp5FU_59bcbaf8.jpg" },
-  { label: "SUSPENSION PARTS", img: "/manus-storage/3jMDoiAxEfqq_c26088b5.jpg" },
-  { label: "ALLOYS & RIMS", img: "/manus-storage/uheUzyXJXuab_451facf8.jpg" },
+  { label: "BRAKES", img: "/assets/images/products/mercedes-brake-pads.jpg" },
+  { label: "GEAR PARTS", img: "/assets/images/products/suzuki-clutch-kit.jpg" },
+  { label: "STEERING", img: "/assets/images/products/bmw-steering-rack.jpg" },
+  { label: "LUBRICANTS", img: "/assets/images/products/shell-oil.jpg" },
+  { label: "BODY KITS", img: "/assets/images/products/bmw-roof-rack.jpg" },
+  { label: "ENGINE PARTS", img: "/assets/images/products/toyota-carburetor.jpg" },
+  { label: "ELECTRICALS", img: "/assets/images/products/hyundai-alternator.jpg" },
+  { label: "SUSPENSION PARTS", img: "/assets/images/products/mercedes-shock-absorber.jpg" },
+  { label: "ALLOYS & RIMS", img: "/assets/images/products/lexus-alloy-rim.jpg" },
 ];
 
 // Car brand logos
 const CAR_BRANDS = [
-  { name: "Chevrolet", src: "/manus-storage/logo-chevrolet_81054620.png" },
-  { name: "BMW", src: "/manus-storage/logo-bmw_13aff034.png" },
-  { name: "Ford", src: "/manus-storage/logo-ford_b4732f80.png" },
-  { name: "Honda", src: "/manus-storage/logo-honda_e52f552c.png" },
-  { name: "Mercedes-Benz", src: "/manus-storage/logo-mercedes_2feccb84.png" },
-  { name: "Hyundai", src: "/manus-storage/logo-hyundai_15b12879.webp" },
-  { name: "Toyota", src: "/manus-storage/logo-toyota_1894187f.webp" },
-  { name: "Suzuki", src: "/manus-storage/logo-suzuki_b3c0cbaf.webp" },
-  { name: "Infiniti", src: "/manus-storage/logo-infiniti_b91aef4e.webp" },
-  { name: "Mopar", src: "/manus-storage/logo-mopar_77df2a46.webp" },
-  { name: "Lexus", src: "/manus-storage/logo-lexus_5623a401.webp" },
+  { name: "Chevrolet", src: "/assets/images/brands/chevrolet.png" },
+  { name: "BMW", src: "/assets/images/brands/bmw.png" },
+  { name: "Ford", src: "/assets/images/brands/ford.png" },
+  { name: "Honda", src: "/assets/images/brands/honda.png" },
+  { name: "Mercedes-Benz", src: "/assets/images/brands/mercedes.png" },
+  { name: "Hyundai", src: "/assets/images/brands/hyundai.png" },
+  { name: "Toyota", src: "/assets/images/brands/toyota.png" },
+  { name: "Suzuki", src: "/assets/images/brands/suzuki.png" },
+  { name: "Infiniti", src: "/assets/images/brands/infiniti.png" },
+  { name: "Mopar", src: "/assets/images/brands/mopar.png" },
+  { name: "Lexus", src: "/assets/images/brands/lexus.png" },
 ];
 
 // Recent products
 const PRODUCTS = [
-  { name: "MOTOR ENGINE OIL", cat: "Lubricants", img: "/manus-storage/AKO7fx0e7EoX_75e2d9bb.png" },
-  { name: "AUTOMATIC TRANSMISSION FLUID", cat: "Lubricants", img: "/manus-storage/lICQCnHriqD6_a6ef8f18.jpeg" },
-  { name: "BMW Railing Carrier Roof Rack", cat: "Body Kits", img: "/manus-storage/GXZUdoXVzqPQ_5abad503.jpg" },
-  { name: "Torque Converter", cat: "Gear Parts", img: "/manus-storage/YMVAngtBcdAv_946f3813.jpg" },
-  { name: "Rolls Royce Alloy Rim FD156", cat: "Alloys & Rims", img: "/manus-storage/YkTorajED7yL_485d744f.jpg" },
-  { name: "Antilock Braking System", cat: "Brakes", img: "/manus-storage/qe91vSqdJL9S_1d3c6406.jpg" },
-  { name: "Audi Lower Arm", cat: "Suspension Parts", img: "/manus-storage/PFo1pre5XNwy_22a198d0.png" },
-  { name: "Ball Joint Volkswagen", cat: "Suspension Parts", img: "/manus-storage/BAK11LsdYal3_c70d17ff.jpg" },
+  { name: "Toyota Genuine Brake Pads", cat: "Brakes", price: "KES 5,500", img: "/assets/images/products/toyota-brake-pads.jpg" },
+  { name: "BMW Genuine Oil Filter Kit", cat: "Engine Parts", price: "KES 3,500", img: "/assets/images/products/bmw-oil-filter.jpg" },
+  { name: "Mercedes-Benz Shock Absorber", cat: "Suspension Parts", price: "KES 14,500", img: "/assets/images/products/mercedes-shock-absorber.jpg" },
+  { name: "Honda Headlight Assembly", cat: "Electricals", price: "KES 12,000", img: "/assets/images/products/honda-headlight.jpg" },
+  { name: "Ford Ranger Radiator", cat: "Engine Parts", price: "KES 16,000", img: "/assets/images/products/ford-radiator.jpg" },
+  { name: "Lexus RX Alloy Rim", cat: "Alloys & Rims", price: "KES 45,000", img: "/assets/images/products/lexus-alloy-rim.jpg" },
 ];
 
 function HeroSlider() {
   const [current, setCurrent] = useState(0);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  const startTimer = () => {
-    if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => setCurrent((c) => (c + 1) % SLIDES.length), 5000);
-  };
 
   useEffect(() => {
-    startTimer();
-    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % HERO_SLIDES.length);
+    }, 6000);
+    return () => clearInterval(timer);
   }, []);
 
-  const go = (idx: number) => { setCurrent(idx); startTimer(); };
-
   return (
-    <div className="relative overflow-hidden" style={{ minHeight: 520, background: "#111" }}>
-      {/* Background image overlay */}
-      <div className="absolute inset-0">
-        <img
-          src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=1600&q=80"
-          alt="Auto parts background"
-          className="w-full h-full object-cover opacity-20"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent" />
-      </div>
-
-      {/* Decorative wheel */}
-      <img
-        src="/manus-storage/wheel_55c164fa.png"
-        alt=""
-        className="absolute right-0 top-0 h-full opacity-10 object-contain pointer-events-none"
-        style={{ maxWidth: 600 }}
-      />
-      <img
-        src="/manus-storage/dotted-grid_638195c6.png"
-        alt=""
-        className="absolute right-24 top-12 opacity-20 pointer-events-none"
-        style={{ width: 200 }}
-      />
-
-      {/* Slides */}
-      <div className="relative z-10 max-w-[1280px] mx-auto px-6 flex flex-col justify-center" style={{ minHeight: 520 }}>
-        {/* Large brand title */}
-        <p className="text-white/80 font-black text-xl md:text-2xl lg:text-3xl tracking-[0.35em] uppercase mb-5" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>SUPREME AUTOPARTS</p>
-
-        {SLIDES.map((slide, i) => (
+    <div className="relative h-[450px] md:h-[650px] overflow-hidden">
+      {HERO_SLIDES.map((slide, i) => (
+        <div
+          key={i}
+          className={`absolute inset-0 transition-opacity duration-1000 flex items-center ${
+            i === current ? "opacity-100 z-10" : "opacity-0 z-0"
+          }`}
+        >
           <div
-            key={i}
-            className={`transition-all duration-700 ${i === current ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 absolute"}`}
-            style={i !== current ? { pointerEvents: "none" } : {}}
-          >
-            <p className="section-label mb-3">{slide.tag}</p>
-            <h1 className="text-white font-black text-3xl md:text-5xl leading-tight max-w-2xl mb-8" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
-              {slide.title}
-            </h1>
-            <Link href="/contact" className="btn-primary inline-flex">
-              CONTACT US <span className="ml-1">+</span>
-            </Link>
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${slide.image})` }}
+          />
+          <div className={`absolute inset-0 bg-gradient-to-r ${slide.bg}`} />
+          <div className="relative z-20 max-w-[1280px] mx-auto px-4 w-full">
+            <div className="max-w-2xl">
+              <p className="text-white font-bold tracking-[0.3em] mb-2 text-sm md:text-base animate-fadeInUp">
+                {slide.subtitle}
+              </p>
+              <h2
+                className="text-4xl md:text-7xl font-black text-white mb-6 leading-none animate-fadeInUp delay-100"
+                style={{ fontFamily: "'Barlow Condensed', sans-serif" }}
+              >
+                {slide.title}
+              </h2>
+              <p className="text-gray-300 text-lg mb-8 animate-fadeInUp delay-200">
+                {slide.description}
+              </p>
+              <div className="flex gap-4 animate-fadeInUp delay-300">
+                <Link href="/products" className="btn-primary">
+                  SHOP NOW <span className="ml-1">+</span>
+                </Link>
+                <Link href="/contact" className="bg-white text-gray-900 font-bold uppercase tracking-widest text-xs px-8 py-4 hover:bg-gray-100 transition-colors">
+                  CONTACT US
+                </Link>
+              </div>
+            </div>
           </div>
-        ))}
-      </div>
-
-      {/* Dots */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-        {SLIDES.map((_, i) => (
+        </div>
+      ))}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex gap-2">
+        {HERO_SLIDES.map((_, i) => (
           <button
             key={i}
-            onClick={() => go(i)}
-            className={`w-3 h-3 rounded-full transition-all ${i === current ? "bg-[oklch(0.45_0.22_27)] scale-110" : "bg-white/40 hover:bg-white/70"}`}
-            aria-label={`Slide ${i + 1}`}
+            onClick={() => setCurrent(i)}
+            className={`w-12 h-1 transition-colors ${i === current ? "bg-[oklch(0.45_0.22_27)]" : "bg-white/30"}`}
           />
         ))}
       </div>
-
-      {/* Arrows */}
-      <button
-        onClick={() => go((current - 1 + SLIDES.length) % SLIDES.length)}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white/10 hover:bg-[oklch(0.45_0.22_27)] text-white p-2 rounded-sm transition-colors"
-        aria-label="Previous slide"
-      >
-        <ChevronLeft size={20} />
-      </button>
-      <button
-        onClick={() => go((current + 1) % SLIDES.length)}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white/10 hover:bg-[oklch(0.45_0.22_27)] text-white p-2 rounded-sm transition-colors"
-        aria-label="Next slide"
-      >
-        <ChevronRight size={20} />
-      </button>
     </div>
   );
 }
 
 function FeaturesBar() {
   const features = [
-    { icon: <Globe size={28} />, label: "Worldwide Delivery" },
-    { icon: <CreditCard size={28} />, label: "Easy Payments" },
-    { icon: <Tag size={28} />, label: "Best Prices" },
-    { icon: <Star size={28} />, label: "Exclusive Discounts" },
+    { label: "QUALITY PARTS", desc: "Genuine & OEM Standards" },
+    { label: "EXPERT SUPPORT", desc: "Professional Advice" },
+    { label: "QUICK DELIVERY", desc: "Nationwide Shipping" },
+    { label: "BEST PRICES", desc: "Competitive Rates" },
   ];
+
   return (
-    <div className="bg-[oklch(0.45_0.22_27)]">
-      <div className="max-w-[1280px] mx-auto px-4 grid grid-cols-2 md:grid-cols-4">
-        {features.map((f, i) => (
-          <div key={i} className={`flex items-center gap-3 py-5 px-6 text-white ${i < features.length - 1 ? "border-r border-red-700/50" : ""}`}>
-            <span className="opacity-80">{f.icon}</span>
-            <span className="font-bold uppercase tracking-wide text-sm">{f.label}</span>
-          </div>
-        ))}
+    <div className="bg-gray-900 py-8">
+      <div className="max-w-[1280px] mx-auto px-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          {features.map((f) => (
+            <div key={f.label} className="flex items-center gap-4 border-r border-white/10 last:border-0">
+              <CheckCircle2 className="text-[oklch(0.45_0.22_27)] shrink-0" size={24} />
+              <div>
+                <p className="text-white font-bold text-sm tracking-wider uppercase">{f.label}</p>
+                <p className="text-gray-400 text-xs">{f.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -252,20 +223,14 @@ function AboutSection() {
         <div className="relative">
           <div className="absolute -top-4 -left-4 w-full h-full bg-[oklch(0.45_0.22_27)] opacity-10 rounded-sm" />
           <img
-            src="/manus-storage/mechanic_f3c33fc9.jpg"
+            src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800&q=80"
             alt="Auto spare parts store"
             className="relative z-10 w-full h-80 object-cover rounded-sm shadow-lg"
-          />
-          <img
-            src="/manus-storage/ellipse-holder_31878a5d.png"
-            alt=""
-            className="absolute -bottom-6 -right-6 w-32 opacity-30 pointer-events-none"
           />
         </div>
 
         {/* Text side */}
         <div>
-          <img src="/manus-storage/wrench_bea0eb82.png" alt="" className="w-8 mb-4 opacity-70" />
           <h2 className="text-3xl md:text-4xl font-black mb-4" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
             Providing All Types of Car Parts & Accessories
           </h2>
@@ -288,37 +253,40 @@ function RecentProducts() {
   return (
     <section className="py-16 bg-gray-50">
       <div className="max-w-[1280px] mx-auto px-4">
-        <p className="section-label text-center mb-2">OUR PRODUCTS</p>
-        <h2 className="text-3xl md:text-4xl font-black text-center mb-2" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
-          Recently Added Parts
-        </h2>
-        <div className="flex justify-center mb-10">
-          <div className="flex gap-1">
-            <span className="w-8 h-0.5 bg-[oklch(0.45_0.22_27)]" />
-            <span className="w-2 h-0.5 bg-[oklch(0.45_0.22_27)]" />
-            <span className="w-2 h-0.5 bg-[oklch(0.45_0.22_27)]" />
+        <div className="flex justify-between items-end mb-10">
+          <div>
+            <p className="section-label">NEW ARRIVALS</p>
+            <h2 className="text-3xl md:text-4xl font-black" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
+              Our Recent Products
+            </h2>
           </div>
+          <Link href="/products" className="text-xs font-bold uppercase tracking-widest text-[oklch(0.45_0.22_27)] hover:underline mb-1">
+            VIEW ALL PRODUCTS →
+          </Link>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {PRODUCTS.map((p) => (
-            <div key={p.name} className="bg-white border border-gray-100 rounded-sm overflow-hidden hover:shadow-md transition-shadow group">
-              <div className="overflow-hidden h-44">
-                <img src={p.img} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+            <div key={p.name} className="bg-white border border-gray-200 rounded-sm overflow-hidden group">
+              <div className="h-40 overflow-hidden bg-gray-100">
+                <img
+                  src={p.img}
+                  alt={p.name}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
               </div>
-              <div className="p-3">
-                <p className="text-xs text-[oklch(0.45_0.22_27)] font-semibold uppercase tracking-wide mb-1">{p.cat}</p>
-                <h3 className="text-sm font-bold text-gray-800 leading-tight">{p.name}</h3>
-                <Link href={`/order?product=${encodeURIComponent(p.name)}&price=${encodeURIComponent((p as any).price || "")}`} className="mt-3 text-xs font-bold uppercase tracking-wide text-[oklch(0.45_0.22_27)] hover:underline flex items-center gap-1">
+              <div className="p-4">
+                <p className="text-[10px] text-[oklch(0.45_0.22_27)] font-bold uppercase tracking-wider mb-1">{p.cat}</p>
+                <h3 className="text-sm font-bold text-gray-800 leading-tight mb-2 h-10 overflow-hidden">{p.name}</h3>
+                <Link
+                  href={`/order?product=${encodeURIComponent(p.name)}&price=${encodeURIComponent(p.price)}`}
+                  className="text-xs font-bold uppercase tracking-wide text-[oklch(0.45_0.22_27)] hover:underline"
+                >
                   Order Now →
                 </Link>
               </div>
             </div>
           ))}
-        </div>
-        <div className="text-center mt-8">
-          <Link href="/products" className="btn-primary inline-flex">
-            VIEW ALL PRODUCTS
-          </Link>
         </div>
       </div>
     </section>
@@ -332,65 +300,74 @@ function ContactForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSent(true);
-    setTimeout(() => setSent(false), 4000);
     setForm({ name: "", email: "", subject: "", message: "" });
   };
 
   return (
-    <section className="py-16 bg-white">
-      <div className="max-w-[1280px] mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-12">
-        {/* Info */}
+    <section className="py-20 bg-white">
+      <div className="max-w-[1280px] mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-16">
         <div>
-          <p className="section-label mb-2">GET IN TOUCH</p>
-          <h2 className="text-3xl md:text-4xl font-black mb-4" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
-            Feel Free to Ask Us Anything
+          <p className="section-label">GET IN TOUCH</p>
+          <h2 className="text-3xl md:text-4xl font-black mb-6" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
+            Ready to order? Or have a question?
           </h2>
-          <p className="text-gray-600 mb-6">Have a question about a part? Not sure what fits your car? We're just a message away!</p>
-          <div className="flex flex-col gap-4 text-sm text-gray-700">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-[oklch(0.45_0.22_27)] rounded-full flex items-center justify-center shrink-0">
-                <Phone size={16} color="white" />
+          <p className="text-gray-600 mb-10">
+            Contact us for any auto spare part inquiry. We respond quickly to all messages and can help you find even the rarest components.
+          </p>
+
+          <div className="space-y-6">
+            <div className="flex gap-4">
+              <div className="w-12 h-12 bg-gray-900 flex items-center justify-center shrink-0">
+                <Phone className="text-white" size={20} />
               </div>
               <div>
-                <p className="font-bold text-gray-900">Phone</p>
-                <a href="tel:+254714498451" className="text-[oklch(0.45_0.22_27)] hover:underline">+254 714 498 451</a>
+                <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-1">Call Us</p>
+                <p className="text-lg font-bold">+254 714 498 451</p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-[oklch(0.45_0.22_27)] rounded-full flex items-center justify-center shrink-0">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            <div className="flex gap-4">
+              <div className="w-12 h-12 bg-gray-900 flex items-center justify-center shrink-0">
+                <Mail className="text-white" size={20} />
               </div>
               <div>
-                <p className="font-bold text-gray-900">Email</p>
-                <a href="mailto:calvin@supremeautoparts.co.ke" className="text-[oklch(0.45_0.22_27)] hover:underline">calvin@supremeautoparts.co.ke</a>
+                <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-1">Email Us</p>
+                <p className="text-lg font-bold">supremeautopartskenya@gmail.com</p>
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <div className="w-12 h-12 bg-gray-900 flex items-center justify-center shrink-0">
+                <MapPin className="text-white" size={20} />
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-1">Location</p>
+                <p className="text-lg font-bold">Nairobi, Kenya</p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="bg-gray-50 p-8 border border-gray-100 rounded-sm space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wide text-gray-600 mb-1">Your full name</label>
+              <label className="block text-xs font-bold uppercase tracking-wide text-gray-600 mb-1">Name</label>
               <input
                 type="text"
                 required
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 className="w-full border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:border-[oklch(0.45_0.22_27)] rounded-sm"
-                placeholder="John Kamau"
+                placeholder="Your Name"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wide text-gray-600 mb-1">E-mail address</label>
+              <label className="block text-xs font-bold uppercase tracking-wide text-gray-600 mb-1">Email</label>
               <input
                 type="email"
                 required
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 className="w-full border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:border-[oklch(0.45_0.22_27)] rounded-sm"
-                placeholder="john@email.com"
+                placeholder="Your Email"
               />
             </div>
           </div>

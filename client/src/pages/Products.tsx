@@ -11,34 +11,34 @@ const CATEGORIES = [
 const PRODUCTS = [
   // TOYOTA
   { name: "Toyota Genuine Brake Pads", category: "Brakes", brand: "Toyota", price: "KES 5,500", img: "/assets/images/products/toyota-brake-pads.jpg" },
-  { name: "Toyota Air Filter", category: "Engine Parts", brand: "Toyota", price: "KES 1,800", img: "/manus-storage/zPFMUNhMi0Ew_b44d9215.jpg" },
-  { name: "Toyota Oil Filter", category: "Engine Parts", brand: "Toyota", price: "KES 1,200", img: "/manus-storage/zPFMUNhMi0Ew_b44d9215.jpg" },
-  { name: "Toyota Hilux Carburetor", category: "Engine Parts", brand: "Toyota", price: "KES 18,000", img: "/manus-storage/GO7ybAG0jxp4_8f770ca8.webp" },
-  { name: "Toyota Fuse Box", category: "Electricals", brand: "Toyota", price: "KES 6,500", img: "/manus-storage/dYYk704pp5FU_59bcbaf8.jpg" },
-  { name: "Toyota Starter Motor", category: "Engine Parts", brand: "Toyota", price: "KES 12,500", img: "/manus-storage/H327vhS6DEWU_1cbc3c60.jpg" },
+  { name: "Toyota Air Filter", category: "Engine Parts", brand: "Toyota", price: "KES 1,800", img: "/assets/images/products/toyota-air-filter.jpg" },
+  { name: "Toyota Oil Filter", category: "Engine Parts", brand: "Toyota", price: "KES 1,200", img: "/assets/images/products/toyota-oil-filter.jpg" },
+  { name: "Toyota Hilux Carburetor", category: "Engine Parts", brand: "Toyota", price: "KES 18,000", img: "/assets/images/products/toyota-carburetor.jpg" },
+  { name: "Toyota Fuse Box", category: "Electricals", brand: "Toyota", price: "KES 6,500", img: "/assets/images/products/toyota-fuse-box.jpg" },
+  { name: "Toyota Starter Motor", category: "Engine Parts", brand: "Toyota", price: "KES 12,500", img: "/assets/images/products/toyota-starter-motor.jpg" },
 
   // BMW
   { name: "BMW Genuine Oil Filter Kit", category: "Engine Parts", brand: "BMW", price: "KES 3,500", img: "/assets/images/products/bmw-oil-filter.jpg" },
-  { name: "BMW Railing Carrier Roof Rack", category: "Body Kits", brand: "BMW", price: "KES 45,000", img: "/manus-storage/GXZUdoXVzqPQ_5abad503.jpg" },
-  { name: "BMW Camshaft N54", category: "Engine Parts", brand: "BMW", price: "KES 35,000", img: "/manus-storage/Cj14kqW0EFHE_663f6f7b.jpg" },
-  { name: "BMW Front Lower Arm", category: "Suspension Parts", brand: "BMW", price: "KES 11,000", img: "/manus-storage/PFo1pre5XNwy_22a198d0.png" },
-  { name: "BMW Steering Rack", category: "Steering", brand: "BMW", price: "KES 35,000", img: "/manus-storage/zkPNJza6nOuS_759a5d60.jpg" },
-  { name: "BMW Water Pump", category: "Engine Parts", brand: "BMW", price: "KES 7,500", img: "/manus-storage/UsHolq2JTjAa_d9faff3e.jpg" },
-  { name: "BMW Alloy Rim 18-inch", category: "Alloys & Rims", brand: "BMW", price: "KES 35,000", img: "/manus-storage/uheUzyXJXuab_451facf8.jpg" },
+  { name: "BMW Railing Carrier Roof Rack", category: "Body Kits", brand: "BMW", price: "KES 45,000", img: "/assets/images/products/bmw-roof-rack.jpg" },
+  { name: "BMW Camshaft N54", category: "Engine Parts", brand: "BMW", price: "KES 35,000", img: "/assets/images/products/bmw-camshaft.jpg" },
+  { name: "BMW Front Lower Arm", category: "Suspension Parts", brand: "BMW", price: "KES 11,000", img: "/assets/images/products/bmw-front-lower-arm.jpg" },
+  { name: "BMW Steering Rack", category: "Steering", brand: "BMW", price: "KES 35,000", img: "/assets/images/products/bmw-steering-rack.jpg" },
+  { name: "BMW Water Pump", category: "Engine Parts", brand: "BMW", price: "KES 7,500", img: "/assets/images/products/bmw-water-pump.jpg" },
+  { name: "BMW Alloy Rim 18-inch", category: "Alloys & Rims", brand: "BMW", price: "KES 35,000", img: "/assets/images/products/bmw-alloy-rim-18.jpg" },
 
   // MERCEDES-BENZ
   { name: "Mercedes-Benz Shock Absorber", category: "Suspension Parts", brand: "Mercedes-Benz", price: "KES 14,500", img: "/assets/images/products/mercedes-shock-absorber.jpg" },
-  { name: "Mercedes-Benz Brake Pads", category: "Brakes", brand: "Mercedes-Benz", price: "KES 5,500", img: "/manus-storage/TgbmGhpPhcaO_67125cf6.jpg" },
-  { name: "Mercedes Fuel Filter", category: "Engine Parts", brand: "Mercedes-Benz", price: "KES 2,000", img: "/manus-storage/qycEYakJQzm7_80a8344c.jpg" },
-  { name: "Mercedes Alloy Rim 20-inch", category: "Alloys & Rims", brand: "Mercedes-Benz", price: "KES 48,000", img: "/manus-storage/YkTorajED7yL_485d744f.jpg" },
+  { name: "Mercedes-Benz Brake Pads", category: "Brakes", brand: "Mercedes-Benz", price: "KES 5,500", img: "/assets/images/products/mercedes-brake-pads.jpg" },
+  { name: "Mercedes Fuel Filter", category: "Engine Parts", brand: "Mercedes-Benz", price: "KES 2,000", img: "/assets/images/products/mercedes-fuel-filter.jpg" },
+  { name: "Mercedes Alloy Rim 20-inch", category: "Alloys & Rims", brand: "Mercedes-Benz", price: "KES 48,000", img: "/assets/images/products/mercedes-alloy-rim.jpg" },
 
   // HONDA
   { name: "Honda Headlight Assembly", category: "Electricals", brand: "Honda", price: "KES 12,000", img: "/assets/images/products/honda-headlight.jpg" },
-  { name: "Honda Civic Brake Discs", category: "Brakes", brand: "Honda", price: "KES 9,000", img: "/manus-storage/GsXjhKiBYVt2_82d1e305.jpg" },
+  { name: "Honda Civic Brake Discs", category: "Brakes", brand: "Honda", price: "KES 9,000", img: "/assets/images/products/honda-brake-discs.jpg" },
 
   // FORD
   { name: "Ford Ranger Radiator", category: "Engine Parts", brand: "Ford", price: "KES 16,000", img: "/assets/images/products/ford-radiator.jpg" },
-  { name: "Ford Ranger Clutch Kit", category: "Gear Parts", brand: "Ford", price: "KES 12,000", img: "/manus-storage/RXcTD4AjzfOZ_e4689606.jpg" },
+  { name: "Ford Ranger Clutch Kit", category: "Gear Parts", brand: "Ford", price: "KES 12,000", img: "/assets/images/products/ford-clutch-kit.jpg" },
 
   // HYUNDAI
   { name: "Hyundai Alternator", category: "Electricals", brand: "Hyundai", price: "KES 18,500", img: "/assets/images/products/hyundai-alternator.jpg" },
@@ -59,13 +59,13 @@ const PRODUCTS = [
   { name: "Mopar Oil Filter", category: "Engine Parts", brand: "Mopar", price: "KES 1,500", img: "/assets/images/products/mopar-oil-filter.jpg" },
 
   // UNIVERSAL / OTHER
-  { name: "AC Blower Motor", category: "Electricals", brand: "Universal", price: "KES 8,500", img: "/manus-storage/B64ZG02QbuFg_daace09a.jpg" },
-  { name: "Antilock Braking System", category: "Brakes", brand: "Universal", price: "KES 15,000", img: "/manus-storage/qe91vSqdJL9S_1d3c6406.jpg" },
-  { name: "Automatic Transmission Fluid", category: "Lubricants", brand: "Universal", price: "KES 2,800", img: "/manus-storage/lICQCnHriqD6_a6ef8f18.jpeg" },
-  { name: "Engine Oil 5W-30 Shell", category: "Lubricants", brand: "Universal", price: "KES 3,500", img: "/manus-storage/zx3mpd38mqwh_1dd516ab.jpg" },
-  { name: "Engine Oil Castrol 10W-40", category: "Lubricants", brand: "Universal", price: "KES 3,200", img: "/manus-storage/lyq8mGbYVNzx_980b6d3c.jpg" },
-  { name: "Power Steering Pump", category: "Steering", brand: "Universal", price: "KES 14,000", img: "/manus-storage/zz0xcWQ26Pwl_81008dae.jpg" },
-  { name: "Turbocharger Kit", category: "Engine Parts", brand: "Universal", price: "KES 65,000", img: "/manus-storage/Cj14kqW0EFHE_663f6f7b.jpg" },
+  { name: "AC Blower Motor", category: "Electricals", brand: "Universal", price: "KES 8,500", img: "/assets/images/products/ac-blower-motor.jpg" },
+  { name: "Antilock Braking System", category: "Brakes", brand: "Universal", price: "KES 15,000", img: "/assets/images/products/abs-module.jpg" },
+  { name: "Automatic Transmission Fluid", category: "Lubricants", brand: "Universal", price: "KES 2,800", img: "/assets/images/products/transmission-fluid.jpg" },
+  { name: "Engine Oil 5W-30 Shell", category: "Lubricants", brand: "Universal", price: "KES 3,500", img: "/assets/images/products/shell-oil.jpg" },
+  { name: "Engine Oil Castrol 10W-40", category: "Lubricants", brand: "Universal", price: "KES 3,200", img: "/assets/images/products/castrol-oil.jpg" },
+  { name: "Power Steering Pump", category: "Steering", brand: "Universal", price: "KES 14,000", img: "/assets/images/products/steering-pump.jpg" },
+  { name: "Turbocharger Kit", category: "Engine Parts", brand: "Universal", price: "KES 65,000", img: "/assets/images/products/turbocharger-kit.jpg" },
 ];
 
 export default function Products() {

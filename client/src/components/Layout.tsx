@@ -141,7 +141,7 @@ export function Footer() {
       <div className="max-w-[1280px] mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-4 gap-10">
         {/* Logo & about */}
         <div className="md:col-span-1 flex flex-col gap-4">
-          <img src="/manus-storage/logo_cc4bca6e.png" alt="Supreme Autoparts" className="h-14 w-auto object-contain brightness-0 invert" />
+          <img src="/assets/images/brands/toyota.png" alt="Supreme Autoparts" className="h-14 w-auto object-contain brightness-0 invert" />
           <p className="text-gray-400 text-sm leading-relaxed">
             Based in Kenya, <strong className="text-white">Supreme Autoparts</strong> is a rapidly expanding player in the auto spare parts industry, supplying high-quality components for top-tier brands.
           </p>
