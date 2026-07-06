@@ -1,12 +1,26 @@
 import { useState, useEffect } from "react";
 import { Navbar, Footer, FloatingButtons } from "@/components/Layout";
 import { Link, useLocation } from "wouter";
-import { Search, Filter, X } from "lucide-react";
+import { Search, Filter, X, ChevronRight } from "lucide-react";
 
 const CATEGORIES = [
   "All Parts", "Alloys & Rims", "Brakes", "Electricals", "Engine Parts",
-  "Gear Parts", "Lubricants", "Steering", "Suspension Parts", "Body Kits", "Used Parts",
+  "Gear Parts", "Lubricants", "Steering", "Suspension Parts", "Body Kits", "Windscreens", "Used Parts",
 ];
+
+const VEHICLE_MODELS: Record<string, string[]> = {
+  "Toyota": ["Fielder", "Premio", "Prado", "Hilux", "Vitz", "Land Cruiser", "Corolla", "Axio", "Probox", "Noah", "Voxy", "Harrier", "Rav4", "Hiace", "Wish"],
+  "BMW": ["3 Series (E90/F30/G20)", "5 Series (F10/G30)", "7 Series", "X1", "X3", "X5", "X6", "1 Series", "2 Series", "M3", "M5"],
+  "Mercedes-Benz": ["C-Class (W204/W205)", "E-Class (W212/W213)", "S-Class", "GLC", "GLE", "GLA", "G-Wagon", "CLA", "Vito", "Sprinter"],
+  "Honda": ["Civic", "CR-V", "Fit", "Accord", "Insight", "Vezel", "Stream"],
+  "Ford": ["Ranger", "Everest", "F-150", "Focus", "Fiesta", "Explorer"],
+  "Hyundai": ["Tucson", "Santa Fe", "Elantra", "Accent", "Kona", "Sonata"],
+  "Suzuki": ["Swift", "Vitara", "Jimny", "Alto", "Ertiga"],
+  "Lexus": ["RX350", "NX200", "LX570", "IS250", "ES300", "GX460"],
+  "Infiniti": ["Q50", "QX70", "QX80", "G37"],
+  "Chevrolet": ["Cruze", "Captiva", "Trailblazer"],
+  "Mopar": ["Jeep Grand Cherokee", "Jeep Wrangler", "Dodge Ram", "Chrysler 300C"],
+};
 
 const PRODUCTS = [
   // TOYOTA
@@ -16,6 +30,7 @@ const PRODUCTS = [
   { name: "Toyota Hilux Carburetor", category: "Engine Parts", brand: "Toyota", price: "KES 18,000", img: "/assets/images/products/toyota-carburetor.jpg" },
   { name: "Toyota Fuse Box", category: "Electricals", brand: "Toyota", price: "KES 6,500", img: "/assets/images/products/toyota-fuse-box.jpg" },
   { name: "Toyota Starter Motor", category: "Engine Parts", brand: "Toyota", price: "KES 12,500", img: "/assets/images/products/toyota-starter-motor.jpg" },
+  { name: "Toyota Front Windscreen", category: "Windscreens", brand: "Toyota", price: "KES 15,000", img: "/assets/images/products/toyota-windscreen.webp" },
 
   // BMW
   { name: "BMW Genuine Oil Filter Kit", category: "Engine Parts", brand: "BMW", price: "KES 3,500", img: "/assets/images/products/bmw-oil-filter.jpg" },
@@ -24,21 +39,19 @@ const PRODUCTS = [
   { name: "BMW Front Lower Arm", category: "Suspension Parts", brand: "BMW", price: "KES 11,000", img: "/assets/images/products/bmw-front-lower-arm.jpg" },
   { name: "BMW Steering Rack", category: "Steering", brand: "BMW", price: "KES 35,000", img: "/assets/images/products/bmw-steering-rack.jpg" },
   { name: "BMW Water Pump", category: "Engine Parts", brand: "BMW", price: "KES 7,500", img: "/assets/images/products/bmw-water-pump.jpg" },
-  { name: "BMW Alloy Rim 18-inch", category: "Alloys & Rims", brand: "BMW", price: "KES 35,000", img: "/assets/images/products/bmw-alloy-rim-18.jpg" },
+  { name: "BMW Headlight Level Sensor", category: "Electricals", brand: "BMW", price: "KES 8,500", img: "/assets/images/products/bmw-sensor.jpg" },
 
   // MERCEDES-BENZ
   { name: "Mercedes-Benz Shock Absorber", category: "Suspension Parts", brand: "Mercedes-Benz", price: "KES 14,500", img: "/assets/images/products/mercedes-shock-absorber.jpg" },
   { name: "Mercedes-Benz Brake Pads", category: "Brakes", brand: "Mercedes-Benz", price: "KES 5,500", img: "/assets/images/products/mercedes-brake-pads.jpg" },
   { name: "Mercedes Fuel Filter", category: "Engine Parts", brand: "Mercedes-Benz", price: "KES 2,000", img: "/assets/images/products/mercedes-fuel-filter.jpg" },
-  { name: "Mercedes Alloy Rim 20-inch", category: "Alloys & Rims", brand: "Mercedes-Benz", price: "KES 48,000", img: "/assets/images/products/mercedes-alloy-rim.jpg" },
+  { name: "Mercedes Front Bumper", category: "Body Kits", brand: "Mercedes-Benz", price: "KES 25,000", img: "/assets/images/products/mercedes-bumper.jpg" },
 
   // HONDA
   { name: "Honda Headlight Assembly", category: "Electricals", brand: "Honda", price: "KES 12,000", img: "/assets/images/products/honda-headlight.jpg" },
-  { name: "Honda Civic Brake Discs", category: "Brakes", brand: "Honda", price: "KES 9,000", img: "/assets/images/products/honda-brake-discs.jpg" },
 
   // FORD
   { name: "Ford Ranger Radiator", category: "Engine Parts", brand: "Ford", price: "KES 16,000", img: "/assets/images/products/ford-radiator.jpg" },
-  { name: "Ford Ranger Clutch Kit", category: "Gear Parts", brand: "Ford", price: "KES 12,000", img: "/assets/images/products/ford-clutch-kit.jpg" },
 
   // HYUNDAI
   { name: "Hyundai Alternator", category: "Electricals", brand: "Hyundai", price: "KES 18,500", img: "/assets/images/products/hyundai-alternator.jpg" },
@@ -61,10 +74,6 @@ const PRODUCTS = [
   // UNIVERSAL / OTHER
   { name: "AC Blower Motor", category: "Electricals", brand: "Universal", price: "KES 8,500", img: "/assets/images/products/ac-blower-motor.jpg" },
   { name: "Antilock Braking System", category: "Brakes", brand: "Universal", price: "KES 15,000", img: "/assets/images/products/abs-module.jpg" },
-  { name: "Automatic Transmission Fluid", category: "Lubricants", brand: "Universal", price: "KES 2,800", img: "/assets/images/products/transmission-fluid.jpg" },
-  { name: "Engine Oil 5W-30 Shell", category: "Lubricants", brand: "Universal", price: "KES 3,500", img: "/assets/images/products/shell-oil.jpg" },
-  { name: "Engine Oil Castrol 10W-40", category: "Lubricants", brand: "Universal", price: "KES 3,200", img: "/assets/images/products/castrol-oil.jpg" },
-  { name: "Power Steering Pump", category: "Steering", brand: "Universal", price: "KES 14,000", img: "/assets/images/products/steering-pump.jpg" },
   { name: "Turbocharger Kit", category: "Engine Parts", brand: "Universal", price: "KES 65,000", img: "/assets/images/products/turbocharger-kit.jpg" },
 ];
 
@@ -75,6 +84,8 @@ export default function Products() {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState<"name" | "price" | "category">("name");
   const [page, setPage] = useState(1);
+  const [selectedModel, setSelectedModel] = useState("");
+  const [showModelPrompt, setShowModelPrompt] = useState<{product: any} | null>(null);
   const ITEMS_PER_PAGE = 12;
 
   useEffect(() => {
@@ -115,9 +126,16 @@ export default function Products() {
     setPage(1);
   };
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    setPage(1);
+  const handleOrderClick = (product: any) => {
+    setShowModelPrompt({ product });
+  };
+
+  const handleModelConfirm = () => {
+    if (showModelPrompt && selectedModel) {
+      const { product } = showModelPrompt;
+      const url = `/order?product=${encodeURIComponent(product.name)}&price=${encodeURIComponent(product.price)}&model=${encodeURIComponent(selectedModel)}&brand=${encodeURIComponent(product.brand)}`;
+      setLocation(url);
+    }
   };
 
   const clearBrandFilter = () => {
@@ -175,7 +193,7 @@ export default function Products() {
 
             {/* Search & Sort Bar */}
             <div className="flex flex-col md:flex-row gap-4 mb-8">
-              <form onSubmit={handleSearch} className="flex-1 flex gap-2">
+              <form className="flex-1 flex gap-2" onSubmit={(e) => e.preventDefault()}>
                 <input
                   type="text"
                   placeholder="Search products..."
@@ -255,12 +273,12 @@ export default function Products() {
                         </div>
                         <h3 className="text-sm font-bold text-gray-800 leading-tight mb-2 h-10 overflow-hidden">{product.name}</h3>
                         <p className="text-sm font-bold text-[oklch(0.45_0.22_27)]">{product.price}</p>
-                        <Link
-                          href={`/order?product=${encodeURIComponent(product.name)}&price=${encodeURIComponent(product.price)}`}
+                        <button
+                          onClick={() => handleOrderClick(product)}
                           className="mt-2 text-xs font-bold uppercase tracking-wide text-[oklch(0.45_0.22_27)] hover:underline flex items-center gap-1"
                         >
                           Order Now →
-                        </Link>
+                        </button>
                       </div>
                     </div>
                   ))}
@@ -305,30 +323,52 @@ export default function Products() {
                     </button>
                   </div>
                 )}
-
-                {/* Contact CTA */}
-                <div className="mt-12 bg-gray-900 p-8 text-center rounded-sm">
-                  <p className="text-white text-lg font-bold mb-2">Can't find what you're looking for?</p>
-                  <p className="text-gray-400 text-sm mb-4">We source all types of auto spare parts. Let us help you find it!</p>
-                  <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                    <a
-                      href="tel:+254714498451"
-                      className="btn-primary justify-center"
-                    >
-                      CALL US NOW
-                    </a>
-                    <Link
-                      href="/contact"
-                      className="bg-white text-[oklch(0.45_0.22_27)] font-bold uppercase tracking-widest text-xs px-6 py-3 hover:bg-gray-100 transition-colors flex items-center justify-center"
-                    >
-                      SEND INQUIRY
-                    </Link>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
         </section>
+
+        {/* Model Selection Modal */}
+        {showModelPrompt && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+            <div className="bg-white w-full max-w-md rounded-sm shadow-2xl overflow-hidden">
+              <div className="bg-gray-900 p-4 flex justify-between items-center">
+                <h3 className="text-white font-bold uppercase tracking-wider text-sm">Select Your Vehicle Model</h3>
+                <button onClick={() => setShowModelPrompt(null)} className="text-white hover:text-gray-300">
+                  <X size={20} />
+                </button>
+              </div>
+              <div className="p-6">
+                <p className="text-sm text-gray-600 mb-4">
+                  Please select your <strong>{showModelPrompt.product.brand}</strong> model to ensure the <strong>{showModelPrompt.product.name}</strong> fits perfectly.
+                </p>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wide text-gray-500 mb-1">Vehicle Model</label>
+                    <select
+                      value={selectedModel}
+                      onChange={(e) => setSelectedModel(e.target.value)}
+                      className="w-full border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:border-[oklch(0.45_0.22_27)] rounded-sm bg-white"
+                    >
+                      <option value="">-- Select Model --</option>
+                      {(VEHICLE_MODELS[showModelPrompt.product.brand] || []).map(model => (
+                        <option key={model} value={model}>{model}</option>
+                      ))}
+                      <option value="Other">Other (Specify in form)</option>
+                    </select>
+                  </div>
+                  <button
+                    disabled={!selectedModel}
+                    onClick={handleModelConfirm}
+                    className="w-full btn-primary justify-center disabled:opacity-50"
+                  >
+                    CONTINUE TO ORDER <ChevronRight size={16} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
       <Footer />
       <FloatingButtons />

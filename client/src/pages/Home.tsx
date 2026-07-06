@@ -32,6 +32,7 @@ const CATEGORIES = [
   { label: "ELECTRICALS", img: "/assets/images/products/hyundai-alternator.jpg" },
   { label: "SUSPENSION PARTS", img: "/assets/images/products/mercedes-shock-absorber.jpg" },
   { label: "ALLOYS & RIMS", img: "/assets/images/products/lexus-alloy-rim.jpg" },
+  { label: "WINDSCREENS", img: "/assets/images/products/toyota-windscreen.webp" },
 ];
 
 // Car brand logos
