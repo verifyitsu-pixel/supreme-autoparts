@@ -308,8 +308,8 @@ function RecentProducts() {
               <div className="p-3">
                 <p className="text-xs text-[oklch(0.45_0.22_27)] font-semibold uppercase tracking-wide mb-1">{p.cat}</p>
                 <h3 className="text-sm font-bold text-gray-800 leading-tight">{p.name}</h3>
-                <Link href="/contact" className="mt-3 text-xs font-bold uppercase tracking-wide text-[oklch(0.45_0.22_27)] hover:underline flex items-center gap-1">
-                  Read more →
+                <Link href={`/order?product=${encodeURIComponent(p.name)}&price=${encodeURIComponent((p as any).price || "")}`} className="mt-3 text-xs font-bold uppercase tracking-wide text-[oklch(0.45_0.22_27)] hover:underline flex items-center gap-1">
+                  Order Now →
                 </Link>
               </div>
             </div>

@@ -9,6 +9,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Products from "./pages/Products";
 import Brands from "./pages/Brands";
+import Order from "./pages/Order";
 import Terms from "./pages/Terms";
 import RefundPolicy from "./pages/RefundPolicy";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -20,6 +21,7 @@ function Router() {
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
       <Route path="/products" component={Products} />
+      <Route path="/order" component={Order} />
       <Route path="/brands" component={Brands} />
       <Route path="/terms-and-conditions" component={Terms} />
       <Route path="/refund-policy" component={RefundPolicy} />

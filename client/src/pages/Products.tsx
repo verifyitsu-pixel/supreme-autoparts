@@ -187,10 +187,10 @@ export default function Products() {
                         <h3 className="text-sm font-bold text-gray-800 leading-tight mb-2">{product.name}</h3>
                         <p className="text-sm font-bold text-[oklch(0.45_0.22_27)]">{product.price}</p>
                         <Link
-                          href="/contact"
+                          href={`/order?product=${encodeURIComponent(product.name)}&price=${encodeURIComponent(product.price)}`}
                           className="mt-2 text-xs font-bold uppercase tracking-wide text-[oklch(0.45_0.22_27)] hover:underline flex items-center gap-1"
                         >
-                          Read more →
+                          Order Now →
                         </Link>
                       </div>
                     </div>
