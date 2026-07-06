@@ -24,15 +24,15 @@ const SLIDES = [
 
 // Product categories
 const CATEGORIES = [
-  { label: "BRAKES", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" },
-  { label: "GEAR PARTS", img: "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=600&q=80" },
-  { label: "STEERING", img: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=80" },
-  { label: "LUBRICANTS", img: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&q=80" },
-  { label: "BODY KITS", img: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=600&q=80" },
-  { label: "ENGINE PARTS", img: "https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=600&q=80" },
-  { label: "ELECTRICALS", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" },
-  { label: "SUSPENSION PARTS", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" },
-  { label: "ALLOYS & RIMS", img: "https://images.unsplash.com/photo-1547744152-14d985cb937f?w=600&q=80" },
+  { label: "BRAKES", img: "/manus-storage/TgbmGhpPhcaO_67125cf6.jpg" },
+  { label: "GEAR PARTS", img: "/manus-storage/YMVAngtBcdAv_946f3813.jpg" },
+  { label: "STEERING", img: "/manus-storage/zkPNJza6nOuS_759a5d60.jpg" },
+  { label: "LUBRICANTS", img: "/manus-storage/zx3mpd38mqwh_1dd516ab.jpg" },
+  { label: "BODY KITS", img: "/manus-storage/dk6nReWkXBNM_cceba880.jpg" },
+  { label: "ENGINE PARTS", img: "/manus-storage/GO7ybAG0jxp4_8f770ca8.webp" },
+  { label: "ELECTRICALS", img: "/manus-storage/dYYk704pp5FU_59bcbaf8.jpg" },
+  { label: "SUSPENSION PARTS", img: "/manus-storage/3jMDoiAxEfqq_c26088b5.jpg" },
+  { label: "ALLOYS & RIMS", img: "/manus-storage/uheUzyXJXuab_451facf8.jpg" },
 ];
 
 // Car brand logos
@@ -52,14 +52,14 @@ const CAR_BRANDS = [
 
 // Recent products
 const PRODUCTS = [
-  { name: "MOTOR ENGINE OIL", cat: "Lubricants", img: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&q=80" },
-  { name: "AUTOMATIC TRANSMISSION FLUID", cat: "Lubricants", img: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&q=80" },
-  { name: "BMW Railing Carrier Roof Rack", cat: "Body Kits", img: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=400&q=80" },
-  { name: "Torque Converter", cat: "Gear Parts", img: "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=400&q=80" },
-  { name: "Rolls Royce Alloy Rim FD156", cat: "Alloys & Rims", img: "https://images.unsplash.com/photo-1547744152-14d985cb937f?w=400&q=80" },
-  { name: "Antilock Braking System", cat: "Brakes", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" },
-  { name: "Audi Lower Arm", cat: "Suspension Parts", img: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400&q=80" },
-  { name: "Ball Joint Volkswagen", cat: "Suspension Parts", img: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400&q=80" },
+  { name: "MOTOR ENGINE OIL", cat: "Lubricants", img: "/manus-storage/AKO7fx0e7EoX_75e2d9bb.png" },
+  { name: "AUTOMATIC TRANSMISSION FLUID", cat: "Lubricants", img: "/manus-storage/lICQCnHriqD6_a6ef8f18.jpeg" },
+  { name: "BMW Railing Carrier Roof Rack", cat: "Body Kits", img: "/manus-storage/GXZUdoXVzqPQ_5abad503.jpg" },
+  { name: "Torque Converter", cat: "Gear Parts", img: "/manus-storage/YMVAngtBcdAv_946f3813.jpg" },
+  { name: "Rolls Royce Alloy Rim FD156", cat: "Alloys & Rims", img: "/manus-storage/YkTorajED7yL_485d744f.jpg" },
+  { name: "Antilock Braking System", cat: "Brakes", img: "/manus-storage/qe91vSqdJL9S_1d3c6406.jpg" },
+  { name: "Audi Lower Arm", cat: "Suspension Parts", img: "/manus-storage/PFo1pre5XNwy_22a198d0.png" },
+  { name: "Ball Joint Volkswagen", cat: "Suspension Parts", img: "/manus-storage/BAK11LsdYal3_c70d17ff.jpg" },
 ];
 
 function HeroSlider() {
