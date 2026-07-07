@@ -8,10 +8,10 @@ const CATEGORIES = [
   { name: "Engine Components", img: "/assets/images/categories/engine.jpg" },
   { name: "Transmission & Gear", img: "/assets/images/categories/transmission.jpg" },
   { name: "Steering Systems", img: "/assets/images/categories/steering.jpg" },
-  { name: "Suspension & Chassis", img: "/assets/images/products/mercedes-shock-absorber.jpg" },
+  { name: "Suspension & Chassis", img: "/assets/images/real_parts/mercedes_shock_absorber.jpg" },
   { name: "Electrical & Sensors", img: "/assets/images/products/bmw-sensor.jpg" },
   { name: "Alloys & Rims", img: "/assets/images/products/lexus-alloy-rim.jpg" },
-  { name: "Lubricants & Fluids", img: "/assets/images/products/toyota-oil-filter.jpg" },
+  { name: "Lubricants & Fluids", img: "/assets/images/real_parts/bmw_oil_filter.jpg" },
   { name: "Body Kits & Styling", img: "/assets/images/products/mercedes-bumper.jpg" },
   { name: "Glass & Windscreens", img: "/assets/images/products/toyota-windscreen.webp" },
   { name: "Certified Used Parts", img: "/assets/images/products/bmw-steering-rack.jpg" },
@@ -19,101 +19,101 @@ const CATEGORIES = [
 
 const VEHICLE_MODELS: Record<string, { name: string; img?: string }[]> = {
   "Toyota": [
-    { name: "Fielder", img: "/assets/images/models/fielder.jpg" },
-    { name: "Harrier", img: "/assets/images/models/harrier.png" },
-    { name: "Vitz", img: "/assets/images/models/vitz.jpg" },
-    { name: "Prado (J120/J150)", img: "/assets/images/models/prado.jpg" },
+    { name: "Fielder", img: "/assets/images/real_models/toyota_fielder.jpg" },
+    { name: "Harrier", img: "/assets/images/real_models/toyota_harrier.jpg" },
+    { name: "Vitz", img: "/assets/images/real_models/toyota_vitz.jpg" },
+    { name: "Prado (J120/J150)", img: "/assets/images/real_models/toyota_prado.jpg" },
     { name: "Premio", img: "/assets/images/models/premio.jpg" },
-    { name: "Hilux (Vigo/Revo)", img: "/assets/images/models/hilux.jpg" },
-    { name: "Land Cruiser (V8/300)", img: "/assets/images/models/landcruiser.jpg" },
-    { name: "Corolla", img: "/assets/images/models/fielder.jpg" },
-    { name: "Axio", img: "/assets/images/models/fielder.jpg" },
+    { name: "Hilux (Vigo/Revo)", img: "/assets/images/real_models/toyota_hilux.jpg" },
+    { name: "Land Cruiser (V8/300)", img: "/assets/images/real_models/toyota_landcruiser.jpg" },
+    { name: "Corolla", img: "/assets/images/real_models/toyota_fielder.jpg" },
+    { name: "Axio", img: "/assets/images/real_models/toyota_fielder.jpg" },
     { name: "Probox", img: "/assets/images/models/probox.jpg" },
     { name: "Noah/Voxy", img: "/assets/images/models/noah.webp" },
-    { name: "Rav4", img: "/assets/images/models/harrier.png" },
-    { name: "Hiace", img: "/assets/images/models/hilux.jpg" },
-    { name: "Wish", img: "/assets/images/models/vitz.jpg" }
+    { name: "Rav4", img: "/assets/images/real_models/toyota_harrier.jpg" },
+    { name: "Hiace", img: "/assets/images/real_models/toyota_hilux.jpg" },
+    { name: "Wish", img: "/assets/images/real_models/toyota_vitz.jpg" }
   ],
   "BMW": [
-    { name: "3 Series (E90/F30/G20)", img: "/assets/images/models/bmw3.jpg" },
-    { name: "5 Series (F10/G30)", img: "/assets/images/models/bmw5.jpg" },
-    { name: "7 Series (F01/G11)", img: "/assets/images/models/bmw5.jpg" },
-    { name: "X1 (E84/F48)", img: "/assets/images/models/bmw3.jpg" },
-    { name: "X3 (F25/G01)", img: "/assets/images/models/bmw3.jpg" },
-    { name: "X5 (E70/F15/G05)", img: "/assets/images/models/bmw5.jpg" },
-    { name: "X6", img: "/assets/images/models/bmw5.jpg" },
-    { name: "1 Series", img: "/assets/images/models/bmw3.jpg" },
-    { name: "M3/M4/M5 Performance", img: "/assets/images/models/bmw3.jpg" }
+    { name: "3 Series (E90/F30/G20)", img: "/assets/images/real_models/bmw_3series.jpg" },
+    { name: "5 Series (F10/G30)", img: "/assets/images/real_models/bmw_5series.jpg" },
+    { name: "7 Series (F01/G11)", img: "/assets/images/real_models/bmw_5series.jpg" },
+    { name: "X1 (E84/F48)", img: "/assets/images/real_models/bmw_3series.jpg" },
+    { name: "X3 (F25/G01)", img: "/assets/images/real_models/bmw_3series.jpg" },
+    { name: "X5 (E70/F15/G05)", img: "/assets/images/real_models/bmw_5series.jpg" },
+    { name: "X6", img: "/assets/images/real_models/bmw_5series.jpg" },
+    { name: "1 Series", img: "/assets/images/real_models/bmw_3series.jpg" },
+    { name: "M3/M4/M5 Performance", img: "/assets/images/real_models/bmw_3series.jpg" }
   ],
   "Mercedes-Benz": [
-    { name: "S550 (W221/W222)", img: "/assets/images/models/mercedesc.png" },
-    { name: "C-Class (W204/W205/W206)", img: "/assets/images/models/mercedesc.png" },
-    { name: "E-Class (W212/W213)", img: "/assets/images/models/mercedesc.png" },
-    { name: "S-Class (W221/W222)", img: "/assets/images/models/mercedesc.png" },
-    { name: "GLC-Class", img: "/assets/images/models/mercedesc.png" },
-    { name: "GLE-Class", img: "/assets/images/models/mercedesc.png" },
-    { name: "GLA-Class", img: "/assets/images/models/mercedesc.png" },
-    { name: "G-Wagon", img: "/assets/images/models/mercedesc.png" },
-    { name: "CLA-Class", img: "/assets/images/models/mercedesc.png" },
-    { name: "Vito/V-Class", img: "/assets/images/models/mercedesc.png" },
-    { name: "Sprinter", img: "/assets/images/models/mercedesc.png" }
+    { name: "S550 (W221/W222)", img: "/assets/images/real_models/mercedes_sclass.jpg" },
+    { name: "C-Class (W204/W205/W206)", img: "/assets/images/real_models/mercedes_cclass.jpg" },
+    { name: "E-Class (W212/W213)", img: "/assets/images/real_models/mercedes_cclass.jpg" },
+    { name: "S-Class (W221/W222)", img: "/assets/images/real_models/mercedes_sclass.jpg" },
+    { name: "GLC-Class", img: "/assets/images/real_models/mercedes_cclass.jpg" },
+    { name: "GLE-Class", img: "/assets/images/real_models/mercedes_cclass.jpg" },
+    { name: "GLA-Class", img: "/assets/images/real_models/mercedes_cclass.jpg" },
+    { name: "G-Wagon", img: "/assets/images/real_models/mercedes_sclass.jpg" },
+    { name: "CLA-Class", img: "/assets/images/real_models/mercedes_cclass.jpg" },
+    { name: "Vito/V-Class", img: "/assets/images/real_models/mercedes_cclass.jpg" },
+    { name: "Sprinter", img: "/assets/images/real_models/mercedes_cclass.jpg" }
   ],
   "Honda": [
-    { name: "Civic (FD/FB/FC)", img: "/assets/images/models/vitz.jpg" },
-    { name: "CR-V", img: "/assets/images/models/harrier.png" },
-    { name: "Fit/Jazz", img: "/assets/images/models/vitz.jpg" },
-    { name: "Accord", img: "/assets/images/models/vitz.jpg" },
-    { name: "Insight", img: "/assets/images/models/vitz.jpg" },
-    { name: "Vezel/HR-V", img: "/assets/images/models/harrier.png" },
-    { name: "Stream", img: "/assets/images/models/harrier.png" }
+    { name: "Civic (FD/FB/FC)", img: "/assets/images/real_models/toyota_vitz.jpg" },
+    { name: "CR-V", img: "/assets/images/real_models/toyota_harrier.jpg" },
+    { name: "Fit/Jazz", img: "/assets/images/real_models/toyota_vitz.jpg" },
+    { name: "Accord", img: "/assets/images/real_models/toyota_vitz.jpg" },
+    { name: "Insight", img: "/assets/images/real_models/toyota_vitz.jpg" },
+    { name: "Vezel/HR-V", img: "/assets/images/real_models/toyota_harrier.jpg" },
+    { name: "Stream", img: "/assets/images/real_models/toyota_harrier.jpg" }
   ],
   "Ford": [
-    { name: "Ranger (T6/T7/T8)", img: "/assets/images/models/prado.jpg" },
-    { name: "Everest", img: "/assets/images/models/prado.jpg" },
-    { name: "F-150 Raptor", img: "/assets/images/models/prado.jpg" },
-    { name: "Focus", img: "/assets/images/models/vitz.jpg" },
-    { name: "Fiesta", img: "/assets/images/models/vitz.jpg" },
-    { name: "Explorer", img: "/assets/images/models/prado.jpg" }
+    { name: "Ranger (T6/T7/T8)", img: "/assets/images/real_models/toyota_prado.jpg" },
+    { name: "Everest", img: "/assets/images/real_models/toyota_prado.jpg" },
+    { name: "F-150 Raptor", img: "/assets/images/real_models/toyota_prado.jpg" },
+    { name: "Focus", img: "/assets/images/real_models/toyota_vitz.jpg" },
+    { name: "Fiesta", img: "/assets/images/real_models/toyota_vitz.jpg" },
+    { name: "Explorer", img: "/assets/images/real_models/toyota_prado.jpg" }
   ],
   "Hyundai": [
-    { name: "Tucson", img: "/assets/images/models/harrier.png" },
-    { name: "Santa Fe", img: "/assets/images/models/harrier.png" },
-    { name: "Elantra", img: "/assets/images/models/vitz.jpg" },
-    { name: "Accent", img: "/assets/images/models/vitz.jpg" },
-    { name: "Kona", img: "/assets/images/models/vitz.jpg" },
-    { name: "Sonata", img: "/assets/images/models/vitz.jpg" }
+    { name: "Tucson", img: "/assets/images/real_models/toyota_harrier.jpg" },
+    { name: "Santa Fe", img: "/assets/images/real_models/toyota_harrier.jpg" },
+    { name: "Elantra", img: "/assets/images/real_models/toyota_vitz.jpg" },
+    { name: "Accent", img: "/assets/images/real_models/toyota_vitz.jpg" },
+    { name: "Kona", img: "/assets/images/real_models/toyota_vitz.jpg" },
+    { name: "Sonata", img: "/assets/images/real_models/toyota_vitz.jpg" }
   ],
   "Suzuki": [
-    { name: "Swift", img: "/assets/images/models/vitz.jpg" },
-    { name: "Vitara", img: "/assets/images/models/harrier.png" },
-    { name: "Jimny", img: "/assets/images/models/prado.jpg" },
-    { name: "Alto", img: "/assets/images/models/vitz.jpg" },
-    { name: "Ertiga", img: "/assets/images/models/vitz.jpg" }
+    { name: "Swift", img: "/assets/images/real_models/toyota_vitz.jpg" },
+    { name: "Vitara", img: "/assets/images/real_models/toyota_harrier.jpg" },
+    { name: "Jimny", img: "/assets/images/real_models/toyota_prado.jpg" },
+    { name: "Alto", img: "/assets/images/real_models/toyota_vitz.jpg" },
+    { name: "Ertiga", img: "/assets/images/real_models/toyota_vitz.jpg" }
   ],
   "Lexus": [
-    { name: "RX350/RX450h", img: "/assets/images/models/harrier.png" },
-    { name: "NX200t/NX300", img: "/assets/images/models/harrier.png" },
-    { name: "LX570/LX600", img: "/assets/images/models/prado.jpg" },
-    { name: "IS250/IS300", img: "/assets/images/models/vitz.jpg" },
-    { name: "ES300h", img: "/assets/images/models/vitz.jpg" },
-    { name: "GX460", img: "/assets/images/models/prado.jpg" }
+    { name: "RX350/RX450h", img: "/assets/images/real_models/toyota_harrier.jpg" },
+    { name: "NX200t/NX300", img: "/assets/images/real_models/toyota_harrier.jpg" },
+    { name: "LX570/LX600", img: "/assets/images/real_models/toyota_prado.jpg" },
+    { name: "IS250/IS300", img: "/assets/images/real_models/toyota_vitz.jpg" },
+    { name: "ES300h", img: "/assets/images/real_models/toyota_vitz.jpg" },
+    { name: "GX460", img: "/assets/images/real_models/toyota_prado.jpg" }
   ],
   "Infiniti": [
-    { name: "Q50", img: "/assets/images/models/vitz.jpg" },
-    { name: "QX70", img: "/assets/images/models/harrier.png" },
-    { name: "QX80", img: "/assets/images/models/prado.jpg" },
-    { name: "G37", img: "/assets/images/models/vitz.jpg" }
+    { name: "Q50", img: "/assets/images/real_models/toyota_vitz.jpg" },
+    { name: "QX70", img: "/assets/images/real_models/toyota_harrier.jpg" },
+    { name: "QX80", img: "/assets/images/real_models/toyota_prado.jpg" },
+    { name: "G37", img: "/assets/images/real_models/toyota_vitz.jpg" }
   ],
   "Chevrolet": [
-    { name: "Cruze", img: "/assets/images/models/vitz.jpg" },
-    { name: "Captiva", img: "/assets/images/models/harrier.png" },
-    { name: "Trailblazer", img: "/assets/images/models/prado.jpg" }
+    { name: "Cruze", img: "/assets/images/real_models/toyota_vitz.jpg" },
+    { name: "Captiva", img: "/assets/images/real_models/toyota_harrier.jpg" },
+    { name: "Trailblazer", img: "/assets/images/real_models/toyota_prado.jpg" }
   ],
   "Mopar": [
-    { name: "Jeep Grand Cherokee", img: "/assets/images/models/prado.jpg" },
-    { name: "Jeep Wrangler (JK/JL)", img: "/assets/images/models/prado.jpg" },
-    { name: "Dodge Ram 1500", img: "/assets/images/models/prado.jpg" },
-    { name: "Chrysler 300C", img: "/assets/images/models/vitz.jpg" }
+    { name: "Jeep Grand Cherokee", img: "/assets/images/real_models/toyota_prado.jpg" },
+    { name: "Jeep Wrangler (JK/JL)", img: "/assets/images/real_models/toyota_prado.jpg" },
+    { name: "Dodge Ram 1500", img: "/assets/images/real_models/toyota_prado.jpg" },
+    { name: "Chrysler 300C", img: "/assets/images/real_models/toyota_vitz.jpg" }
   ],
 };
 
@@ -126,7 +126,7 @@ const PRODUCTS = [
         category: "Braking Systems", 
         brand, 
         price: brand === "BMW" ? "KES 12,500" : brand === "Mercedes-Benz" ? "KES 14,000" : "KES 6,500", 
-        img: brand === "BMW" ? "/assets/images/products/bmw3-brake-pads.jpg" : "/assets/images/products/toyota-brake-pads.jpg", 
+        img: brand === "BMW" ? "/assets/images/products/bmw3-brake-pads.jpg" : "/assets/images/real_parts/toyota_brake_pads.jpg", 
         condition: "New", 
         models: [model.name] 
       },
@@ -135,7 +135,7 @@ const PRODUCTS = [
         category: "Engine Components", 
         brand, 
         price: "KES 1,800", 
-        img: brand === "BMW" ? "/assets/images/products/bmw-oil-filter.jpg" : "/assets/images/products/toyota-oil-filter.jpg", 
+        img: brand === "BMW" ? "/assets/images/real_parts/bmw_oil_filter.jpg" : "/assets/images/products/toyota-oil-filter.jpg", 
         condition: "New", 
         models: [model.name] 
       },
@@ -144,7 +144,7 @@ const PRODUCTS = [
         category: "Engine Components", 
         brand, 
         price: "KES 2,500", 
-        img: brand === "Toyota" ? "/assets/images/products/toyota-air-filter.jpg" : "/assets/images/products/bmw-oil-filter.jpg", 
+        img: brand === "Toyota" ? "/assets/images/products/toyota-air-filter.jpg" : "/assets/images/real_parts/bmw_oil_filter.jpg", 
         condition: "New", 
         models: [model.name] 
       },
@@ -171,7 +171,7 @@ const PRODUCTS = [
         category: "Suspension & Chassis", 
         brand, 
         price: brand === "Mercedes-Benz" ? "KES 35,000" : "KES 22,000", 
-        img: brand === "Mercedes-Benz" ? "/assets/images/products/mercedesc-shock.jpg" : "/assets/images/products/mercedes-shock-absorber.jpg", 
+        img: brand === "Mercedes-Benz" ? "/assets/images/real_parts/mercedes_shock_absorber.jpg" : "/assets/images/products/mercedes-shock-absorber.jpg", 
         condition: "New", 
         models: [model.name] 
       },
@@ -207,7 +207,7 @@ const PRODUCTS = [
         category: "Lubricants & Fluids", 
         brand, 
         price: "KES 8,500", 
-        img: "/assets/images/products/toyota-oil-filter.jpg", 
+        img: brand === "BMW" ? "/assets/images/real_parts/bmw_oil_filter.jpg" : "/assets/images/products/toyota-oil-filter.jpg", 
         condition: "New", 
         models: [model.name] 
       },
@@ -302,20 +302,19 @@ export default function Products() {
               <div className="flex items-center gap-4">
                 <div className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all ${!activeBrand ? "bg-[oklch(0.45_0.22_27)] border-[oklch(0.45_0.22_27)] text-white" : "border-white/20 text-white/50"}`}>
                   <span className="text-[10px] font-black">01</span>
-                  <span className="text-[10px] font-black uppercase tracking-widest">Select Brand</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest">Brand</span>
                 </div>
-                <ChevronRight className="text-white/20" size={16} />
+                <div className="w-8 h-px bg-white/10" />
                 <div className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all ${activeBrand && !activeModel ? "bg-[oklch(0.45_0.22_27)] border-[oklch(0.45_0.22_27)] text-white" : "border-white/20 text-white/50"}`}>
                   <span className="text-[10px] font-black">02</span>
-                  <span className="text-[10px] font-black uppercase tracking-widest">Select Model</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest">Model</span>
                 </div>
-                <ChevronRight className="text-white/20" size={16} />
+                <div className="w-8 h-px bg-white/10" />
                 <div className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all ${activeModel && !activeCategory ? "bg-[oklch(0.45_0.22_27)] border-[oklch(0.45_0.22_27)] text-white" : "border-white/20 text-white/50"}`}>
                   <span className="text-[10px] font-black">03</span>
                   <span className="text-[10px] font-black uppercase tracking-widest">Category</span>
                 </div>
               </div>
-              
               {(activeBrand || activeModel || activeCategory) && (
                 <button onClick={resetAll} className="text-[10px] font-black text-[oklch(0.45_0.22_27)] uppercase tracking-widest hover:underline">
                   Reset Selection
@@ -327,7 +326,6 @@ export default function Products() {
 
         <section className="py-16 min-h-[60vh]">
           <div className="max-w-[1280px] mx-auto px-6">
-            
             {/* STEP 1: SELECT BRAND */}
             {!activeBrand && (
               <div className="animate-fadeIn">
@@ -402,54 +400,53 @@ export default function Products() {
                     <X size={14} /> Back to Models
                   </button>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
                   {CATEGORIES.map(cat => (
                     <button 
                       key={cat.name}
                       onClick={() => handleCategorySelect(cat.name)}
-                      className="group bg-white border border-gray-100 overflow-hidden rounded-sm hover:border-[oklch(0.45_0.22_27)] hover:shadow-2xl transition-all duration-500"
+                      className="group bg-white border border-gray-100 p-8 flex flex-col items-center justify-center gap-4 hover:border-[oklch(0.45_0.22_27)] hover:shadow-2xl transition-all duration-500"
                     >
-                      <div className="h-40 bg-gray-50 overflow-hidden">
-                        <img src={cat.img} alt={cat.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                      <div className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center overflow-hidden border border-gray-100">
+                        <img src={cat.img} alt={cat.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" />
                       </div>
-                      <div className="p-6 bg-white flex justify-between items-center">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-gray-900">{cat.name}</span>
-                        <LayoutGrid size={16} className="text-gray-200 group-hover:text-[oklch(0.45_0.22_27)] transition-colors" />
-                      </div>
+                      <span className="text-[9px] font-black uppercase tracking-widest text-gray-900 text-center leading-tight">{cat.name}</span>
                     </button>
                   ))}
                 </div>
               </div>
             )}
 
-            {/* STEP 4: VIEW PARTS */}
+            {/* STEP 4: RESULTS GRID */}
             {activeBrand && activeModel && activeCategory && (
               <div className="animate-fadeIn">
                 <div className="flex flex-col lg:flex-row gap-12">
-                  {/* Selection Summary Sidebar */}
-                  <aside className="w-full lg:w-72 shrink-0">
-                    <div className="sticky top-28 bg-gray-900 p-8 rounded-sm text-white shadow-2xl">
-                      <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[oklch(0.45_0.22_27)] mb-8">Selection Summary</h3>
-                      <div className="space-y-8">
-                        <div>
-                          <p className="text-[8px] font-bold text-white/40 uppercase tracking-widest mb-2">Manufacturer</p>
-                          <div className="flex items-center justify-between">
-                            <p className="text-xs font-black uppercase tracking-widest">{activeBrand}</p>
-                            <button onClick={() => setActiveBrand(null)} className="text-white/20 hover:text-white"><X size={12} /></button>
+                  {/* Sidebar Info */}
+                  <aside className="lg:w-80 shrink-0">
+                    <div className="bg-gray-900 p-10 rounded-sm sticky top-32">
+                      <div className="mb-10">
+                        <h4 className="text-[10px] font-black text-[oklch(0.45_0.22_27)] uppercase tracking-[0.3em] mb-8">Current Selection</h4>
+                        <div className="space-y-8">
+                          <div>
+                            <p className="text-[8px] font-bold text-white/40 uppercase tracking-widest mb-2">Manufacturer</p>
+                            <div className="flex items-center justify-between">
+                              <p className="text-xs font-black uppercase tracking-widest">{activeBrand}</p>
+                              <button onClick={() => setActiveBrand(null)} className="text-white/20 hover:text-white"><X size={12} /></button>
+                            </div>
                           </div>
-                        </div>
-                        <div>
-                          <p className="text-[8px] font-bold text-white/40 uppercase tracking-widest mb-2">Vehicle Model</p>
-                          <div className="flex items-center justify-between">
-                            <p className="text-xs font-black uppercase tracking-widest">{activeModel}</p>
-                            <button onClick={() => setActiveModel(null)} className="text-white/20 hover:text-white"><X size={12} /></button>
+                          <div>
+                            <p className="text-[8px] font-bold text-white/40 uppercase tracking-widest mb-2">Vehicle Model</p>
+                            <div className="flex items-center justify-between">
+                              <p className="text-xs font-black uppercase tracking-widest">{activeModel}</p>
+                              <button onClick={() => setActiveModel(null)} className="text-white/20 hover:text-white"><X size={12} /></button>
+                            </div>
                           </div>
-                        </div>
-                        <div>
-                          <p className="text-[8px] font-bold text-white/40 uppercase tracking-widest mb-2">Part Category</p>
-                          <div className="flex items-center justify-between">
-                            <p className="text-xs font-black uppercase tracking-widest">{activeCategory}</p>
-                            <button onClick={() => setActiveCategory(null)} className="text-white/20 hover:text-white"><X size={12} /></button>
+                          <div>
+                            <p className="text-[8px] font-bold text-white/40 uppercase tracking-widest mb-2">Part Category</p>
+                            <div className="flex items-center justify-between">
+                              <p className="text-xs font-black uppercase tracking-widest">{activeCategory}</p>
+                              <button onClick={() => setActiveCategory(null)} className="text-white/20 hover:text-white"><X size={12} /></button>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -519,7 +516,6 @@ export default function Products() {
                 </div>
               </div>
             )}
-
           </div>
         </section>
       </main>
