@@ -24,24 +24,24 @@ const VEHICLE_MODELS: Record<string, { name: string; img?: string }[]> = {
     { name: "Vitz", img: "/assets/images/models/vitz.jpg" },
     { name: "Prado (J120/J150)", img: "/assets/images/models/prado.jpg" },
     { name: "Premio", img: "/assets/images/models/premio.jpg" },
-    { name: "Hilux (Vigo/Revo)", img: "/assets/images/models/fielder.jpg" }, // Fallback img
-    { name: "Land Cruiser (V8/300)", img: "/assets/images/models/prado.jpg" },
+    { name: "Hilux (Vigo/Revo)", img: "/assets/images/models/hilux.jpg" },
+    { name: "Land Cruiser (V8/300)", img: "/assets/images/models/landcruiser.jpg" },
     { name: "Corolla", img: "/assets/images/models/fielder.jpg" },
     { name: "Axio", img: "/assets/images/models/fielder.jpg" },
-    { name: "Probox", img: "/assets/images/models/vitz.jpg" },
-    { name: "Noah/Voxy", img: "/assets/images/models/harrier.png" },
+    { name: "Probox", img: "/assets/images/models/probox.jpg" },
+    { name: "Noah/Voxy", img: "/assets/images/models/noah.webp" },
     { name: "Rav4", img: "/assets/images/models/harrier.png" },
-    { name: "Hiace", img: "/assets/images/models/fielder.jpg" },
+    { name: "Hiace", img: "/assets/images/models/hilux.jpg" },
     { name: "Wish", img: "/assets/images/models/vitz.jpg" }
   ],
   "BMW": [
     { name: "3 Series (E90/F30/G20)", img: "/assets/images/models/bmw3.jpg" },
-    { name: "5 Series (F10/G30)", img: "/assets/images/models/bmw3.jpg" },
-    { name: "7 Series (F01/G11)", img: "/assets/images/models/bmw3.jpg" },
+    { name: "5 Series (F10/G30)", img: "/assets/images/models/bmw5.jpg" },
+    { name: "7 Series (F01/G11)", img: "/assets/images/models/bmw5.jpg" },
     { name: "X1 (E84/F48)", img: "/assets/images/models/bmw3.jpg" },
     { name: "X3 (F25/G01)", img: "/assets/images/models/bmw3.jpg" },
-    { name: "X5 (E70/F15/G05)", img: "/assets/images/models/bmw3.jpg" },
-    { name: "X6", img: "/assets/images/models/bmw3.jpg" },
+    { name: "X5 (E70/F15/G05)", img: "/assets/images/models/bmw5.jpg" },
+    { name: "X6", img: "/assets/images/models/bmw5.jpg" },
     { name: "1 Series", img: "/assets/images/models/bmw3.jpg" },
     { name: "M3/M4/M5 Performance", img: "/assets/images/models/bmw3.jpg" }
   ],
@@ -121,17 +121,105 @@ const PRODUCTS = [
   // Generate a baseline for every model to ensure no empty states
   ...Object.entries(VEHICLE_MODELS).flatMap(([brand, models]) => 
     models.flatMap(model => [
-      { name: `${brand} ${model.name} Genuine Brake Pad Set`, category: "Braking Systems", brand, price: "KES 6,500", img: "/assets/images/products/toyota-brake-pads.jpg", condition: "New", models: [model.name] },
-      { name: `${brand} ${model.name} High-Flow Oil Filter`, category: "Engine Components", brand, price: "KES 1,800", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New", models: [model.name] },
-      { name: `${brand} ${model.name} OEM Air Filter`, category: "Engine Components", brand, price: "KES 2,500", img: "/assets/images/products/toyota-air-filter.jpg", condition: "New", models: [model.name] },
-      { name: `${brand} ${model.name} Performance Spark Plugs`, category: "Electrical & Sensors", brand, price: "KES 4,500", img: "/assets/images/products/bmw-sensor.jpg", condition: "New", models: [model.name] },
-      { name: `${brand} ${model.name} Premium Windscreen`, category: "Glass & Windscreens", brand, price: "KES 18,000", img: "/assets/images/products/toyota-windscreen.webp", condition: "New", models: [model.name] },
-      { name: `${brand} ${model.name} Shock Absorber Set`, category: "Suspension & Chassis", brand, price: "KES 22,000", img: "/assets/images/products/mercedes-shock-absorber.jpg", condition: "New", models: [model.name] },
-      { name: `${brand} ${model.name} Transmission Service Kit`, category: "Transmission & Gear", brand, price: "KES 15,000", img: "/assets/images/products/bmw-gear-service-kit.jpg", condition: "New", models: [model.name] },
-      { name: `${brand} ${model.name} Power Steering Pump`, category: "Steering Systems", brand, price: "KES 28,000", img: "/assets/images/products/bmw-steering-rack.jpg", condition: "Certified Used", models: [model.name] },
-      { name: `${brand} ${model.name} Alloy Wheel Set (17\")`, category: "Alloys & Rims", brand, price: "KES 65,000", img: "/assets/images/products/lexus-alloy-rim.jpg", condition: "New", models: [model.name] },
-      { name: `${brand} ${model.name} Fully Synthetic Engine Oil`, category: "Lubricants & Fluids", brand, price: "KES 8,500", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New", models: [model.name] },
-      { name: `${brand} ${model.name} Body Styling Kit`, category: "Body Kits & Styling", brand, price: "KES 45,000", img: "/assets/images/products/mercedes-bumper.jpg", condition: "New", models: [model.name] },
+      { 
+        name: `${brand} ${model.name} Genuine Brake Pad Set`, 
+        category: "Braking Systems", 
+        brand, 
+        price: brand === "BMW" ? "KES 12,500" : brand === "Mercedes-Benz" ? "KES 14,000" : "KES 6,500", 
+        img: brand === "BMW" ? "/assets/images/products/bmw3-brake-pads.jpg" : "/assets/images/products/toyota-brake-pads.jpg", 
+        condition: "New", 
+        models: [model.name] 
+      },
+      { 
+        name: `${brand} ${model.name} High-Flow Oil Filter`, 
+        category: "Engine Components", 
+        brand, 
+        price: "KES 1,800", 
+        img: brand === "BMW" ? "/assets/images/products/bmw-oil-filter.jpg" : "/assets/images/products/toyota-oil-filter.jpg", 
+        condition: "New", 
+        models: [model.name] 
+      },
+      { 
+        name: `${brand} ${model.name} OEM Air Filter`, 
+        category: "Engine Components", 
+        brand, 
+        price: "KES 2,500", 
+        img: brand === "Toyota" ? "/assets/images/products/toyota-air-filter.jpg" : "/assets/images/products/bmw-oil-filter.jpg", 
+        condition: "New", 
+        models: [model.name] 
+      },
+      { 
+        name: `${brand} ${model.name} Performance Spark Plugs`, 
+        category: "Electrical & Sensors", 
+        brand, 
+        price: "KES 4,500", 
+        img: brand === "Honda" ? "/assets/images/products/honda-civic-alternator.jpg" : "/assets/images/products/bmw-sensor.jpg", 
+        condition: "New", 
+        models: [model.name] 
+      },
+      { 
+        name: `${brand} ${model.name} Premium Windscreen`, 
+        category: "Glass & Windscreens", 
+        brand, 
+        price: "KES 18,000", 
+        img: brand === "Toyota" ? "/assets/images/products/toyota-windscreen.webp" : "/assets/images/products/toyota-windscreen-2.jpg", 
+        condition: "New", 
+        models: [model.name] 
+      },
+      { 
+        name: `${brand} ${model.name} Shock Absorber Set`, 
+        category: "Suspension & Chassis", 
+        brand, 
+        price: brand === "Mercedes-Benz" ? "KES 35,000" : "KES 22,000", 
+        img: brand === "Mercedes-Benz" ? "/assets/images/products/mercedesc-shock.jpg" : "/assets/images/products/mercedes-shock-absorber.jpg", 
+        condition: "New", 
+        models: [model.name] 
+      },
+      { 
+        name: `${brand} ${model.name} Transmission Service Kit`, 
+        category: "Transmission & Gear", 
+        brand, 
+        price: "KES 15,000", 
+        img: brand === "BMW" ? "/assets/images/products/bmw-gear-service-kit.jpg" : "/assets/images/products/toyota-vitz-gearbox.png", 
+        condition: "New", 
+        models: [model.name] 
+      },
+      { 
+        name: `${brand} ${model.name} Power Steering Pump`, 
+        category: "Steering Systems", 
+        brand, 
+        price: "KES 28,000", 
+        img: "/assets/images/products/bmw-steering-rack.jpg", 
+        condition: "Certified Used", 
+        models: [model.name] 
+      },
+      { 
+        name: `${brand} ${model.name} Alloy Wheel Set (17\")`, 
+        category: "Alloys & Rims", 
+        brand, 
+        price: "KES 65,000", 
+        img: brand === "Mercedes-Benz" ? "/assets/images/products/mercedes-alloy-rim.jpg" : "/assets/images/products/lexus-alloy-rim.jpg", 
+        condition: "New", 
+        models: [model.name] 
+      },
+      { 
+        name: `${brand} ${model.name} Fully Synthetic Engine Oil`, 
+        category: "Lubricants & Fluids", 
+        brand, 
+        price: "KES 8,500", 
+        img: "/assets/images/products/toyota-oil-filter.jpg", 
+        condition: "New", 
+        models: [model.name] 
+      },
+      { 
+        name: `${brand} ${model.name} Body Styling Kit`, 
+        category: "Body Kits & Styling", 
+        brand, 
+        price: "KES 45,000", 
+        img: "/assets/images/products/mercedes-bumper.jpg", 
+        condition: "New", 
+        models: [model.name] 
+      },
     ])
   ),
   // Specific High-End Items
