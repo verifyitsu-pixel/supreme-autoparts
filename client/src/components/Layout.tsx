@@ -162,7 +162,7 @@ export function Footer() {
             <ul className="space-y-6">
               <li className="flex gap-4">
                 <MapPin className="text-[oklch(0.45_0.22_27)] shrink-0" size={18} />
-                <span className="text-xs text-gray-400 font-medium leading-relaxed">Supreme Plaza, Kirinyaga Road,<br />Nairobi, Kenya</span>
+                <span className="text-xs text-gray-400 font-medium leading-relaxed">MIDAX PLAZA, Kangundo Rd,<br />Nairobi, Kenya</span>
               </li>
               <li className="flex gap-4">
                 <Phone className="text-[oklch(0.45_0.22_27)] shrink-0" size={18} />
@@ -215,6 +215,17 @@ export function Footer() {
             </div>
           </div>
         )}
+
+        {/* Payment Methods */}
+        <div className="py-12 border-t border-white/5">
+          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 mb-6 text-center">We Accept</p>
+          <div className="flex flex-wrap items-center justify-center gap-8">
+            <img src="/assets/images/payments/cards.png" alt="Visa, Mastercard, Amex, Discover" className="h-8 object-contain opacity-80 hover:opacity-100 transition-opacity" />
+            <img src="/assets/images/payments/paypal.png" alt="PayPal" className="h-8 object-contain opacity-80 hover:opacity-100 transition-opacity" />
+            <img src="/assets/images/payments/mpesa.png" alt="M-Pesa" className="h-8 object-contain opacity-80 hover:opacity-100 transition-opacity" />
+            <div className="text-white text-xs font-black uppercase tracking-widest px-4 py-2 border border-white/20 rounded-sm hover:border-white transition-colors">PesaLink</div>
+          </div>
+        </div>
 
         <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
           <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">© {new Date().getFullYear()} Supreme Autoparts. All Rights Reserved.</p>
