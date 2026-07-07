@@ -57,7 +57,7 @@ export default function Terms() {
               <h2 className="text-2xl font-black text-gray-900 mb-6 uppercase tracking-tight">8. Contact Information</h2>
               <div className="bg-gray-50 border border-gray-200 p-8 rounded-sm mb-12">
                 <p className="text-gray-700 mb-4 font-bold">For any legal or service-related inquiries, please contact:</p>
-                <p className="text-sm text-gray-700"><strong>Email:</strong> <a href="mailto:calvin@supremeautoparts.co.ke" className="text-[oklch(0.45_0.22_27)] underline">calvin@supremeautoparts.co.ke</a></p>
+                <p className="text-sm text-gray-700"><strong>Email:</strong> <a href="mailto:valvin@supremeautoparts.co.ke" className="text-[oklch(0.45_0.22_27)] underline">valvin@supremeautoparts.co.ke</a></p>
                 <p className="text-sm text-gray-700"><strong>WhatsApp:</strong> <a href="https://wa.me/254714498451" className="text-[oklch(0.45_0.22_27)] underline">+254 714 498 451</a></p>
               </div>
             </div>

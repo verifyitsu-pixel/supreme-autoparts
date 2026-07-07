@@ -235,7 +235,7 @@ export function Footer() {
               </li>
               <li className="flex gap-4">
                 <Mail className="text-[#E42933] shrink-0" size={18} />
-                <span className="text-xs text-gray-400 font-medium"><a href="mailto:calvin@supremeautoparts.co.ke" className="hover:text-[#E42933] transition-colors">calvin@supremeautoparts.co.ke</a></span>
+                <span className="text-xs text-gray-400 font-medium"><a href="mailto:valvin@supremeautoparts.co.ke" className="hover:text-[#E42933] transition-colors">valvin@supremeautoparts.co.ke</a></span>
               </li>
             </ul>
           </div>

@@ -28,19 +28,24 @@ const BRANDS = [
   { name: "Behr", src: "/assets/images/brand-behr.jpg", description: "Climate control and engine cooling" },
 ];
 
-// Car brands
+// Car brands – all major Kenyan market brands
 const CAR_BRANDS = [
-  { name: "Toyota", src: "/assets/images/logo-toyota.webp" },
-  { name: "BMW", src: "/assets/images/logo-bmw.png" },
-  { name: "Mercedes-Benz", src: "/assets/images/logo-mercedes.png" },
-  { name: "Honda", src: "/assets/images/logo-honda.png" },
-  { name: "Ford", src: "/assets/images/logo-ford.png" },
-  { name: "Hyundai", src: "/assets/images/logo-hyundai.webp" },
-  { name: "Suzuki", src: "/assets/images/logo-suzuki.webp" },
-  { name: "Lexus", src: "/assets/images/logo-lexus.webp" },
-  { name: "Chevrolet", src: "/assets/images/logo-chevrolet.png" },
-  { name: "Infiniti", src: "/assets/images/logo-infiniti.webp" },
-  { name: "Mopar", src: "/assets/images/logo-mopar.webp" },
+  { id: "toyota", name: "Toyota", src: "/assets/images/brands/toyota.png" },
+  { id: "nissan", name: "Nissan", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Nissan_logo.svg/200px-Nissan_logo.svg.png" },
+  { id: "mazda", name: "Mazda", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Mazda_logo.svg/200px-Mazda_logo.svg.png" },
+  { id: "honda", name: "Honda", src: "/assets/images/brands/honda.png" },
+  { id: "subaru", name: "Subaru", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Subaru_logo.svg/200px-Subaru_logo.svg.png" },
+  { id: "mitsubishi", name: "Mitsubishi", src: "/assets/images/brands/mitsubishi.png" },
+  { id: "suzuki", name: "Suzuki", src: "/assets/images/brands/suzuki.png" },
+  { id: "bmw", name: "BMW", src: "/assets/images/brands/bmw.png" },
+  { id: "mercedes-benz", name: "Mercedes-Benz", src: "/assets/images/brands/mercedesbenz.png" },
+  { id: "volkswagen", name: "Volkswagen", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Volkswagen_logo_2019.svg/200px-Volkswagen_logo_2019.svg.png" },
+  { id: "ford", name: "Ford", src: "/assets/images/brands/ford.png" },
+  { id: "hyundai", name: "Hyundai", src: "/assets/images/brands/hyundai.png" },
+  { id: "isuzu", name: "Isuzu", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Isuzu_logo.svg/200px-Isuzu_logo.svg.png" },
+  { id: "lexus", name: "Lexus", src: "/assets/images/brands/lexus.png" },
+  { id: "kia", name: "Kia", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Kia-logo.svg/200px-Kia-logo.svg.png" },
+  { id: "land-rover", name: "Land Rover", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Land_Rover_logo.svg/200px-Land_Rover_logo.svg.png" },
 ];
 
 export default function Brands() {
@@ -76,8 +81,8 @@ export default function Brands() {
             <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-6">
               {CAR_BRANDS.map((brand) => (
                 <Link
-                  key={brand.name}
-                  href={`/products?brand=${encodeURIComponent(brand.name)}`}
+                  key={brand.id}
+                  href={`/shop/brand/${brand.id}`}
                   className="bg-gray-50 border border-gray-100 p-6 flex flex-col items-center justify-center gap-3 hover:shadow-md transition-shadow rounded-sm"
                   style={{ minHeight: 120 }}
                 >

@@ -86,7 +86,7 @@ function InvoiceModal({ order, type, onClose }: { order: Order; type: "invoice" 
             <div>
               <img src="/assets/images/logo-horizontal.png" alt="Supreme Autoparts" className="h-10 mb-3" />
               <p className="text-sm text-gray-600">MIDAX Plaza, Kangundo Rd, Nairobi</p>
-              <p className="text-sm text-gray-600">+254 714 498 451 | calvin@supremeautoparts.co.ke</p>
+              <p className="text-sm text-gray-600">+254 714 498 451 | valvin@supremeautoparts.co.ke</p>
             </div>
             <div className="text-right">
               <div className={`inline-block px-4 py-2 rounded-lg text-white font-black text-lg mb-2 ${isPaid ? "bg-green-600" : "bg-[#E42933]"}`}>

@@ -70,7 +70,7 @@ export function Navbar() {
     setLocation("/");
   };
 
-  const announcement = storeSettings?.announcementBar || "🚚 Free shipping on orders over KES 10,000 | Call us: +254 700 000 000";
+  const announcement = storeSettings?.announcementBar || "🚚 Free shipping on orders over KES 10,000 | Call us: +254 714 498 451";
   const showAnnouncement = storeSettings?.announcementBarEnabled !== false && announcementVisible;
 
   return (
@@ -91,11 +91,11 @@ export function Navbar() {
         <div className="hidden lg:block bg-[#1a1a1a] text-gray-300 text-xs">
           <div className="max-w-[1400px] mx-auto px-4 py-1.5 flex items-center justify-between">
             <div className="flex items-center gap-6">
-              <a href="tel:+254700000000" className="flex items-center gap-1.5 hover:text-white transition-colors">
-                <Phone size={11} /> <span>{storeSettings?.storePhone || "+254 700 000 000"}</span>
+              <a href="tel:+254714498451" className="flex items-center gap-1.5 hover:text-white transition-colors">
+                <Phone size={11} /> <span>{storeSettings?.storePhone || "+254 714 498 451"}</span>
               </a>
-              <a href="mailto:info@supremeautoparts.co.ke" className="flex items-center gap-1.5 hover:text-white transition-colors">
-                <Mail size={11} /> <span>info@supremeautoparts.co.ke</span>
+              <a href="mailto:valvin@supremeautoparts.co.ke" className="flex items-center gap-1.5 hover:text-white transition-colors">
+                <Mail size={11} /> <span>valvin@supremeautoparts.co.ke</span>
               </a>
               <span className="flex items-center gap-1.5">
                 <MapPin size={11} /> <span>Nairobi, Kenya</span>
@@ -274,7 +274,7 @@ export function Navbar() {
                     {CATEGORIES.map((cat) => (
                       <div key={cat.name} className="group relative">
                         <button
-                          onClick={() => { setLocation(`/products?category=${encodeURIComponent(cat.name)}`); setCategoryMenuOpen(false); }}
+                          onClick={() => { setLocation(`/shop/brands?category=${encodeURIComponent(cat.name)}`); setCategoryMenuOpen(false); }}
                           className="w-full flex items-center justify-between px-4 py-2.5 text-gray-700 hover:bg-[#E42933] hover:text-white transition-colors text-sm"
                         >
                           <span className="flex items-center gap-2.5">
@@ -287,7 +287,7 @@ export function Navbar() {
                         <div className="absolute left-full top-0 w-56 bg-white shadow-2xl border border-gray-100 rounded-xl overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-[300]">
                           <div className="px-4 py-2 bg-[#E42933] text-white text-xs font-bold uppercase tracking-wider">{cat.name}</div>
                           {cat.subcategories.map(sub => (
-                            <button key={sub} onClick={() => { setLocation(`/products?category=${encodeURIComponent(cat.name)}&subcategory=${encodeURIComponent(sub)}`); setCategoryMenuOpen(false); }}
+                            <button key={sub} onClick={() => { setLocation(`/shop/brands?category=${encodeURIComponent(cat.name)}&sub=${encodeURIComponent(sub)}`); setCategoryMenuOpen(false); }}
                               className="block w-full text-left px-4 py-2 text-sm text-gray-600 hover:text-[#E42933] hover:bg-gray-50 transition-colors">
                               {sub}
                             </button>
@@ -385,7 +385,7 @@ export function Navbar() {
                   {expandedMobileCategory === cat.name && (
                     <div className="bg-gray-50 border-t border-gray-100">
                       {cat.subcategories.map(sub => (
-                        <button key={sub} onClick={() => { setLocation(`/products?category=${encodeURIComponent(cat.name)}&subcategory=${encodeURIComponent(sub)}`); setMobileMenuOpen(false); }}
+                        <button key={sub} onClick={() => { setLocation(`/shop/brands?category=${encodeURIComponent(cat.name)}&sub=${encodeURIComponent(sub)}`); setMobileMenuOpen(false); }}
                           className="block w-full text-left px-8 py-2.5 text-sm text-gray-600 hover:text-[#E42933] hover:bg-white transition-colors">
                           {sub}
                         </button>
@@ -399,7 +399,7 @@ export function Navbar() {
             {/* Bottom Links */}
             <div className="border-t border-gray-200 p-4 space-y-2">
               {[
-                { href: "/brands", label: "Shop by Brand" },
+                { href: "/shop/brands", label: "Shop by Brand" },
                 { href: "/about", label: "About Us" },
                 { href: "/contact", label: "Contact" },
               ].map(item => (
@@ -460,7 +460,7 @@ export function Footer() {
                 {[
                   { label: "Facebook", href: "#" },
                   { label: "Instagram", href: "#" },
-                  { label: "WhatsApp", href: "https://wa.me/254700000000" },
+                  { label: "WhatsApp", href: "https://wa.me/254714498451" },
                 ].map(s => (
                   <a key={s.label} href={s.href} className="w-8 h-8 rounded-full bg-white/10 hover:bg-[#E42933] flex items-center justify-center text-xs font-bold transition-colors">
                     {s.label[0]}
@@ -475,7 +475,7 @@ export function Footer() {
               <ul className="space-y-2.5">
                 {[
                   { label: "Shop All Parts", href: "/products" },
-                  { label: "Shop by Brand", href: "/brands" },
+                  { label: "Shop by Brand", href: "/shop/brands" },
                   { label: "About Us", href: "/about" },
                   { label: "Contact Us", href: "/contact" },
                   { label: "Track Order", href: "/dashboard" },
@@ -505,19 +505,19 @@ export function Footer() {
             <div>
               <h4 className="text-white font-bold mb-4 text-sm uppercase tracking-wider">Contact Us</h4>
               <div className="space-y-3">
-                <a href="tel:+254700000000" className="flex items-center gap-3 text-sm text-gray-400 hover:text-white transition-colors">
+                <a href="tel:+254714498451" className="flex items-center gap-3 text-sm text-gray-400 hover:text-white transition-colors">
                   <Phone size={15} className="text-[#E42933] flex-shrink-0" />
-                  <span>+254 700 000 000</span>
+                  <span>+254 714 498 451</span>
                 </a>
-                <a href="mailto:info@supremeautoparts.co.ke" className="flex items-center gap-3 text-sm text-gray-400 hover:text-white transition-colors">
+                <a href="mailto:valvin@supremeautoparts.co.ke" className="flex items-center gap-3 text-sm text-gray-400 hover:text-white transition-colors">
                   <Mail size={15} className="text-[#E42933] flex-shrink-0" />
-                  <span>info@supremeautoparts.co.ke</span>
+                  <span>valvin@supremeautoparts.co.ke</span>
                 </a>
                 <div className="flex items-start gap-3 text-sm text-gray-400">
                   <MapPin size={15} className="text-[#E42933] flex-shrink-0 mt-0.5" />
                   <span>Nairobi, Kenya</span>
                 </div>
-                <a href="https://wa.me/254700000000" target="_blank" rel="noopener noreferrer"
+                <a href="https://wa.me/254714498451" target="_blank" rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors mt-2">
                   <span>💬</span> WhatsApp Us
                 </a>

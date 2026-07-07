@@ -73,7 +73,7 @@ export default function Contact() {
                     </div>
                     <div>
                       <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Email Support</p>
-                      <p className="text-lg font-black text-gray-900"><a href="mailto:calvin@supremeautoparts.co.ke" className="hover:text-[oklch(0.45_0.22_27)] transition-colors">calvin@supremeautoparts.co.ke</a></p>
+                      <p className="text-lg font-black text-gray-900"><a href="mailto:valvin@supremeautoparts.co.ke" className="hover:text-[oklch(0.45_0.22_27)] transition-colors">valvin@supremeautoparts.co.ke</a></p>
                     </div>
                   </div>
 

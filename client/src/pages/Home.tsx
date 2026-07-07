@@ -14,14 +14,22 @@ const FEATURED_CATEGORIES = [
 ];
 
 const CAR_BRANDS = [
-  { name: "Toyota", logo: "/assets/images/brands/toyota.png" },
-  { name: "BMW", logo: "/assets/images/brands/bmw.png" },
-  { name: "Mercedes-Benz", logo: "/assets/images/brands/mercedesbenz.png" },
-  { name: "Honda", logo: "/assets/images/brands/honda.png" },
-  { name: "Ford", logo: "/assets/images/brands/ford.png" },
-  { name: "Hyundai", logo: "/assets/images/brands/hyundai.png" },
-  { name: "Suzuki", logo: "/assets/images/brands/suzuki.png" },
-  { name: "Lexus", logo: "/assets/images/brands/lexus.png" },
+  { id: "toyota", name: "Toyota", logo: "/assets/images/brands/toyota.png" },
+  { id: "nissan", name: "Nissan", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Nissan_logo.svg/200px-Nissan_logo.svg.png" },
+  { id: "mazda", name: "Mazda", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Mazda_logo.svg/200px-Mazda_logo.svg.png" },
+  { id: "honda", name: "Honda", logo: "/assets/images/brands/honda.png" },
+  { id: "subaru", name: "Subaru", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Subaru_logo.svg/200px-Subaru_logo.svg.png" },
+  { id: "mitsubishi", name: "Mitsubishi", logo: "/assets/images/brands/mitsubishi.png" },
+  { id: "suzuki", name: "Suzuki", logo: "/assets/images/brands/suzuki.png" },
+  { id: "bmw", name: "BMW", logo: "/assets/images/brands/bmw.png" },
+  { id: "mercedes-benz", name: "Mercedes-Benz", logo: "/assets/images/brands/mercedesbenz.png" },
+  { id: "volkswagen", name: "Volkswagen", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Volkswagen_logo_2019.svg/200px-Volkswagen_logo_2019.svg.png" },
+  { id: "ford", name: "Ford", logo: "/assets/images/brands/ford.png" },
+  { id: "hyundai", name: "Hyundai", logo: "/assets/images/brands/hyundai.png" },
+  { id: "isuzu", name: "Isuzu", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Isuzu_logo.svg/200px-Isuzu_logo.svg.png" },
+  { id: "lexus", name: "Lexus", logo: "/assets/images/brands/lexus.png" },
+  { id: "kia", name: "Kia", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Kia-logo.svg/200px-Kia-logo.svg.png" },
+  { id: "land-rover", name: "Land Rover", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Land_Rover_logo.svg/200px-Land_Rover_logo.svg.png" },
 ];
 
 const TRUST_BADGES = [
@@ -45,7 +53,6 @@ function ProductCard({ product }: { product: any }) {
       brand: product.brand || "",
       model: product.model || "",
       category: product.category || "",
-      sku: product.sku,
     });
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
@@ -170,15 +177,15 @@ export default function Home() {
           <div className="max-w-[1400px] mx-auto px-4">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl md:text-2xl font-black text-gray-900 uppercase tracking-tight">Shop By Brand</h2>
-              <Link href="/brands" className="text-sm text-[#E42933] hover:underline flex items-center gap-1 font-medium">
+              <Link href="/shop/brands" className="text-sm text-[#E42933] hover:underline flex items-center gap-1 font-medium">
                 View All <ChevronRight size={14} />
               </Link>
             </div>
             <div className="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-8 gap-2 md:gap-3">
               {CAR_BRANDS.map(brand => (
                 <Link
-                  key={brand.name}
-                  href={`/products?brand=${encodeURIComponent(brand.name)}`}
+                  key={brand.id}
+                  href={`/shop/brand/${brand.id}`}
                   className="bg-white rounded-xl border border-gray-200 p-3 md:p-4 flex flex-col items-center justify-center gap-2 hover:border-[#E42933] hover:shadow-md transition-all group aspect-square"
                 >
                   <img

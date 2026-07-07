@@ -1,3 +1,4 @@
+import React from "react";
 import { useState, useRef } from "react";
 import { useAdmin } from "@/contexts/AdminContext";
 import {
@@ -222,7 +223,7 @@ export function InvoiceGenerator({ order }: any) {
 
         <div className="text-center text-xs text-gray-500 pt-4 border-t border-gray-200">
           <p>Thank you for your business!</p>
-          <p>For inquiries, contact us at info@supremeautoparts.co.ke</p>
+          <p>For inquiries, contact us at valvin@supremeautoparts.co.ke</p>
         </div>
       </div>
     </div>

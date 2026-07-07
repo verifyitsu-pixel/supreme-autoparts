@@ -59,7 +59,7 @@ export default function RefundPolicy() {
               <div className="bg-gray-50 border border-gray-200 p-8 rounded-sm mb-12">
                 <p className="text-gray-700 mb-4 font-bold">To initiate a return or replacement claim, please contact our support team:</p>
                 <p className="text-sm text-gray-700"><strong>WhatsApp:</strong> <a href="https://wa.me/254714498451" className="text-[oklch(0.45_0.22_27)] underline">+254 714 498 451</a></p>
-                <p className="text-sm text-gray-700"><strong>Email:</strong> <a href="mailto:calvin@supremeautoparts.co.ke" className="text-[oklch(0.45_0.22_27)] underline">calvin@supremeautoparts.co.ke</a></p>
+                <p className="text-sm text-gray-700"><strong>Email:</strong> <a href="mailto:valvin@supremeautoparts.co.ke" className="text-[oklch(0.45_0.22_27)] underline">valvin@supremeautoparts.co.ke</a></p>
               </div>
             </div>
           </div>

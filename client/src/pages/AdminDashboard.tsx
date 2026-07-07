@@ -1389,7 +1389,7 @@ function SettingsSection() {
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">WhatsApp Number</label>
                 <input value={form.whatsappNumber} onChange={(e) => setForm({ ...form, whatsappNumber: e.target.value })}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#E42933]" placeholder="+254700000000" />
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#E42933]" placeholder="+254714498451" />
               </div>
               <div className="sm:col-span-2">
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">Store Address</label>

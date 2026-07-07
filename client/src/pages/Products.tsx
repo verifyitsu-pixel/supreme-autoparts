@@ -246,7 +246,6 @@ export default function Products() {
       brand: product.brand || activeBrand || "",
       model: product.model || activeModel || "",
       category: product.category || activeCategory || "",
-      sku: product.sku,
     });
     setAddedToCart(product.id);
     setTimeout(() => setAddedToCart(null), 2000);

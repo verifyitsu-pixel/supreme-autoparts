@@ -25,6 +25,11 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import CheckoutNew from "./pages/CheckoutNew";
 import AdminDashboard from "./pages/AdminDashboard";
+// New Shop Flow Pages
+import BrandSelection from "./pages/BrandSelection";
+import ModelSelection from "./pages/ModelSelection";
+import CategorySelection from "./pages/CategorySelection";
+import PartsListing from "./pages/PartsListing";
 
 function Router() {
   return (
@@ -35,6 +40,12 @@ function Router() {
       <Route path="/products" component={Products} />
       <Route path="/order" component={Order} />
       <Route path="/brands" component={Brands} />
+      {/* ── New Shop Flow: Brand → Model → Category → Parts ── */}
+      <Route path="/shop/brands" component={BrandSelection} />
+      <Route path="/shop/brand/:brandId" component={ModelSelection} />
+      <Route path="/shop/brand/:brandId/model/:modelId" component={CategorySelection} />
+      <Route path="/shop/brand/:brandId/model/:modelId/category/:categoryId" component={PartsListing} />
+      {/* ─────────────────────────────────────────────────── */}
       <Route path="/login" component={LoginNew} />
       <Route path="/register" component={RegisterNew} />
       <Route path="/dashboard" component={Dashboard} />
