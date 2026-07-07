@@ -4,12 +4,12 @@ import { ArrowRight, ShieldCheck, Truck, Clock, Award, ChevronRight, Star, Zap, 
 import { Navbar, Footer } from "@/components/NavbarNew";
 
 const FEATURED_CATEGORIES = [
-  { name: "Braking Systems", img: "/assets/images/categories/braking.jpg", count: "240+ Parts", icon: "🛑" },
-  { name: "Engine Components", img: "/assets/images/categories/engine.jpg", count: "580+ Parts", icon: "⚙️" },
-  { name: "Suspension & Chassis", img: "/assets/images/products/mercedes-shock-absorber.jpg", count: "310+ Parts", icon: "🚗" },
-  { name: "Electrical & Sensors", img: "/assets/images/products/hyundai-alternator.jpg", count: "190+ Parts", icon: "⚡" },
-  { name: "Transmission & Gear", img: "/assets/images/categories/transmission.jpg", count: "120+ Parts", icon: "🔧" },
-  { name: "Alloys & Rims", img: "/assets/images/products/lexus-alloy-rim.jpg", count: "80+ Parts", icon: "🔵" },
+  { name: "Braking Systems", img: "https://m.media-amazon.com/images/I/71jZ3oBSqNL._AC_SL1500_.jpg", count: "240+ Parts", icon: "🛑" },
+  { name: "Engine Components", img: "https://m.media-amazon.com/images/I/71Yw5TCcPLL._AC_SL1500_.jpg", count: "580+ Parts", icon: "⚙️" },
+  { name: "Suspension & Chassis", img: "https://m.media-amazon.com/images/I/81YXWqhQV8L._AC_SL1500_.jpg", count: "310+ Parts", icon: "🚗" },
+  { name: "Electrical & Sensors", img: "https://m.media-amazon.com/images/I/71nPPOWQVpL._AC_SL1500_.jpg", count: "190+ Parts", icon: "⚡" },
+  { name: "Transmission & Gear", img: "https://m.media-amazon.com/images/I/71dNfzJXvVL._AC_SL1500_.jpg", count: "120+ Parts", icon: "🔧" },
+  { name: "Alloys & Rims", img: "https://m.media-amazon.com/images/I/81-qJ5XNPVL._AC_SL1500_.jpg", count: "80+ Parts", icon: "🔵" },
 ];
 
 const CAR_BRANDS = [
@@ -71,7 +71,7 @@ export default function Home() {
         <section className="relative min-h-[60vh] md:min-h-[75vh] flex items-center bg-black overflow-hidden">
           <div className="absolute inset-0 z-0">
             <img
-              src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=2000"
+              src="https://images.toyota-europe.com/eu/hilux/0/exterior/front-view.jpg"
               className="w-full h-full object-cover opacity-50"
               alt="Luxury Car"
             />
@@ -231,7 +231,7 @@ export default function Home() {
               <div className="relative">
                 <div className="rounded-2xl overflow-hidden aspect-square">
                   <img
-                    src="https://images.unsplash.com/photo-1552820728-8ac41f1ce891?q=80&w=1000"
+                    src="https://www.mercedes-benz.co.ke/passengercars/models/saloon/s-class/overview/_jcr_content/root/responsivegrid/tabs/tabitem/simple_teaser/simple_teaser_item/image.component.dam_ts.1691584824584.jpg/mercedes-benz-s-class-w223-saloon-exterior-960x540-08-2021.jpg"
                     alt="Workshop"
                     className="w-full h-full object-cover"
                   />

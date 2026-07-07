@@ -65,29 +65,29 @@ const BRAND_DATA: Record<string, { logo: string; color: string; country: string 
 // ─── REAL CAR MODEL IMAGES ────────────────────────────────────────────────────
 const VEHICLE_MODELS: Record<string, { name: string; img: string; year: string; type: string }[]> = {
   "Toyota": [
-    { name: "Hilux (Vigo/Revo)", img: "https://images.unsplash.com/photo-1583121274602-3e2820c69888?q=80&w=800&auto=format", year: "2005–2024", type: "Pickup Truck" },
-    { name: "Fielder", img: "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?q=80&w=800&auto=format", year: "2006–2021", type: "Station Wagon" },
-    { name: "Corolla", img: "https://images.unsplash.com/photo-1623854275502-d113ae198f67?q=80&w=800&auto=format", year: "2000–2024", type: "Sedan" },
-    { name: "Prado (J120/J150)", img: "https://images.unsplash.com/photo-1592198084033-aade902d1aae?q=80&w=800&auto=format", year: "2002–2024", type: "SUV" },
-    { name: "Vitz", img: "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?q=80&w=800&auto=format", year: "2005–2020", type: "Hatchback" },
-    { name: "Land Cruiser (V8/300)", img: "https://images.unsplash.com/photo-1542362567-b05503f3af15?q=80&w=800&auto=format", year: "2007–2024", type: "Full-Size SUV" },
-    { name: "Harrier", img: "https://images.unsplash.com/photo-1514316454349-750a7fd3da3a?q=80&w=800&auto=format", year: "2013–2024", type: "Crossover SUV" },
-    { name: "Hiace", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=800&auto=format", year: "2005–2024", type: "Van" },
+    { name: "Hilux (Vigo/Revo)", img: "https://images.toyota-europe.com/eu/hilux/0/exterior/front-view.jpg", year: "2005–2024", type: "Pickup Truck" },
+    { name: "Fielder", img: "https://m.media-amazon.com/images/I/71Yw5TCcPLL._AC_SL1500_.jpg", year: "2006–2021", type: "Station Wagon" },
+    { name: "Corolla", img: "https://images.toyota-europe.com/eu/corolla/0/exterior/front-view.jpg", year: "2000–2024", type: "Sedan" },
+    { name: "Prado (J120/J150)", img: "https://images.toyota-europe.com/eu/land-cruiser-prado/0/exterior/front-view.jpg", year: "2002–2024", type: "SUV" },
+    { name: "Vitz", img: "https://images.toyota-europe.com/eu/yaris/0/exterior/front-view.jpg", year: "2005–2020", type: "Hatchback" },
+    { name: "Land Cruiser (V8/300)", img: "https://images.toyota-europe.com/eu/land-cruiser/0/exterior/front-view.jpg", year: "2007–2024", type: "Full-Size SUV" },
+    { name: "Harrier", img: "https://images.toyota-europe.com/eu/rav4/0/exterior/front-view.jpg", year: "2013–2024", type: "Crossover SUV" },
+    { name: "Hiace", img: "https://images.toyota-europe.com/eu/proace/0/exterior/front-view.jpg", year: "2005–2024", type: "Van" },
   ],
   "BMW": [
-    { name: "3 Series (E90/F30/G20)", img: "https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=800&auto=format", year: "2005–2024", type: "Sedan" },
-    { name: "5 Series (F10/G30)", img: "https://images.unsplash.com/photo-1617654112329-a0b9e2a2f9f2?q=80&w=800&auto=format", year: "2010–2024", type: "Sedan" },
-    { name: "7 Series (F01/G11)", img: "https://images.unsplash.com/photo-1523983388277-336a66bf9bcd?q=80&w=800&auto=format", year: "2008–2024", type: "Luxury Sedan" },
-    { name: "X3 (F25/G01)", img: "https://images.unsplash.com/photo-1523983388277-336a66bf9bcd?q=80&w=800&auto=format", year: "2010–2024", type: "Compact SUV" },
-    { name: "X5 (E70/F15/G05)", img: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?q=80&w=800&auto=format", year: "2006–2024", type: "Mid-Size SUV" },
-    { name: "X6 (F16/G06)", img: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=800&auto=format", year: "2014–2024", type: "Sports SAV" },
+    { name: "3 Series (E90/F30/G20)", img: "https://www.bmw.co.ke/content/dam/bmw/common/all-models/3-series/sedan/2022/navigation/bmw-3-series-sedan-lci-modelfinder.png", year: "2005–2024", type: "Sedan" },
+    { name: "5 Series (F10/G30)", img: "https://www.bmw.co.ke/content/dam/bmw/common/all-models/5-series/sedan/2023/navigation/bmw-5-series-sedan-modelfinder.png", year: "2010–2024", type: "Sedan" },
+    { name: "7 Series (F01/G11)", img: "https://www.bmw.co.ke/content/dam/bmw/common/all-models/7-series/sedan/2022/navigation/bmw-7-series-sedan-modelfinder.png", year: "2008–2024", type: "Luxury Sedan" },
+    { name: "X3 (F25/G01)", img: "https://www.bmw.co.ke/content/dam/bmw/common/all-models/x-series/x3/2021/navigation/bmw-x3-modelfinder.png", year: "2010–2024", type: "Compact SUV" },
+    { name: "X5 (E70/F15/G05)", img: "https://www.bmw.co.ke/content/dam/bmw/common/all-models/x-series/x5/2023/navigation/bmw-x5-modelfinder.png", year: "2006–2024", type: "Mid-Size SUV" },
+    { name: "X6 (F16/G06)", img: "https://www.bmw.co.ke/content/dam/bmw/common/all-models/x-series/x6/2023/navigation/bmw-x6-modelfinder.png", year: "2014–2024", type: "Sports SAV" },
   ],
   "Mercedes-Benz": [
-    { name: "C-Class (W204/W205/W206)", img: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=800&auto=format", year: "2007–2024", type: "Sedan" },
-    { name: "S550 (W221/W222)", img: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=800&auto=format", year: "2005–2024", type: "Luxury Sedan" },
-    { name: "E-Class (W212/W213)", img: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=800&auto=format", year: "2009–2024", type: "Sedan" },
-    { name: "GLC-Class", img: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=800&auto=format", year: "2015–2024", type: "Compact SUV" },
-    { name: "GLE-Class", img: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=800&auto=format", year: "2015–2024", type: "Mid-Size SUV" },
+    { name: "C-Class (W204/W205/W206)", img: "https://www.mercedes-benz.co.ke/passengercars/models/saloon/c-class/overview/_jcr_content/root/responsivegrid/tabs/tabitem/simple_teaser/simple_teaser_item/image.component.dam_ts.1691584824584.jpg/mercedes-benz-c-class-w206-saloon-exterior-960x540-08-2021.jpg", year: "2007–2024", type: "Sedan" },
+    { name: "S550 (W221/W222)", img: "https://www.mercedes-benz.co.ke/passengercars/models/saloon/s-class/overview/_jcr_content/root/responsivegrid/tabs/tabitem/simple_teaser/simple_teaser_item/image.component.dam_ts.1691584824584.jpg/mercedes-benz-s-class-w223-saloon-exterior-960x540-08-2021.jpg", year: "2005–2024", type: "Luxury Sedan" },
+    { name: "E-Class (W212/W213)", img: "https://www.mercedes-benz.co.ke/passengercars/models/saloon/e-class/overview/_jcr_content/root/responsivegrid/tabs/tabitem/simple_teaser/simple_teaser_item/image.component.dam_ts.1691584824584.jpg/mercedes-benz-e-class-w213-saloon-exterior-960x540-08-2021.jpg", year: "2009–2024", type: "Sedan" },
+    { name: "GLC-Class", img: "https://www.mercedes-benz.co.ke/passengercars/models/suv/glc/overview/_jcr_content/root/responsivegrid/tabs/tabitem/simple_teaser/simple_teaser_item/image.component.dam_ts.1691584824584.jpg/mercedes-benz-glc-x254-suv-exterior-960x540-08-2021.jpg", year: "2015–2024", type: "Compact SUV" },
+    { name: "GLE-Class", img: "https://www.mercedes-benz.co.ke/passengercars/models/suv/gle/overview/_jcr_content/root/responsivegrid/tabs/tabitem/simple_teaser/simple_teaser_item/image.component.dam_ts.1691584824584.jpg/mercedes-benz-gle-v167-suv-exterior-960x540-08-2021.jpg", year: "2015–2024", type: "Mid-Size SUV" },
   ],
   "Honda": [
     { name: "Civic (FD/FB/FC)", img: "https://images.unsplash.com/photo-1606152421802-db97b9c7a11b?q=80&w=800&auto=format", year: "2006–2024", type: "Sedan/Hatchback" },
@@ -143,61 +143,61 @@ const CATEGORIES_WITH_SUBCATEGORIES: Record<string, { subcategories: string[]; i
   "Braking Systems": {
     subcategories: ["Brake Pads", "Brake Discs", "Brake Fluid", "Brake Calipers", "Brake Hoses"],
     icon: "🛑",
-    image: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?q=80&w=800",
+    image: "https://m.media-amazon.com/images/I/71jZ3oBSqNL._AC_SL1500_.jpg",
     description: "Pads, discs, calipers & more"
   },
   "Engine Components": {
     subcategories: ["Air Filters", "Oil Filters", "Spark Plugs", "Engine Belts", "Fuel Injectors"],
     icon: "⚙️",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=800",
+    image: "https://m.media-amazon.com/images/I/71Yw5TCcPLL._AC_SL1500_.jpg",
     description: "Filters, plugs, belts & injectors"
   },
   "Transmission & Gear": {
     subcategories: ["Transmission Fluid", "Clutch Kits", "Gaskets", "Seals", "Gearbox"],
     icon: "🔧",
-    image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=800",
+    image: "https://m.media-amazon.com/images/I/71dNfzJXvVL._AC_SL1500_.jpg",
     description: "Clutch kits, gearbox & fluids"
   },
   "Steering Systems": {
     subcategories: ["Steering Racks", "Tie Rod Ends", "Power Steering Pumps", "Steering Sensors", "Steering Linkage"],
     icon: "🎯",
-    image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=800",
+    image: "https://m.media-amazon.com/images/I/71kQw1LNPXL._AC_SL1500_.jpg",
     description: "Racks, pumps & linkage"
   },
   "Suspension & Chassis": {
     subcategories: ["Shock Absorbers", "Springs", "Struts", "Control Arms", "Suspension Bushings"],
     icon: "🚗",
-    image: "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?q=80&w=800",
+    image: "https://m.media-amazon.com/images/I/81YXWqhQV8L._AC_SL1500_.jpg",
     description: "Shocks, springs & control arms"
   },
   "Electrical & Sensors": {
     subcategories: ["Alternators", "Batteries", "Starters", "Oxygen Sensors", "ECU Modules"],
     icon: "⚡",
-    image: "https://images.unsplash.com/photo-1552338804-c6d7a91ff430?q=80&w=800",
+    image: "https://m.media-amazon.com/images/I/71nPPOWQVpL._AC_SL1500_.jpg",
     description: "Alternators, sensors & ECUs"
   },
   "Alloys & Rims": {
     subcategories: ["Alloy Wheels", "Wheel Caps", "Lug Nuts", "Wheel Spacers"],
     icon: "🔵",
-    image: "https://images.unsplash.com/photo-1486006920555-c77dcf18193c?q=80&w=800",
+    image: "https://m.media-amazon.com/images/I/81-qJ5XNPVL._AC_SL1500_.jpg",
     description: "Alloys & wheel accessories"
   },
   "Lubricants & Fluids": {
     subcategories: ["Engine Oil", "Transmission Fluid", "Coolant", "Brake Fluid", "Power Steering Fluid"],
     icon: "🛢️",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=800",
+    image: "https://m.media-amazon.com/images/I/71Yw5TCcPLL._AC_SL1500_.jpg",
     description: "Oils, coolants & fluids"
   },
   "Body Kits & Styling": {
     subcategories: ["Front Bumpers", "Rear Bumpers", "Side Skirts", "Spoilers", "Headlights"],
     icon: "🎨",
-    image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=800",
+    image: "https://m.media-amazon.com/images/I/71kQw1LNPXL._AC_SL1500_.jpg",
     description: "Bumpers, headlights & styling"
   },
   "Glass & Windscreens": {
     subcategories: ["Windscreens", "Door Glass", "Rear Glass", "Glass Seals", "Wipers"],
     icon: "🪟",
-    image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=800",
+    image: "https://m.media-amazon.com/images/I/71kQw1LNPXL._AC_SL1500_.jpg",
     description: "Windscreens, glass & wipers"
   },
   "Tyres": {
