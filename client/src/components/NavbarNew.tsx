@@ -14,6 +14,9 @@ import {
   Settings,
   Heart,
   Package,
+  Phone,
+  Mail,
+  MapPin,
 } from "lucide-react";
 
 const CATEGORIES = [
@@ -46,6 +49,7 @@ export function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [, setLocationPath] = useLocation();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const { user, logout } = useAuth();
   const { itemCount } = useCart();
@@ -222,7 +226,10 @@ export function Navbar() {
               <div className="absolute left-0 mt-0 w-64 bg-white rounded-lg shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[100] py-4">
                 {CATEGORIES.map((category) => (
                   <div key={category.name} className="group/sub">
-                    <button className="w-full flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors">
+                    <button 
+                      onClick={() => setLocationPath(`/products?category=${encodeURIComponent(category.name)}`)}
+                      className="w-full flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors text-left"
+                    >
                       <span className="text-sm font-semibold">{category.name}</span>
                       <ChevronDown size={14} className="group-hover/sub:rotate-180 transition-transform" />
                     </button>
@@ -333,7 +340,7 @@ export function Navbar() {
                     {category.subcategories.map((sub) => (
                       <Link
                         key={sub}
-                        href={`/products?category=${category.name}&subcategory=${sub}`}
+                        href={`/products?category=${encodeURIComponent(category.name)}&subcategory=${encodeURIComponent(sub)}`}
                         onClick={() => setMobileMenuOpen(false)}
                         className="block text-gray-400 text-sm hover:text-[#E42933] transition-colors"
                       >
@@ -343,6 +350,35 @@ export function Navbar() {
                   </div>
                 </div>
               ))}
+            </div>
+
+            {/* Mobile Contact Info */}
+            <div className="mb-8 p-4 bg-gray-900 rounded-lg border border-gray-800">
+              <h4 className="text-white font-black text-xs uppercase tracking-widest mb-4">Quick Support</h4>
+              <div className="space-y-3">
+                <a href="tel:+254714498451" className="flex items-center gap-3 text-gray-400 hover:text-white transition-colors">
+                  <Phone size={16} className="text-[#E42933]" />
+                  <span className="text-sm font-medium">+254 714 498 451</span>
+                </a>
+                <a href="mailto:calvin@supremeautoparts.co.ke" className="flex items-center gap-3 text-gray-400 hover:text-white transition-colors">
+                  <Mail size={16} className="text-[#E42933]" />
+                  <span className="text-sm font-medium">calvin@supremeautoparts.co.ke</span>
+                </a>
+                <div className="flex items-start gap-3 text-gray-400">
+                  <MapPin size={16} className="text-[#E42933] mt-1 shrink-0" />
+                  <div>
+                    <span className="text-sm font-medium block">MIDAX Plaza, Kangundo Rd</span>
+                    <a 
+                      href="https://www.google.com/maps/search/?api=1&query=MIDAX+Plaza+Kangundo+Rd+Nairobi" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-[10px] font-bold text-[#E42933] uppercase tracking-widest hover:underline mt-1 block"
+                    >
+                      Get Directions →
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Mobile Navigation Links */}
@@ -427,9 +463,9 @@ export function Footer() {
           <div>
             <h4 className="text-white font-black mb-4">Contact</h4>
             <ul className="space-y-2 text-sm">
-              <li>Email: info@supremeautoparts.co.ke</li>
-              <li>Phone: +254 (0) 123 456 789</li>
-              <li>Nairobi, Kenya</li>
+              <li>Email: <a href="mailto:calvin@supremeautoparts.co.ke" className="hover:text-[#E42933] transition-colors">calvin@supremeautoparts.co.ke</a></li>
+              <li>Phone: <a href="tel:+254714498451" className="hover:text-[#E42933] transition-colors">+254 714 498 451</a></li>
+              <li>MIDAX Plaza, Kangundo Rd, Nairobi</li>
             </ul>
           </div>
         </div>

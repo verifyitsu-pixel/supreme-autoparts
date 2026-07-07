@@ -148,7 +148,7 @@ export default function About() {
             </div>
             <div className="flex gap-4">
               <a href="tel:+254714498451" className="bg-white text-[oklch(0.45_0.22_27)] px-10 py-4 font-black text-xs uppercase tracking-[0.2em] hover:bg-gray-100 transition-all shadow-xl">
-                CALL EXPERTS
+                CALL +254 714 498 451
               </a>
             </div>
           </div>

@@ -219,7 +219,15 @@ export function Footer() {
             <ul className="space-y-6">
               <li className="flex gap-4">
                 <MapPin className="text-[#E42933] shrink-0" size={18} />
-                <span className="text-xs text-gray-400 font-medium leading-relaxed">MIDAX PLAZA, Kangundo Rd,<br />Nairobi, Kenya</span>
+                <span className="text-xs text-gray-400 font-medium leading-relaxed">MIDAX Plaza, Kangundo Rd,<br />Nairobi, Kenya</span>
+                <a 
+                  href="https://www.google.com/maps/search/?api=1&query=MIDAX+Plaza+Kangundo+Rd+Nairobi" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-[9px] font-black text-[#E42933] uppercase tracking-widest mt-2 block hover:underline"
+                >
+                  Get Directions →
+                </a>
               </li>
               <li className="flex gap-4">
                 <Phone className="text-[#E42933] shrink-0" size={18} />
@@ -227,7 +235,7 @@ export function Footer() {
               </li>
               <li className="flex gap-4">
                 <Mail className="text-[#E42933] shrink-0" size={18} />
-                <span className="text-xs text-gray-400 font-medium">calvin@supremeautoparts.co.ke</span>
+                <span className="text-xs text-gray-400 font-medium"><a href="mailto:calvin@supremeautoparts.co.ke" className="hover:text-[#E42933] transition-colors">calvin@supremeautoparts.co.ke</a></span>
               </li>
             </ul>
           </div>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Navbar, Footer } from "@/components/NavbarNew";
 import { FloatingButtons } from "@/components/Layout";
 import { Phone, Mail, MapPin, Clock, Send, ShieldCheck, MessageCircle } from "lucide-react";
+import { MapView } from "@/components/Map";
 
 export default function Contact() {
   const [form, setForm] = useState({ name: "", contact: "", subject: "", message: "" });
@@ -72,7 +73,7 @@ export default function Contact() {
                     </div>
                     <div>
                       <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Email Support</p>
-                      <p className="text-lg font-black text-gray-900">supremeautopartskenya@gmail.com</p>
+                      <p className="text-lg font-black text-gray-900"><a href="mailto:calvin@supremeautoparts.co.ke" className="hover:text-[oklch(0.45_0.22_27)] transition-colors">calvin@supremeautoparts.co.ke</a></p>
                     </div>
                   </div>
 
@@ -82,8 +83,16 @@ export default function Contact() {
                     </div>
                     <div>
                       <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Head Office</p>
-                      <p className="text-lg font-black text-gray-900">Nairobi, Kenya</p>
+                      <p className="text-lg font-black text-gray-900">MIDAX Plaza, Kangundo Rd, Nairobi</p>
                       <p className="text-xs text-gray-500">Nationwide Shipping Center</p>
+                      <a 
+                        href="https://www.google.com/maps/search/?api=1&query=MIDAX+Plaza+Kangundo+Rd+Nairobi" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-[10px] font-bold text-[oklch(0.45_0.22_27)] uppercase tracking-widest mt-2 block hover:underline"
+                      >
+                        Get Directions →
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -166,6 +175,28 @@ export default function Contact() {
                       {isSubmitting ? "SENDING..." : "SEND VIA WHATSAPP"} <MessageCircle size={18} />
                     </button>
                   </form>
+                </div>
+              </div>
+            </div>
+
+            {/* Map Section */}
+            <div className="mt-24">
+              <div className="bg-gray-50 p-4 rounded-sm border border-gray-100 mb-8">
+                <div className="flex items-center gap-4 mb-4">
+                  <MapPin className="text-[oklch(0.45_0.22_27)]" size={24} />
+                  <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
+                    Visit Our Showroom
+                  </h3>
+                </div>
+                <p className="text-sm text-gray-600 mb-6">
+                  Located at MIDAX Plaza along Kangundo Road. We are open Monday to Saturday for all your genuine auto spare parts needs.
+                </p>
+                <div className="w-full h-[450px] rounded-sm overflow-hidden shadow-inner border border-gray-200">
+                  <MapView 
+                    initialCenter={{ lat: -1.2677, lng: 36.9325 }} // Approximate coordinates for MIDAX Plaza, Kangundo Rd
+                    initialZoom={15}
+                    className="h-full"
+                  />
                 </div>
               </div>
             </div>
