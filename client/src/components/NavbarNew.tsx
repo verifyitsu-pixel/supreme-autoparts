@@ -22,23 +22,47 @@ import {
 const CATEGORIES = [
   {
     name: "Braking Systems",
-    subcategories: ["Brake Pads", "Brake Discs", "Brake Fluid", "Brake Calipers"],
+    subcategories: ["Brake Pads", "Brake Discs", "Brake Fluid", "Brake Calipers", "Brake Hoses"],
   },
   {
     name: "Engine Components",
-    subcategories: ["Air Filters", "Oil Filters", "Spark Plugs", "Engine Belts"],
+    subcategories: ["Air Filters", "Oil Filters", "Spark Plugs", "Engine Belts", "Fuel Injectors"],
   },
   {
-    name: "Suspension",
-    subcategories: ["Shock Absorbers", "Springs", "Struts", "Control Arms"],
+    name: "Transmission & Gear",
+    subcategories: ["Transmission Fluid", "Clutch Kits", "Gaskets", "Seals", "Flywheel"],
   },
   {
-    name: "Transmission",
-    subcategories: ["Transmission Fluid", "Filters", "Gaskets", "Seals"],
+    name: "Steering Systems",
+    subcategories: ["Steering Racks", "Tie Rod Ends", "Power Steering Pumps", "Steering Sensors", "Steering Linkage"],
   },
   {
-    name: "Cooling System",
-    subcategories: ["Radiators", "Water Pumps", "Thermostats", "Fans"],
+    name: "Suspension & Chassis",
+    subcategories: ["Shock Absorbers", "Springs", "Struts", "Control Arms", "Suspension Bushings"],
+  },
+  {
+    name: "Electrical & Sensors",
+    subcategories: ["Alternators", "Batteries", "Starters", "Oxygen Sensors", "ECU Modules"],
+  },
+  {
+    name: "Alloys & Rims",
+    subcategories: ["Alloy Wheels", "Tire Sets", "Wheel Caps", "Lug Nuts", "Wheel Spacers"],
+  },
+  {
+    name: "Lubricants & Fluids",
+    subcategories: ["Engine Oil", "Transmission Fluid", "Coolant", "Brake Fluid", "Power Steering Fluid"],
+  },
+  {
+    name: "Body Kits & Styling",
+    subcategories: ["Front Bumpers", "Rear Bumpers", "Side Skirts", "Spoilers", "Body Panels"],
+  },
+  {
+    name: "Glass & Windscreens",
+    subcategories: ["Windscreens", "Door Glass", "Rear Glass", "Glass Seals", "Wipers"],
+  },
+  {
+    name: "Certified Used Parts",
+    subcategories: ["Used Engines", "Used Transmissions", "Used Alternators", "Used Starters", "Used Gearboxes"],
   },
 ];
 
@@ -236,13 +260,13 @@ export function Navbar() {
                     {/* Sub-categories */}
                     <div className="hidden group-hover/sub:block bg-gray-50 border-l-2 border-[#E42933]">
                       {category.subcategories.map((sub) => (
-                        <Link
+                        <button
                           key={sub}
-                          href={`/products?category=${category.name}&subcategory=${sub}`}
-                          className="block px-6 py-2 text-xs text-gray-600 hover:text-[#E42933] hover:bg-white transition-colors"
+                          onClick={() => setLocationPath(`/products?category=${encodeURIComponent(category.name)}&subcategory=${encodeURIComponent(sub)}`)}
+                          className="block w-full text-left px-6 py-2 text-xs text-gray-600 hover:text-[#E42933] hover:bg-white transition-colors"
                         >
                           {sub}
-                        </Link>
+                        </button>
                       ))}
                     </div>
                   </div>
@@ -338,14 +362,16 @@ export function Navbar() {
                   </button>
                   <div className="pl-4 space-y-2">
                     {category.subcategories.map((sub) => (
-                      <Link
+                      <button
                         key={sub}
-                        href={`/products?category=${encodeURIComponent(category.name)}&subcategory=${encodeURIComponent(sub)}`}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="block text-gray-400 text-sm hover:text-[#E42933] transition-colors"
+                        onClick={() => {
+                          setLocationPath(`/products?category=${encodeURIComponent(category.name)}&subcategory=${encodeURIComponent(sub)}`);
+                          setMobileMenuOpen(false);
+                        }}
+                        className="block text-gray-400 text-sm hover:text-[#E42933] transition-colors text-left w-full"
                       >
                         {sub}
-                      </Link>
+                      </button>
                     ))}
                   </div>
                 </div>

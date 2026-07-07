@@ -5,19 +5,19 @@ import { Link, useLocation } from "wouter";
 import { useCart } from "@/contexts/CartContext";
 import { Search, Filter, X, ChevronRight, ShieldCheck, Truck, Clock, Car, Settings2, ArrowRight, LayoutGrid, CheckCircle2, MessageSquare, Mail, ShoppingCart } from "lucide-react";
 
-const CATEGORIES = [
-  { name: "Braking Systems", img: "/assets/images/categories/braking.jpg" },
-  { name: "Engine Components", img: "/assets/images/categories/engine.jpg" },
-  { name: "Transmission & Gear", img: "/assets/images/categories/transmission.jpg" },
-  { name: "Steering Systems", img: "/assets/images/categories/steering.jpg" },
-  { name: "Suspension & Chassis", img: "/assets/images/real_parts/mercedes_shock_absorber.jpg" },
-  { name: "Electrical & Sensors", img: "/assets/images/products/bmw-sensor.jpg" },
-  { name: "Alloys & Rims", img: "/assets/images/products/lexus-alloy-rim.jpg" },
-  { name: "Lubricants & Fluids", img: "/assets/images/real_parts/bmw_oil_filter.jpg" },
-  { name: "Body Kits & Styling", img: "/assets/images/products/mercedes-bumper.jpg" },
-  { name: "Glass & Windscreens", img: "/assets/images/products/toyota-windscreen.webp" },
-  { name: "Certified Used Parts", img: "/assets/images/products/bmw-steering-rack.jpg" },
-];
+const CATEGORIES_WITH_SUBCATEGORIES = {
+  "Braking Systems": ["Brake Pads", "Brake Discs", "Brake Fluid", "Brake Calipers", "Brake Hoses"],
+  "Engine Components": ["Air Filters", "Oil Filters", "Spark Plugs", "Engine Belts", "Fuel Injectors"],
+  "Transmission & Gear": ["Transmission Fluid", "Clutch Kits", "Gaskets", "Seals", "Flywheel"],
+  "Steering Systems": ["Steering Racks", "Tie Rod Ends", "Power Steering Pumps", "Steering Sensors", "Steering Linkage"],
+  "Suspension & Chassis": ["Shock Absorbers", "Springs", "Struts", "Control Arms", "Suspension Bushings"],
+  "Electrical & Sensors": ["Alternators", "Batteries", "Starters", "Oxygen Sensors", "ECU Modules"],
+  "Alloys & Rims": ["Alloy Wheels", "Tire Sets", "Wheel Caps", "Lug Nuts", "Wheel Spacers"],
+  "Lubricants & Fluids": ["Engine Oil", "Transmission Fluid", "Coolant", "Brake Fluid", "Power Steering Fluid"],
+  "Body Kits & Styling": ["Front Bumpers", "Rear Bumpers", "Side Skirts", "Spoilers", "Body Panels"],
+  "Glass & Windscreens": ["Windscreens", "Door Glass", "Rear Glass", "Glass Seals", "Wipers"],
+  "Certified Used Parts": ["Used Engines", "Used Transmissions", "Used Alternators", "Used Starters", "Used Gearboxes"],
+};
 
 const VEHICLE_MODELS: Record<string, { name: string; img?: string }[]> = {
   "Toyota": [
@@ -25,200 +25,166 @@ const VEHICLE_MODELS: Record<string, { name: string; img?: string }[]> = {
     { name: "Harrier", img: "/assets/images/real_models/toyota_harrier.jpg" },
     { name: "Vitz", img: "/assets/images/real_models/toyota_vitz.jpg" },
     { name: "Prado (J120/J150)", img: "/assets/images/real_models/toyota_prado.jpg" },
-    { name: "Premio", img: "/assets/images/models/premio.jpg" },
     { name: "Hilux (Vigo/Revo)", img: "/assets/images/real_models/toyota_hilux.jpg" },
     { name: "Land Cruiser (V8/300)", img: "/assets/images/real_models/toyota_landcruiser.jpg" },
     { name: "Corolla", img: "/assets/images/real_models/toyota_fielder.jpg" },
-    { name: "Axio", img: "/assets/images/real_models/toyota_fielder.jpg" },
-    { name: "Probox", img: "/assets/images/models/probox.jpg" },
-    { name: "Noah/Voxy", img: "/assets/images/models/noah.webp" },
-    { name: "Rav4", img: "/assets/images/real_models/toyota_harrier.jpg" },
     { name: "Hiace", img: "/assets/images/real_models/toyota_hilux.jpg" },
-    { name: "Wish", img: "/assets/images/real_models/toyota_vitz.jpg" }
   ],
   "BMW": [
     { name: "3 Series (E90/F30/G20)", img: "/assets/images/real_models/bmw_3series.jpg" },
     { name: "5 Series (F10/G30)", img: "/assets/images/real_models/bmw_5series.jpg" },
     { name: "7 Series (F01/G11)", img: "/assets/images/real_models/bmw_5series.jpg" },
-    { name: "X1 (E84/F48)", img: "/assets/images/real_models/bmw_3series.jpg" },
     { name: "X3 (F25/G01)", img: "/assets/images/real_models/bmw_3series.jpg" },
     { name: "X5 (E70/F15/G05)", img: "/assets/images/real_models/bmw_5series.jpg" },
-    { name: "X6", img: "/assets/images/real_models/bmw_5series.jpg" },
-    { name: "1 Series", img: "/assets/images/real_models/bmw_3series.jpg" },
-    { name: "M3/M4/M5 Performance", img: "/assets/images/real_models/bmw_3series.jpg" }
   ],
   "Mercedes-Benz": [
     { name: "S550 (W221/W222)", img: "/assets/images/real_models/mercedes_sclass.jpg" },
     { name: "C-Class (W204/W205/W206)", img: "/assets/images/real_models/mercedes_cclass.jpg" },
     { name: "E-Class (W212/W213)", img: "/assets/images/real_models/mercedes_cclass.jpg" },
-    { name: "S-Class (W221/W222)", img: "/assets/images/real_models/mercedes_sclass.jpg" },
     { name: "GLC-Class", img: "/assets/images/real_models/mercedes_cclass.jpg" },
-    { name: "GLE-Class", img: "/assets/images/real_models/mercedes_cclass.jpg" },
-    { name: "GLA-Class", img: "/assets/images/real_models/mercedes_cclass.jpg" },
-    { name: "G-Wagon", img: "/assets/images/real_models/mercedes_sclass.jpg" },
-    { name: "CLA-Class", img: "/assets/images/real_models/mercedes_cclass.jpg" },
-    { name: "Vito/V-Class", img: "/assets/images/real_models/mercedes_cclass.jpg" },
-    { name: "Sprinter", img: "/assets/images/real_models/mercedes_cclass.jpg" }
   ],
   "Honda": [
     { name: "Civic (FD/FB/FC)", img: "/assets/images/real_models/toyota_vitz.jpg" },
     { name: "CR-V", img: "/assets/images/real_models/toyota_harrier.jpg" },
-    { name: "Fit/Jazz", img: "/assets/images/real_models/toyota_vitz.jpg" },
     { name: "Accord", img: "/assets/images/real_models/toyota_vitz.jpg" },
-    { name: "Insight", img: "/assets/images/real_models/toyota_vitz.jpg" },
-    { name: "Vezel/HR-V", img: "/assets/images/real_models/toyota_harrier.jpg" },
-    { name: "Stream", img: "/assets/images/real_models/toyota_harrier.jpg" }
   ],
   "Ford": [
     { name: "Ranger (T6/T7/T8)", img: "/assets/images/real_models/toyota_prado.jpg" },
     { name: "Everest", img: "/assets/images/real_models/toyota_prado.jpg" },
-    { name: "F-150 Raptor", img: "/assets/images/real_models/toyota_prado.jpg" },
     { name: "Focus", img: "/assets/images/real_models/toyota_vitz.jpg" },
-    { name: "Fiesta", img: "/assets/images/real_models/toyota_vitz.jpg" },
-    { name: "Explorer", img: "/assets/images/real_models/toyota_prado.jpg" }
-  ],
-  "Hyundai": [
-    { name: "Tucson", img: "/assets/images/real_models/toyota_harrier.jpg" },
-    { name: "Santa Fe", img: "/assets/images/real_models/toyota_harrier.jpg" },
-    { name: "Elantra", img: "/assets/images/real_models/toyota_vitz.jpg" },
-    { name: "Accent", img: "/assets/images/real_models/toyota_vitz.jpg" },
-    { name: "Kona", img: "/assets/images/real_models/toyota_vitz.jpg" },
-    { name: "Sonata", img: "/assets/images/real_models/toyota_vitz.jpg" }
-  ],
-  "Suzuki": [
-    { name: "Swift", img: "/assets/images/real_models/toyota_vitz.jpg" },
-    { name: "Vitara", img: "/assets/images/real_models/toyota_harrier.jpg" },
-    { name: "Jimny", img: "/assets/images/real_models/toyota_prado.jpg" },
-    { name: "Alto", img: "/assets/images/real_models/toyota_vitz.jpg" },
-    { name: "Ertiga", img: "/assets/images/real_models/toyota_vitz.jpg" }
-  ],
-  "Lexus": [
-    { name: "RX350/RX450h", img: "/assets/images/real_models/toyota_harrier.jpg" },
-    { name: "NX200t/NX300", img: "/assets/images/real_models/toyota_harrier.jpg" },
-    { name: "LX570/LX600", img: "/assets/images/real_models/toyota_prado.jpg" },
-    { name: "IS250/IS300", img: "/assets/images/real_models/toyota_vitz.jpg" },
-    { name: "ES300h", img: "/assets/images/real_models/toyota_vitz.jpg" },
-    { name: "GX460", img: "/assets/images/real_models/toyota_prado.jpg" }
-  ],
-  "Infiniti": [
-    { name: "Q50", img: "/assets/images/real_models/toyota_vitz.jpg" },
-    { name: "QX70", img: "/assets/images/real_models/toyota_harrier.jpg" },
-    { name: "QX80", img: "/assets/images/real_models/toyota_prado.jpg" },
-    { name: "G37", img: "/assets/images/real_models/toyota_vitz.jpg" }
-  ],
-  "Chevrolet": [
-    { name: "Cruze", img: "/assets/images/real_models/toyota_vitz.jpg" },
-    { name: "Captiva", img: "/assets/images/real_models/toyota_harrier.jpg" },
-    { name: "Trailblazer", img: "/assets/images/real_models/toyota_prado.jpg" }
-  ],
-  "Mopar": [
-    { name: "Jeep Grand Cherokee", img: "/assets/images/real_models/toyota_prado.jpg" },
-    { name: "Jeep Wrangler (JK/JL)", img: "/assets/images/real_models/toyota_prado.jpg" },
-    { name: "Dodge Ram 1500", img: "/assets/images/real_models/toyota_prado.jpg" },
-    { name: "Chrysler 300C", img: "/assets/images/real_models/toyota_vitz.jpg" }
   ],
 };
 
-const CATEGORY_PRODUCTS_MAP: Record<string, (brand: string, model: string) => any[]> = {
-  "Braking Systems": (brand, model) => [
-    { name: `${brand} ${model} Brembo Performance Brake Disc`, price: "KES 28,500", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
-    { name: `${brand} ${model} Bosch Blue Brake Pad Set`, price: "KES 8,500", img: "/assets/images/parts/braking/toyota_fielder_pads.webp", condition: "New" },
-    { name: `${brand} ${model} Brembo Big Brake Kit (Front)`, price: "KES 145,000", img: "/assets/images/parts/braking/bmw_brembo_big_brake_kit.jpg", condition: "New" },
-    { name: `${brand} ${model} Akebono Ceramic Brake Pads`, price: "KES 12,000", img: "/assets/images/real_parts/toyota_brake_pads.jpg", condition: "New" },
-    { name: `${brand} ${model} Brembo Carbon Ceramic Kit`, price: "KES 850,000", img: "/assets/images/parts/braking/bmw_carbon_ceramic_kit.png", condition: "New" },
-  ],
-  "Engine Components": (brand, model) => [
-    { name: `${brand} ${model} Bosch High-Performance Oil Filter`, price: "KES 2,200", img: "/assets/images/parts/engine/bmw_3series_oil_filter.jpg", condition: "New" },
-    { name: `${brand} ${model} NGK Laser Iridium Spark Plug Set`, price: "KES 14,500", img: "/assets/images/products/chevrolet-ignition-coil.jpg", condition: "New" },
-    { name: `${brand} ${model} Gates Racing Timing Belt Kit`, price: "KES 28,000", img: "/assets/images/products/toyota-air-filter.jpg", condition: "New" },
-    { name: `${brand} ${model} Mahle Original Air Filter`, price: "KES 3,500", img: "/assets/images/products/toyota-air-filter.jpg", condition: "New" },
-    { name: `${brand} ${model} Bosch Fuel Injector Set`, price: "KES 45,000", img: "/assets/images/parts/engine/bmw_5series_oil_filter.jpg", condition: "New" },
-  ],
-  "Transmission & Gear": (brand, model) => [
-    { name: `${brand} ${model} ZF 8HP Transmission Service Kit`, price: "KES 24,000", img: "/assets/images/products/bmw-gear-service-kit.jpg", condition: "New" },
-    { name: `${brand} ${model} Exedy Stage 1 Clutch Kit`, price: "KES 48,000", img: "/assets/images/products/suzuki-clutch-kit.jpg", condition: "New" },
-    { name: `${brand} ${model} AISIN Automatic Transmission Fluid`, price: "KES 15,000", img: "/assets/images/products/toyota-vitz-gearbox.png", condition: "New" },
-    { name: `${brand} ${model} Luk Dual Mass Flywheel`, price: "KES 65,000", img: "/assets/images/products/mercedes-gearbox.jpg", condition: "New" },
-    { name: `${brand} ${model} ZF Rebuilt Automatic Transmission`, price: "KES 185,000", img: "/assets/images/products/bmw-gearbox.jpg", condition: "Certified Used" },
-  ],
-  "Steering Systems": (brand, model) => [
-    { name: `${brand} ${model} Bosch Power Steering Pump`, price: "KES 32,000", img: "/assets/images/products/bmw-steering-rack.jpg", condition: "New" },
-    { name: `${brand} ${model} Moog Tie Rod End Assembly`, price: "KES 9,500", img: "/assets/images/products/bmw-sensor-2.jpg", condition: "New" },
-    { name: `${brand} ${model} TRW Steering Rack & Pinion`, price: "KES 55,000", img: "/assets/images/products/bmw-steering-rack.jpg", condition: "Certified Used" },
-    { name: `${brand} ${model} Lemforder Steering Linkage Kit`, price: "KES 18,000", img: "/assets/images/products/bmw-steering-rack.jpg", condition: "New" },
-    { name: `${brand} ${model} Bosch Steering Angle Sensor`, price: "KES 12,500", img: "/assets/images/products/bmw-sensor.jpg", condition: "New" },
-  ],
-  "Suspension & Chassis": (brand, model) => [
-    { name: `${brand} ${model} Bilstein B4 Gas Pressure Shock`, price: "KES 18,500", img: "/assets/images/parts/suspension/mercedes_cclass_shock.jpg", condition: "New" },
-    { name: `${brand} ${model} KYB Excel-G Shock Absorber Set`, price: "KES 35,000", img: "/assets/images/real_parts/mercedes_shock_absorber.jpg", condition: "New" },
-    { name: `${brand} ${model} Lemforder Control Arm Assembly`, price: "KES 28,000", img: "/assets/images/products/mercedes-s550-strut.jpg", condition: "New" },
-    { name: `${brand} ${model} Eibach Pro-Kit Lowering Springs`, price: "KES 42,000", img: "/assets/images/real_parts/mercedes_springs.webp", condition: "New" },
-    { name: `${brand} ${model} Sachs Suspension Strut Mount`, price: "KES 8,500", img: "/assets/images/parts/suspension/mercedes_sclass_shock.jpg", condition: "New" },
-  ],
-  "Electrical & Sensors": (brand, model) => [
-    { name: `${brand} ${model} Denso Alternator (Original)`, price: "KES 45,000", img: "/assets/images/parts/electrical/toyota_denso_alternator.webp", condition: "New" },
-    { name: `${brand} ${model} Bosch S5 Premium Battery`, price: "KES 18,500", img: "/assets/images/products/hyundai-alternator.jpg", condition: "New" },
-    { name: `${brand} ${model} Denso High Output Alternator`, price: "KES 65,000", img: "/assets/images/parts/electrical/toyota_high_output_alternator.jpg", condition: "New" },
-    { name: `${brand} ${model} Bosch Oxygen Sensor`, price: "KES 14,000", img: "/assets/images/products/bmw-sensor.jpg", condition: "New" },
-    { name: `${brand} ${model} Valeo Starter Motor`, price: "KES 22,000", img: "/assets/images/products/hyundai-alternator-2.jpg", condition: "New" },
-  ],
-  "Alloys & Rims": (brand, model) => [
-    { name: `${brand} ${model} BBS Forged Alloy Wheel (18\")`, price: "KES 125,000", img: "/assets/images/products/lexus-alloy-rim.jpg", condition: "New" },
-    { name: `${brand} ${model} Enkei Performance Rim Set (17\")`, price: "KES 85,000", img: "/assets/images/products/mercedes-alloy-rim.jpg", condition: "New" },
-    { name: `${brand} ${model} Vossen Custom Alloy Wheel (20\")`, price: "KES 245,000", img: "/assets/images/products/lexus-alloy-rim-2.jpg", condition: "New" },
-    { name: `${brand} ${model} BBS Center Cap Set`, price: "KES 6,500", img: "/assets/images/products/lexus-alloy-rim.jpg", condition: "New" },
-    { name: `${brand} ${model} Michelin Pilot Sport 4S Tire`, price: "KES 32,000", img: "/assets/images/products/lexus-alloy-rim-2.jpg", condition: "New" },
-  ],
-  "Lubricants & Fluids": (brand, model) => [
-    { name: `${brand} ${model} Castrol EDGE 5W-30 Full Synthetic`, price: "KES 9,500", img: "/assets/images/real_parts/bmw_oil_filter.jpg", condition: "New" },
-    { name: `${brand} ${model} Mobil 1 Advanced Full Synthetic`, price: "KES 10,500", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
-    { name: `${brand} ${model} Motul 8100 X-cess Engine Oil`, price: "KES 11,000", img: "/assets/images/products/toyota-oil-filter-2.png", condition: "New" },
-    { name: `${brand} ${model} Liqui Moly Top Tec 4200 Oil`, price: "KES 12,500", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
-    { name: `${brand} ${model} Shell Helix Ultra Engine Oil`, price: "KES 8,800", img: "/assets/images/products/toyota-oil-filter-2.png", condition: "New" },
-  ],
-  "Body Kits & Styling": (brand, model) => [
-    { name: `${brand} ${model} M-Performance Style Body Kit`, price: "KES 145,000", img: "/assets/images/products/mercedes-bumper.jpg", condition: "New" },
-    { name: `${brand} ${model} AMG Style Front Bumper`, price: "KES 65,000", img: "/assets/images/products/mercedes-bumper.jpg", condition: "New" },
-    { name: `${brand} ${model} Wald International Body Styling`, price: "KES 285,000", img: "/assets/images/products/mercedes-bumper.jpg", condition: "New" },
-    { name: `${brand} ${model} Carbon Fiber Mirror Caps`, price: "KES 18,500", img: "/assets/images/products/mercedes-bumper.jpg", condition: "New" },
-    { name: `${brand} ${model} Rear Diffuser with Quad Tips`, price: "KES 32,000", img: "/assets/images/products/mercedes-bumper.jpg", condition: "New" },
-  ],
-  "Glass & Windscreens": (brand, model) => [
-    { name: `${brand} ${model} Pilkington Front Windscreen`, price: "KES 24,000", img: "/assets/images/products/toyota-windscreen.webp", condition: "New" },
-    { name: `${brand} ${model} Saint-Gobain Sekurit Side Glass`, price: "KES 12,500", img: "/assets/images/products/toyota-windscreen-2.jpg", condition: "New" },
-    { name: `${brand} ${model} AGC Automotive Rear Glass`, price: "KES 18,500", img: "/assets/images/products/toyota-windscreen.webp", condition: "New" },
-    { name: `${brand} ${model} Fuyao Laminated Front Glass`, price: "KES 15,000", img: "/assets/images/products/toyota-windscreen-2.jpg", condition: "New" },
-    { name: `${brand} ${model} Guardian Glass Door Assembly`, price: "KES 9,500", img: "/assets/images/products/toyota-windscreen.webp", condition: "New" },
-  ],
-  "Certified Used Parts": (brand, model) => [
-    { name: `${brand} ${model} Used Engine (Japan Import)`, price: "KES 350,000", img: "/assets/images/products/bmw-steering-rack.jpg", condition: "Certified Used" },
-    { name: `${brand} ${model} Used Automatic Transmission`, price: "KES 145,000", img: "/assets/images/products/bmw-gearbox.jpg", condition: "Certified Used" },
-    { name: `${brand} ${model} Used Xenon Headlight Pair`, price: "KES 85,000", img: "/assets/images/products/honda-headlight.jpg", condition: "Certified Used" },
-    { name: `${brand} ${model} Used Instrument Cluster`, price: "KES 24,000", img: "/assets/images/products/bmw-sensor.jpg", condition: "Certified Used" },
-    { name: `${brand} ${model} Used Infotainment Screen`, price: "KES 45,000", img: "/assets/images/products/bmw-sensor-2.jpg", condition: "Certified Used" },
-  ],
+// Expanded product catalog with 5+ items per subcategory
+const PRODUCT_CATALOG: Record<string, Record<string, Record<string, any[]>>> = {
+  "Braking Systems": {
+    "Brake Pads": {
+      "Toyota Fielder": [
+        { name: "Bosch Blue Brake Pad Set", price: "KES 8,500", img: "/assets/images/parts/braking/toyota_fielder_pads.webp", condition: "New" },
+        { name: "Akebono Ceramic Brake Pads", price: "KES 12,000", img: "/assets/images/real_parts/toyota_brake_pads.jpg", condition: "New" },
+        { name: "Brembo OEM Brake Pads", price: "KES 15,500", img: "/assets/images/parts/braking/toyota_fielder_pads.webp", condition: "New" },
+        { name: "TRW Premium Brake Pads", price: "KES 11,000", img: "/assets/images/real_parts/toyota_brake_pads.jpg", condition: "New" },
+        { name: "Ferodo Racing Brake Pads", price: "KES 18,500", img: "/assets/images/parts/braking/toyota_fielder_pads.webp", condition: "New" },
+      ],
+      "BMW 3 Series (E90/F30/G20)": [
+        { name: "Brembo OEM Brake Pads", price: "KES 22,000", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
+        { name: "Bosch Premium Brake Pads", price: "KES 19,500", img: "/assets/images/parts/braking/toyota_fielder_pads.webp", condition: "New" },
+        { name: "Akebono Premium Pads", price: "KES 21,000", img: "/assets/images/real_parts/toyota_brake_pads.jpg", condition: "New" },
+        { name: "Pagid Racing Brake Pads", price: "KES 25,000", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
+        { name: "Mintex Performance Pads", price: "KES 23,500", img: "/assets/images/parts/braking/toyota_fielder_pads.webp", condition: "New" },
+      ],
+      "Mercedes-Benz C-Class (W204/W205/W206)": [
+        { name: "Mercedes OEM Brake Pads", price: "KES 24,500", img: "/assets/images/parts/braking/toyota_fielder_pads.webp", condition: "New" },
+        { name: "Brembo OEM Pads", price: "KES 26,000", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
+        { name: "Bosch Premium Pads", price: "KES 22,000", img: "/assets/images/real_parts/toyota_brake_pads.jpg", condition: "New" },
+        { name: "ATE Premium Brake Pads", price: "KES 25,500", img: "/assets/images/parts/braking/toyota_fielder_pads.webp", condition: "New" },
+        { name: "Pagid Racing Pads", price: "KES 28,000", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
+      ],
+    },
+    "Brake Discs": {
+      "Toyota Fielder": [
+        { name: "Brembo Ventilated Disc", price: "KES 18,500", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
+        { name: "Bosch Disc Rotor", price: "KES 16,000", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
+        { name: "TRW Brake Disc", price: "KES 17,500", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
+        { name: "Ferodo Disc Rotor", price: "KES 19,000", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
+        { name: "ATE Brake Disc", price: "KES 17,000", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
+      ],
+      "BMW 3 Series (E90/F30/G20)": [
+        { name: "Brembo Performance Disc", price: "KES 28,500", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
+        { name: "Bosch Premium Disc", price: "KES 25,000", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
+        { name: "ATE Brake Disc", price: "KES 26,500", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
+        { name: "Pagid Disc Rotor", price: "KES 29,000", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
+        { name: "Mintex Brake Disc", price: "KES 27,500", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
+      ],
+      "Mercedes-Benz C-Class (W204/W205/W206)": [
+        { name: "Mercedes OEM Disc", price: "KES 32,000", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
+        { name: "Brembo OEM Disc", price: "KES 34,500", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
+        { name: "Bosch Premium Disc", price: "KES 30,500", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
+        { name: "ATE Brake Disc", price: "KES 31,500", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
+        { name: "Pagid Performance Disc", price: "KES 35,000", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
+      ],
+    },
+    "Brake Fluid": {
+      "Toyota Fielder": [
+        { name: "Bosch DOT 4 Brake Fluid", price: "KES 3,500", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
+        { name: "ATE Type 200 Brake Fluid", price: "KES 4,000", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
+        { name: "Castrol Brake Fluid", price: "KES 3,800", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
+        { name: "Motul RBF600 Brake Fluid", price: "KES 5,500", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
+        { name: "Shell Brake Fluid DOT 4", price: "KES 3,600", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
+      ],
+      "BMW 3 Series (E90/F30/G20)": [
+        { name: "Bosch DOT 4 Plus", price: "KES 4,200", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
+        { name: "ATE Type 200 Premium", price: "KES 4,800", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
+        { name: "Motul RBF600 Racing", price: "KES 6,500", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
+        { name: "Castrol SRF Brake Fluid", price: "KES 7,000", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
+        { name: "Brembo Brake Fluid", price: "KES 5,200", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
+      ],
+      "Mercedes-Benz C-Class (W204/W205/W206)": [
+        { name: "Mercedes OEM Brake Fluid", price: "KES 5,500", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
+        { name: "Bosch DOT 4 Plus", price: "KES 4,800", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
+        { name: "ATE Type 200 Premium", price: "KES 5,200", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
+        { name: "Castrol SRF Racing", price: "KES 7,500", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
+        { name: "Motul RBF600", price: "KES 6,800", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
+      ],
+    },
+  },
+  "Lubricants & Fluids": {
+    "Engine Oil": {
+      "Toyota Fielder": [
+        { name: "Castrol EDGE 5W-30", price: "KES 9,500", img: "/assets/images/real_parts/bmw_oil_filter.jpg", condition: "New" },
+        { name: "Mobil 1 5W-30", price: "KES 10,500", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
+        { name: "Shell Helix Ultra 5W-30", price: "KES 8,800", img: "/assets/images/products/toyota-oil-filter-2.png", condition: "New" },
+        { name: "Motul 8100 X-cess 5W-30", price: "KES 11,000", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
+        { name: "Liqui Moly Top Tec 4200", price: "KES 12,500", img: "/assets/images/products/toyota-oil-filter-2.png", condition: "New" },
+      ],
+      "BMW 3 Series (E90/F30/G20)": [
+        { name: "Castrol EDGE 5W-40", price: "KES 11,500", img: "/assets/images/real_parts/bmw_oil_filter.jpg", condition: "New" },
+        { name: "Mobil 1 5W-40", price: "KES 12,500", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
+        { name: "Liqui Moly Leichtlauf", price: "KES 13,500", img: "/assets/images/products/toyota-oil-filter-2.png", condition: "New" },
+        { name: "Shell Helix Ultra 5W-40", price: "KES 10,800", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
+        { name: "Motul 8100 X-cess 5W-40", price: "KES 13,000", img: "/assets/images/products/toyota-oil-filter-2.png", condition: "New" },
+      ],
+      "Mercedes-Benz C-Class (W204/W205/W206)": [
+        { name: "Mercedes OEM Engine Oil", price: "KES 14,500", img: "/assets/images/real_parts/bmw_oil_filter.jpg", condition: "New" },
+        { name: "Castrol EDGE 5W-40", price: "KES 12,500", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
+        { name: "Mobil 1 5W-40", price: "KES 13,500", img: "/assets/images/products/toyota-oil-filter-2.png", condition: "New" },
+        { name: "Shell Helix Ultra 5W-40", price: "KES 11,500", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
+        { name: "Liqui Moly Leichtlauf", price: "KES 14,000", img: "/assets/images/products/toyota-oil-filter-2.png", condition: "New" },
+      ],
+    },
+    "Transmission Fluid": {
+      "Toyota Fielder": [
+        { name: "AISIN Automatic Transmission Fluid", price: "KES 15,000", img: "/assets/images/products/toyota-vitz-gearbox.png", condition: "New" },
+        { name: "Toyota OEM ATF", price: "KES 14,500", img: "/assets/images/products/toyota-vitz-gearbox.png", condition: "New" },
+        { name: "Castrol Transmax", price: "KES 16,500", img: "/assets/images/products/toyota-vitz-gearbox.png", condition: "New" },
+        { name: "Shell Tellus Transmission Fluid", price: "KES 15,500", img: "/assets/images/products/toyota-vitz-gearbox.png", condition: "New" },
+        { name: "Mobil ATF 220", price: "KES 14,800", img: "/assets/images/products/toyota-vitz-gearbox.png", condition: "New" },
+      ],
+      "BMW 3 Series (E90/F30/G20)": [
+        { name: "ZF Automatic Transmission Fluid", price: "KES 24,000", img: "/assets/images/products/bmw-gear-service-kit.jpg", condition: "New" },
+        { name: "Castrol Transmax", price: "KES 22,500", img: "/assets/images/products/bmw-gear-service-kit.jpg", condition: "New" },
+        { name: "Mobil ATF 220", price: "KES 21,000", img: "/assets/images/products/bmw-gear-service-kit.jpg", condition: "New" },
+        { name: "Shell Tellus Premium", price: "KES 23,000", img: "/assets/images/products/bmw-gear-service-kit.jpg", condition: "New" },
+        { name: "Liqui Moly ATF", price: "KES 25,000", img: "/assets/images/products/bmw-gear-service-kit.jpg", condition: "New" },
+      ],
+      "Mercedes-Benz C-Class (W204/W205/W206)": [
+        { name: "Mercedes OEM Transmission Fluid", price: "KES 28,000", img: "/assets/images/products/mercedes-gearbox.jpg", condition: "New" },
+        { name: "ZF Automatic Transmission Fluid", price: "KES 26,500", img: "/assets/images/products/mercedes-gearbox.jpg", condition: "New" },
+        { name: "Castrol Transmax Premium", price: "KES 25,000", img: "/assets/images/products/mercedes-gearbox.jpg", condition: "New" },
+        { name: "Shell Tellus Premium", price: "KES 26,000", img: "/assets/images/products/mercedes-gearbox.jpg", condition: "New" },
+        { name: "Mobil ATF 220", price: "KES 24,500", img: "/assets/images/products/mercedes-gearbox.jpg", condition: "New" },
+      ],
+    },
+  },
 };
-
-const PRODUCTS = Object.entries(VEHICLE_MODELS).flatMap(([brand, models]) => 
-  models.flatMap(model => 
-    Object.entries(CATEGORY_PRODUCTS_MAP).flatMap(([category, getProducts]) => 
-      getProducts(brand, model.name).map(p => ({
-        ...p,
-        category,
-        brand,
-        models: [model.name]
-      }))
-    )
-  )
-);
 
 export default function Products() {
   const [location, setLocation] = useLocation();
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [activeSubcategory, setActiveSubcategory] = useState<string | null>(null);
   const [activeBrand, setActiveBrand] = useState<string | null>(null);
   const [activeModel, setActiveModel] = useState<string | null>(null);
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortBy, setSortBy] = useState<"name" | "price">("name");
   const [page, setPage] = useState(1);
   const [addedToCart, setAddedToCart] = useState<string | null>(null);
   const { addItem } = useCart();
@@ -226,57 +192,81 @@ export default function Products() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
+    const category = params.get("category");
+    const subcategory = params.get("subcategory");
     const brand = params.get("brand");
     const model = params.get("model");
-    const category = params.get("category");
     
-    if (brand) setActiveBrand(brand);
-    if (model) setActiveModel(model);
-    if (category) setActiveCategory(category);
+    if (category) setActiveCategory(decodeURIComponent(category));
+    if (subcategory) setActiveSubcategory(decodeURIComponent(subcategory));
+    if (brand) setActiveBrand(decodeURIComponent(brand));
+    if (model) setActiveModel(decodeURIComponent(model));
     
     setPage(1);
   }, [location]);
 
-  const filtered = PRODUCTS
-    .filter((p) => !activeBrand || p.brand.toLowerCase() === activeBrand.toLowerCase())
-    .filter((p) => !activeModel || p.models.includes(activeModel) || p.models.includes("All Models"))
-    .filter((p) => !activeCategory || p.category === activeCategory)
-    .filter((p) => p.name.toLowerCase().includes(searchTerm.toLowerCase()))
-    .sort((a, b) => {
-      if (sortBy === "name") return a.name.localeCompare(b.name);
-      return 0;
-    });
-
-  const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
-  const pageItems = filtered.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
-
-  const resetAll = () => {
+  const handleCategorySelect = (category: string) => {
+    setActiveCategory(category);
+    setActiveSubcategory(null);
     setActiveBrand(null);
     setActiveModel(null);
-    setActiveCategory(null);
-    setLocation("/products");
+    setLocation(`/products?category=${encodeURIComponent(category)}`);
+  };
+
+  const handleSubcategorySelect = (subcategory: string) => {
+    setActiveSubcategory(subcategory);
+    setActiveBrand(null);
+    setActiveModel(null);
+    setLocation(`/products?category=${encodeURIComponent(activeCategory!)}&subcategory=${encodeURIComponent(subcategory)}`);
   };
 
   const handleBrandSelect = (brand: string) => {
     setActiveBrand(brand);
     setActiveModel(null);
-    setActiveCategory(null);
-    setLocation(`/products?brand=${encodeURIComponent(brand)}`);
+    setLocation(`/products?category=${encodeURIComponent(activeCategory!)}&subcategory=${encodeURIComponent(activeSubcategory!)}&brand=${encodeURIComponent(brand)}`);
   };
 
   const handleModelSelect = (model: string) => {
     setActiveModel(model);
-    setActiveCategory(null);
-    setLocation(`/products?brand=${encodeURIComponent(activeBrand!)}&model=${encodeURIComponent(model)}`);
+    const products = PRODUCT_CATALOG[activeCategory!]?.[activeSubcategory!]?.[model] || [];
+    setLocation(`/products?category=${encodeURIComponent(activeCategory!)}&subcategory=${encodeURIComponent(activeSubcategory!)}&brand=${encodeURIComponent(activeBrand!)}&model=${encodeURIComponent(model)}`);
   };
 
-  const handleCategorySelect = (cat: string) => {
-    setActiveCategory(cat);
-    const params = new URLSearchParams();
-    if (activeBrand) params.set("brand", activeBrand);
-    if (activeModel) params.set("model", activeModel);
-    params.set("category", cat);
-    setLocation(`/products?${params.toString()}`);
+  const resetAll = () => {
+    setActiveCategory(null);
+    setActiveSubcategory(null);
+    setActiveBrand(null);
+    setActiveModel(null);
+    setLocation("/products");
+  };
+
+  const getProducts = () => {
+    if (activeModel && activeSubcategory && activeCategory) {
+      return PRODUCT_CATALOG[activeCategory]?.[activeSubcategory]?.[activeModel] || [];
+    }
+    return [];
+  };
+
+  const products = getProducts()
+    .filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    .sort((a, b) => a.name.localeCompare(b.name));
+
+  const totalPages = Math.ceil(products.length / ITEMS_PER_PAGE);
+  const pageItems = products.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
+
+  const handleAddToCart = (product: any) => {
+    addItem({
+      id: `${activeModel}-${product.name}`,
+      name: product.name,
+      price: parseInt(product.price.replace(/[^0-9]/g, "")),
+      image: product.img,
+      quantity: 1,
+      brand: activeBrand || "",
+      model: activeModel || "",
+      category: activeCategory || ""
+    });
+    setAddedToCart(`${activeModel}-${product.name}`);
+    setTimeout(() => setAddedToCart(null), 2000);
   };
 
   return (
@@ -287,23 +277,40 @@ export default function Products() {
         <div className="bg-gray-900 py-12 border-b border-white/10">
           <div className="max-w-[1280px] mx-auto px-6">
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-              <div className="flex items-center gap-4">
-                <div className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all ${!activeBrand ? "bg-[oklch(0.45_0.22_27)] border-[oklch(0.45_0.22_27)] text-white" : "border-white/20 text-white/50"}`}>
+              <div className="flex items-center gap-4 flex-wrap">
+                <div className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all ${!activeCategory ? "bg-[oklch(0.45_0.22_27)] border-[oklch(0.45_0.22_27)] text-white" : "border-white/20 text-white/50"}`}>
                   <span className="text-[10px] font-black">01</span>
-                  <span className="text-[10px] font-black uppercase tracking-widest">Brand</span>
-                </div>
-                <div className="w-8 h-px bg-white/10" />
-                <div className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all ${activeBrand && !activeModel ? "bg-[oklch(0.45_0.22_27)] border-[oklch(0.45_0.22_27)] text-white" : "border-white/20 text-white/50"}`}>
-                  <span className="text-[10px] font-black">02</span>
-                  <span className="text-[10px] font-black uppercase tracking-widest">Model</span>
-                </div>
-                <div className="w-8 h-px bg-white/10" />
-                <div className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all ${activeModel && !activeCategory ? "bg-[oklch(0.45_0.22_27)] border-[oklch(0.45_0.22_27)] text-white" : "border-white/20 text-white/50"}`}>
-                  <span className="text-[10px] font-black">03</span>
                   <span className="text-[10px] font-black uppercase tracking-widest">Category</span>
                 </div>
+                {activeCategory && (
+                  <>
+                    <div className="w-8 h-px bg-white/10" />
+                    <div className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all ${activeCategory && !activeSubcategory ? "bg-[oklch(0.45_0.22_27)] border-[oklch(0.45_0.22_27)] text-white" : "border-white/20 text-white/50"}`}>
+                      <span className="text-[10px] font-black">02</span>
+                      <span className="text-[10px] font-black uppercase tracking-widest">Subcategory</span>
+                    </div>
+                  </>
+                )}
+                {activeSubcategory && (
+                  <>
+                    <div className="w-8 h-px bg-white/10" />
+                    <div className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all ${activeSubcategory && !activeBrand ? "bg-[oklch(0.45_0.22_27)] border-[oklch(0.45_0.22_27)] text-white" : "border-white/20 text-white/50"}`}>
+                      <span className="text-[10px] font-black">03</span>
+                      <span className="text-[10px] font-black uppercase tracking-widest">Brand</span>
+                    </div>
+                  </>
+                )}
+                {activeBrand && (
+                  <>
+                    <div className="w-8 h-px bg-white/10" />
+                    <div className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all ${activeBrand && !activeModel ? "bg-[oklch(0.45_0.22_27)] border-[oklch(0.45_0.22_27)] text-white" : "border-white/20 text-white/50"}`}>
+                      <span className="text-[10px] font-black">04</span>
+                      <span className="text-[10px] font-black uppercase tracking-widest">Model</span>
+                    </div>
+                  </>
+                )}
               </div>
-              {(activeBrand || activeModel || activeCategory) && (
+              {(activeCategory || activeSubcategory || activeBrand || activeModel) && (
                 <button onClick={resetAll} className="text-[10px] font-black text-[oklch(0.45_0.22_27)] uppercase tracking-widest hover:underline">
                   Reset Selection
                 </button>
@@ -314,19 +321,75 @@ export default function Products() {
 
         <section className="py-16 min-h-[60vh]">
           <div className="max-w-[1280px] mx-auto px-6">
-            {/* STEP 1: SELECT BRAND */}
-            {!activeBrand && !activeCategory && (
+            {/* STEP 1: SELECT CATEGORY */}
+            {!activeCategory && (
               <div className="animate-fadeIn">
                 <div className="mb-12">
                   <p className="text-[oklch(0.45_0.22_27)] font-black text-[10px] uppercase tracking-[0.4em] mb-2">Step One</p>
-                  <h2 className="text-4xl font-black text-gray-900 uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>Choose Manufacturer</h2>
+                  <h2 className="text-4xl font-black text-gray-900 uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>Select Part Category</h2>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                  {Object.keys(CATEGORIES_WITH_SUBCATEGORIES).map(category => (
+                    <button 
+                      key={category}
+                      onClick={() => handleCategorySelect(category)}
+                      className="group bg-white border border-gray-100 p-8 flex flex-col items-center justify-center gap-4 hover:border-[oklch(0.45_0.22_27)] hover:shadow-2xl transition-all duration-500 rounded-sm"
+                    >
+                      <div className="w-16 h-16 bg-gray-50 flex items-center justify-center rounded-full border border-gray-100 group-hover:bg-[oklch(0.45_0.22_27)] group-hover:text-white transition-all">
+                        <Settings2 size={28} />
+                      </div>
+                      <span className="text-[9px] font-black uppercase tracking-widest text-gray-900 text-center leading-tight group-hover:text-[oklch(0.45_0.22_27)]">{category}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* STEP 2: SELECT SUBCATEGORY */}
+            {activeCategory && !activeSubcategory && (
+              <div className="animate-fadeIn">
+                <div className="mb-12 flex items-center justify-between">
+                  <div>
+                    <p className="text-[oklch(0.45_0.22_27)] font-black text-[10px] uppercase tracking-[0.4em] mb-2">Step Two</p>
+                    <h2 className="text-4xl font-black text-gray-900 uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>{activeCategory} Types</h2>
+                  </div>
+                  <button onClick={() => setActiveCategory(null)} className="text-[10px] font-black text-gray-400 hover:text-gray-900 uppercase tracking-widest flex items-center gap-2">
+                    <X size={14} /> Back
+                  </button>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                  {(CATEGORIES_WITH_SUBCATEGORIES[activeCategory as keyof typeof CATEGORIES_WITH_SUBCATEGORIES] || []).map((subcategory: string) => (
+                    <button 
+                      key={subcategory}
+                      onClick={() => handleSubcategorySelect(subcategory)}
+                      className="group bg-white border border-gray-100 p-8 flex flex-col items-center justify-center gap-4 hover:border-[oklch(0.45_0.22_27)] hover:shadow-2xl transition-all duration-500 rounded-sm"
+                    >
+                      <span className="text-[9px] font-black uppercase tracking-widest text-gray-900 text-center leading-tight group-hover:text-[oklch(0.45_0.22_27)]">{subcategory}</span>
+                      <ArrowRight size={16} className="text-gray-300 group-hover:text-[oklch(0.45_0.22_27)] transition-colors" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* STEP 3: SELECT BRAND */}
+            {activeCategory && activeSubcategory && !activeBrand && (
+              <div className="animate-fadeIn">
+                <div className="mb-12 flex items-center justify-between">
+                  <div>
+                    <p className="text-[oklch(0.45_0.22_27)] font-black text-[10px] uppercase tracking-[0.4em] mb-2">Step Three</p>
+                    <h2 className="text-4xl font-black text-gray-900 uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>Choose Brand</h2>
+                  </div>
+                  <button onClick={() => setActiveSubcategory(null)} className="text-[10px] font-black text-gray-400 hover:text-gray-900 uppercase tracking-widest flex items-center gap-2">
+                    <X size={14} /> Back
+                  </button>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
                   {Object.keys(VEHICLE_MODELS).map(brand => (
                     <button 
                       key={brand}
                       onClick={() => handleBrandSelect(brand)}
-                      className="group bg-white border border-gray-100 p-10 flex flex-col items-center justify-center gap-6 hover:border-[oklch(0.45_0.22_27)] hover:shadow-2xl transition-all duration-500"
+                      className="group bg-white border border-gray-100 p-10 flex flex-col items-center justify-center gap-6 hover:border-[oklch(0.45_0.22_27)] hover:shadow-2xl transition-all duration-500 rounded-sm"
                     >
                       <img 
                         src={`/assets/images/brands/${brand.toLowerCase().replace(' ', '')}.png`} 
@@ -340,20 +403,20 @@ export default function Products() {
               </div>
             )}
 
-            {/* STEP 2: SELECT MODEL */}
-            {activeBrand && !activeModel && (
+            {/* STEP 4: SELECT MODEL */}
+            {activeCategory && activeSubcategory && activeBrand && !activeModel && (
               <div className="animate-fadeIn">
                 <div className="mb-12 flex items-center justify-between">
                   <div>
-                    <p className="text-[oklch(0.45_0.22_27)] font-black text-[10px] uppercase tracking-[0.4em] mb-2">Step Two</p>
+                    <p className="text-[oklch(0.45_0.22_27)] font-black text-[10px] uppercase tracking-[0.4em] mb-2">Step Four</p>
                     <h2 className="text-4xl font-black text-gray-900 uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>{activeBrand} Models</h2>
                   </div>
                   <button onClick={() => setActiveBrand(null)} className="text-[10px] font-black text-gray-400 hover:text-gray-900 uppercase tracking-widest flex items-center gap-2">
-                    <X size={14} /> Back to Brands
+                    <X size={14} /> Back
                   </button>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                  {VEHICLE_MODELS[activeBrand].map(model => (
+                  {(VEHICLE_MODELS[activeBrand] || []).map(model => (
                     <button 
                       key={model.name}
                       onClick={() => handleModelSelect(model.name)}
@@ -376,37 +439,8 @@ export default function Products() {
               </div>
             )}
 
-            {/* STEP 3: SELECT CATEGORY */}
-            {activeBrand && activeModel && !activeCategory && (
-              <div className="animate-fadeIn">
-                <div className="mb-12 flex items-center justify-between">
-                  <div>
-                    <p className="text-[oklch(0.45_0.22_27)] font-black text-[10px] uppercase tracking-[0.4em] mb-2">Step Three</p>
-                    <h2 className="text-4xl font-black text-gray-900 uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>{activeModel} Categories</h2>
-                  </div>
-                  <button onClick={() => setActiveModel(null)} className="text-[10px] font-black text-gray-400 hover:text-gray-900 uppercase tracking-widest flex items-center gap-2">
-                    <X size={14} /> Back to Models
-                  </button>
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
-                  {CATEGORIES.map(cat => (
-                    <button 
-                      key={cat.name}
-                      onClick={() => handleCategorySelect(cat.name)}
-                      className="group bg-white border border-gray-100 p-8 flex flex-col items-center justify-center gap-4 hover:border-[oklch(0.45_0.22_27)] hover:shadow-2xl transition-all duration-500"
-                    >
-                      <div className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center overflow-hidden border border-gray-100">
-                        <img src={cat.img} alt={cat.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" />
-                      </div>
-                      <span className="text-[9px] font-black uppercase tracking-widest text-gray-900 text-center leading-tight">{cat.name}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* STEP 4: RESULTS GRID */}
-            {activeCategory && (
+            {/* STEP 5: PRODUCTS GRID */}
+            {activeCategory && activeSubcategory && activeBrand && activeModel && (
               <div className="animate-fadeIn">
                 <div className="flex flex-col lg:flex-row gap-12">
                   {/* Sidebar Info */}
@@ -416,24 +450,31 @@ export default function Products() {
                         <h4 className="text-[10px] font-black text-[oklch(0.45_0.22_27)] uppercase tracking-[0.3em] mb-8">Current Selection</h4>
                         <div className="space-y-8">
                           <div>
-                            <p className="text-[8px] font-bold text-white/40 uppercase tracking-widest mb-2">Manufacturer</p>
+                            <p className="text-[8px] font-bold text-white/40 uppercase tracking-widest mb-2">Category</p>
                             <div className="flex items-center justify-between">
-                              <p className="text-xs font-black uppercase tracking-widest">{activeBrand}</p>
+                              <p className="text-xs font-black uppercase tracking-widest text-white">{activeCategory}</p>
+                              <button onClick={() => setActiveCategory(null)} className="text-white/20 hover:text-white"><X size={12} /></button>
+                            </div>
+                          </div>
+                          <div>
+                            <p className="text-[8px] font-bold text-white/40 uppercase tracking-widest mb-2">Type</p>
+                            <div className="flex items-center justify-between">
+                              <p className="text-xs font-black uppercase tracking-widest text-white">{activeSubcategory}</p>
+                              <button onClick={() => setActiveSubcategory(null)} className="text-white/20 hover:text-white"><X size={12} /></button>
+                            </div>
+                          </div>
+                          <div>
+                            <p className="text-[8px] font-bold text-white/40 uppercase tracking-widest mb-2">Brand</p>
+                            <div className="flex items-center justify-between">
+                              <p className="text-xs font-black uppercase tracking-widest text-white">{activeBrand}</p>
                               <button onClick={() => setActiveBrand(null)} className="text-white/20 hover:text-white"><X size={12} /></button>
                             </div>
                           </div>
                           <div>
-                            <p className="text-[8px] font-bold text-white/40 uppercase tracking-widest mb-2">Vehicle Model</p>
+                            <p className="text-[8px] font-bold text-white/40 uppercase tracking-widest mb-2">Model</p>
                             <div className="flex items-center justify-between">
-                              <p className="text-xs font-black uppercase tracking-widest">{activeModel}</p>
+                              <p className="text-xs font-black uppercase tracking-widest text-white">{activeModel}</p>
                               <button onClick={() => setActiveModel(null)} className="text-white/20 hover:text-white"><X size={12} /></button>
-                            </div>
-                          </div>
-                          <div>
-                            <p className="text-[8px] font-bold text-white/40 uppercase tracking-widest mb-2">Part Category</p>
-                            <div className="flex items-center justify-between">
-                              <p className="text-xs font-black uppercase tracking-widest">{activeCategory}</p>
-                              <button onClick={() => setActiveCategory(null)} className="text-white/20 hover:text-white"><X size={12} /></button>
                             </div>
                           </div>
                         </div>
@@ -449,104 +490,80 @@ export default function Products() {
 
                   {/* Results Grid */}
                   <div className="flex-1">
-                    <div className="flex justify-between items-center mb-10 pb-6 border-b border-gray-100">
-                      <h2 className="text-2xl font-black text-gray-900 uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
-                        Available Components
-                      </h2>
-                      <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                        {filtered.length} Parts Found
-                      </p>
+                    <div className="mb-8 flex flex-col md:flex-row gap-4 items-center justify-between">
+                      <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tight">{pageItems.length} Products Found</h3>
+                      <div className="relative w-full md:w-64">
+                        <input
+                          type="text"
+                          placeholder="Search products..."
+                          value={searchTerm}
+                          onChange={(e) => { setSearchTerm(e.target.value); setPage(1); }}
+                          className="w-full px-4 py-2 border border-gray-200 rounded-sm focus:outline-none focus:ring-2 focus:ring-[oklch(0.45_0.22_27)]"
+                        />
+                      </div>
                     </div>
 
-                    {filtered.length > 0 ? (
-                      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-                        {pageItems.map((product, idx) => (
-                          <div key={idx} className="group bg-white border border-gray-100 rounded-sm overflow-hidden hover:shadow-2xl transition-all duration-500">
-                            <div className="relative h-56 overflow-hidden bg-gray-50">
-                              <img src={product.img} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                              <div className="absolute top-4 left-4">
-                                <span className="bg-white/90 backdrop-blur-sm text-[8px] font-black px-2 py-1 rounded-sm text-gray-900 uppercase tracking-widest shadow-sm">
+                    {pageItems.length > 0 ? (
+                      <>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                          {pageItems.map((product, idx) => (
+                            <div key={idx} className="group bg-white border border-gray-100 rounded-sm overflow-hidden hover:shadow-2xl transition-all duration-500">
+                              <div className="h-48 bg-gray-50 overflow-hidden relative">
+                                <img src={product.img} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                                <div className="absolute top-4 right-4 bg-[oklch(0.45_0.22_27)] text-white px-3 py-1 rounded-sm text-[10px] font-black uppercase tracking-widest">
                                   {product.condition}
-                                </span>
+                                </div>
                               </div>
-                            </div>
-                            <div className="p-6">
-                              <h3 className="text-sm font-bold text-gray-900 leading-tight mb-4 h-10 overflow-hidden group-hover:text-[oklch(0.45_0.22_27)] transition-colors">
-                                {product.name}
-                              </h3>
-                              <div className="flex justify-between items-center pt-5 border-t border-gray-50">
-                                <div>
-                                  <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Price Guide</p>
-                                  <p className="text-base font-black text-gray-900">{product.price}</p>
+                              <div className="p-6">
+                                <h4 className="text-sm font-black text-gray-900 mb-4 line-clamp-2">{product.name}</h4>
+                                <div className="flex items-center justify-between mb-4">
+                                  <span className="text-2xl font-black text-[oklch(0.45_0.22_27)]">{product.price}</span>
                                 </div>
                                 <button
-                                  onClick={() => {
-                                    addItem({
-                                      id: `${activeBrand}-${activeModel}-${product.name}`,
-                                      name: product.name,
-                                      price: parseInt(product.price.replace(/[^0-9]/g, '')),
-                                      quantity: 1,
-                                      image: product.img,
-                                      brand: activeBrand || '',
-                                      model: activeModel || '',
-                                      category: activeCategory || '',
-                                    });
-                                    setAddedToCart(`${activeBrand}-${activeModel}-${product.name}`);
-                                    setTimeout(() => setAddedToCart(null), 2000);
-                                  }}
-                                  className={`p-3 rounded-sm transition-all shadow-lg flex items-center justify-center ${
-                                    addedToCart === `${activeBrand}-${activeModel}-${product.name}`
-                                      ? 'bg-green-600 text-white'
-                                      : 'bg-gray-900 text-white hover:bg-[oklch(0.45_0.22_27)]'
+                                  onClick={() => handleAddToCart(product)}
+                                  className={`w-full py-3 px-4 rounded-sm text-xs font-black uppercase tracking-widest transition-all ${
+                                    addedToCart === `${activeModel}-${product.name}`
+                                      ? "bg-green-500 text-white"
+                                      : "bg-[oklch(0.45_0.22_27)] text-white hover:scale-105"
                                   }`}
                                 >
-                                  {addedToCart === `${activeBrand}-${activeModel}-${product.name}` ? (
-                                    <CheckCircle2 size={18} />
-                                  ) : (
-                                    <ShoppingCart size={18} />
-                                  )}
+                                  {addedToCart === `${activeModel}-${product.name}` ? "✓ Added" : "Add to Cart"}
                                 </button>
                               </div>
                             </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="py-20 text-center bg-gray-50 border border-dashed border-gray-200 rounded-sm">
-                        <Settings2 size={48} className="mx-auto text-gray-300 mb-4" />
-                        <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight mb-2" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>No Parts Listed Yet</h3>
-                        <p className="text-gray-500 text-sm max-w-md mx-auto mb-8">
-                          We are currently updating the inventory for this specific model and category. Please contact us directly for a quote.
-                        </p>
-                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                          <a href="https://wa.me/254714498451?text=I'm looking for a part that's not listed on your website." target="_blank" rel="noopener noreferrer" className="btn-primary py-3 px-8 text-xs flex items-center gap-2">
-                            <MessageSquare size={16} /> REQUEST VIA WHATSAPP
-                          </a>
-                          <a href="mailto:calvin@supremeautoparts.co.ke?subject=Part Inquiry&body=I'm looking for a part that's not listed on your website." className="bg-white border border-gray-200 text-gray-900 py-3 px-8 text-xs font-black uppercase tracking-widest rounded-sm hover:bg-gray-50 transition-all flex items-center gap-2">
-                            <Mail size={16} /> REQUEST VIA EMAIL
-                          </a>
+                          ))}
                         </div>
+
+                        {/* Pagination */}
+                        {totalPages > 1 && (
+                          <div className="flex justify-center gap-2 mb-12">
+                            {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+                              <button
+                                key={p}
+                                onClick={() => setPage(p)}
+                                className={`px-4 py-2 rounded-sm font-black text-xs uppercase tracking-widest transition-all ${
+                                  page === p
+                                    ? "bg-[oklch(0.45_0.22_27)] text-white"
+                                    : "bg-gray-100 text-gray-900 hover:bg-gray-200"
+                                }`}
+                              >
+                                {p}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <div className="text-center py-12">
+                        <p className="text-gray-500 text-lg">No products found for this selection.</p>
+                        <button
+                          onClick={() => handleModelSelect(activeModel)}
+                          className="mt-6 text-[oklch(0.45_0.22_27)] font-black uppercase tracking-widest hover:underline"
+                        >
+                          Try another model
+                        </button>
                       </div>
                     )}
-                    
-                    {/* General "Can't Find Your Part?" Section */}
-                    <div className="mt-20 p-10 bg-gray-900 rounded-sm text-white relative overflow-hidden">
-                      <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
-                      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
-                        <div>
-                          <h3 className="text-2xl font-black uppercase tracking-tight mb-2" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>Can't Find What You Need?</h3>
-                          <p className="text-gray-400 text-sm max-w-lg">Not all our 50,000+ parts are listed online yet. Contact our experts directly and we'll find it for you in minutes.</p>
-                        </div>
-                        <div className="flex flex-col sm:flex-row gap-4">
-                          <a href="https://wa.me/254714498451" target="_blank" rel="noopener noreferrer" className="bg-[oklch(0.45_0.22_27)] text-white py-3 px-6 text-[10px] font-black uppercase tracking-widest rounded-sm hover:scale-105 transition-all flex items-center gap-2">
-                            <MessageSquare size={14} /> WHATSAPP EXPERT
-                          </a>
-                          <a href="mailto:calvin@supremeautoparts.co.ke" className="bg-white/10 text-white border border-white/20 py-3 px-6 text-[10px] font-black uppercase tracking-widest rounded-sm hover:bg-white/20 transition-all flex items-center gap-2">
-                            <Mail size={14} /> EMAIL INQUIRY
-                          </a>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>

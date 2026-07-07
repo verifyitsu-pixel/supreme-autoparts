@@ -150,7 +150,7 @@ Phone: ${shippingAddress.phone}
 Please confirm this order and provide payment instructions.
       `.trim();
 
-      const whatsappUrl = `https://wa.me/254712345678?text=${encodeURIComponent(orderDetails)}`;
+      const whatsappUrl = `https://wa.me/254714498451?text=${encodeURIComponent(orderDetails)}`;
       window.open(whatsappUrl, "_blank");
 
       // Wait a moment then show confirmation
