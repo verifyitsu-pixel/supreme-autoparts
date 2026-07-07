@@ -272,7 +272,11 @@ export default function Products() {
 
   const handleCategorySelect = (cat: string) => {
     setActiveCategory(cat);
-    setLocation(`/products?brand=${encodeURIComponent(activeBrand!)}&model=${encodeURIComponent(activeModel!)}&category=${encodeURIComponent(cat)}`);
+    const params = new URLSearchParams();
+    if (activeBrand) params.set("brand", activeBrand);
+    if (activeModel) params.set("model", activeModel);
+    params.set("category", cat);
+    setLocation(`/products?${params.toString()}`);
   };
 
   return (
@@ -311,7 +315,7 @@ export default function Products() {
         <section className="py-16 min-h-[60vh]">
           <div className="max-w-[1280px] mx-auto px-6">
             {/* STEP 1: SELECT BRAND */}
-            {!activeBrand && (
+            {!activeBrand && !activeCategory && (
               <div className="animate-fadeIn">
                 <div className="mb-12">
                   <p className="text-[oklch(0.45_0.22_27)] font-black text-[10px] uppercase tracking-[0.4em] mb-2">Step One</p>
@@ -402,7 +406,7 @@ export default function Products() {
             )}
 
             {/* STEP 4: RESULTS GRID */}
-            {activeBrand && activeModel && activeCategory && (
+            {activeCategory && (
               <div className="animate-fadeIn">
                 <div className="flex flex-col lg:flex-row gap-12">
                   {/* Sidebar Info */}
