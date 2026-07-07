@@ -158,9 +158,9 @@ export default function Cart() {
                   </div>
 
                   <button
-                    onClick={handleCheckout}
+                    onClick={() => setLocation("/checkout")}
                     disabled={isProcessing}
-                    className="w-full bg-[#E42933] text-white py-3 rounded-lg font-semibold hover:bg-[#d41f28] transition-colors disabled:opacity-50 disabled:cursor-not-allowed mb-3 flex items-center justify-center gap-2"
+                    className="w-full bg-[#E42933] text-white py-3 rounded-lg font-semibold hover:bg-[#d41f28] transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed mb-3"
                   >
                     {isProcessing ? (
                       <>
