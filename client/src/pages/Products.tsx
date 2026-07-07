@@ -53,17 +53,135 @@ const VEHICLE_MODELS: Record<string, { name: string; img?: string }[]> = {
     { name: "Everest", img: "/assets/images/real_models/toyota_prado.jpg" },
     { name: "Focus", img: "/assets/images/real_models/toyota_vitz.jpg" },
   ],
+  "Hyundai": [
+    { name: "Tucson", img: "/assets/images/real_models/toyota_harrier.jpg" },
+    { name: "Santa Fe", img: "/assets/images/real_models/toyota_prado.jpg" },
+    { name: "Elantra", img: "/assets/images/real_models/toyota_vitz.jpg" },
+    { name: "i10", img: "/assets/images/real_models/toyota_vitz.jpg" },
+  ],
+  "Suzuki": [
+    { name: "Swift", img: "/assets/images/real_models/toyota_vitz.jpg" },
+    { name: "Vitara", img: "/assets/images/real_models/toyota_harrier.jpg" },
+    { name: "Jimny", img: "/assets/images/real_models/toyota_hilux.jpg" },
+    { name: "Alto", img: "/assets/images/real_models/toyota_vitz.jpg" },
+  ],
+  "Lexus": [
+    { name: "RX350", img: "/assets/images/real_models/toyota_harrier.jpg" },
+    { name: "LX570", img: "/assets/images/real_models/toyota_landcruiser.jpg" },
+    { name: "IS250", img: "/assets/images/real_models/toyota_vitz.jpg" },
+    { name: "GX460", img: "/assets/images/real_models/toyota_prado.jpg" },
+  ],
+};
+
+// Category-specific product images mapping
+const CATEGORY_IMAGES: Record<string, string[]> = {
+  "Braking Systems": [
+    "/assets/images/parts/braking/toyota_fielder_pads.webp",
+    "/assets/images/parts/braking/bmw_brembo_disc.jpg",
+    "/assets/images/products/toyota-brake-pads.jpg",
+    "/assets/images/products/bmw3-brake-pads.jpg",
+    "/assets/images/products/mercedes-brake-pads.jpg",
+    "/assets/images/products/infiniti-brake-pads.jpg",
+  ],
+  "Engine Components": [
+    "/assets/images/products/toyota-air-filter.jpg",
+    "/assets/images/products/toyota-oil-filter.jpg",
+    "/assets/images/products/bmw-oil-filter.jpg",
+    "/assets/images/products/toyota-carburetor.jpg",
+    "/assets/images/parts/engine/bmw_3series_oil_filter.jpg",
+    "/assets/images/products/turbocharger-kit.jpg",
+  ],
+  "Transmission & Gear": [
+    "/assets/images/products/toyota-vitz-gearbox.png",
+    "/assets/images/products/mercedes-gearbox.jpg",
+    "/assets/images/products/bmw-gearbox.jpg",
+    "/assets/images/products/suzuki-clutch-kit.jpg",
+    "/assets/images/products/bmw-gear-service-kit.jpg",
+    "/assets/images/products/suzuki-swift-clutch.jpg",
+  ],
+  "Suspension & Chassis": [
+    "/assets/images/products/mercedes-shock-absorber.jpg",
+    "/assets/images/products/lexus-rx350-shock.jpg",
+    "/assets/images/products/mercedes-s550-strut.jpg",
+    "/assets/images/products/mercedes-s550-mount.jpg",
+    "/assets/images/parts/suspension/mercedes_cclass_shock.jpg",
+    "/assets/images/products/abs-module.jpg",
+  ],
+  "Electrical & Sensors": [
+    "/assets/images/products/hyundai-alternator.jpg",
+    "/assets/images/products/honda-civic-alternator.jpg",
+    "/assets/images/parts/electrical/toyota_denso_alternator.webp",
+    "/assets/images/products/bmw-sensor.jpg",
+    "/assets/images/products/chevrolet-ignition-coil.jpg",
+    "/assets/images/products/hyundai-tucson-alternator.jpg",
+  ],
+  "Alloys & Rims": [
+    "/assets/images/products/lexus-alloy-rim.jpg",
+    "/assets/images/products/mercedes-alloy-rim.jpg",
+    "/assets/images/products/lexus-alloy-rim-2.jpg",
+    "/assets/images/products/bmw-roof-rack.jpg",
+    "/assets/images/products/lexus-alloy-rim.jpg",
+    "/assets/images/products/mercedes-alloy-rim.jpg",
+  ],
+  "Lubricants & Fluids": [
+    "/assets/images/products/mopar-oil-filter.jpg",
+    "/assets/images/products/mercedes-fuel-filter.jpg",
+    "/assets/images/products/toyota-oil-filter-2.png",
+    "/assets/images/products/mopar-oil-filter-2.jpg",
+    "/assets/images/products/bmw-oil-filter-2.jpg",
+    "/assets/images/products/toyota-oil-filter.jpg",
+  ],
+  "Body Kits & Styling": [
+    "/assets/images/products/mercedes-bumper.jpg",
+    "/assets/images/products/toyota-windscreen.webp",
+    "/assets/images/products/toyota-windscreen-2.jpg",
+    "/assets/images/products/honda-headlight.jpg",
+    "/assets/images/products/fielder-headlight.jpg",
+    "/assets/images/products/mercedes-bumper.jpg",
+  ],
+  "Glass & Windscreens": [
+    "/assets/images/products/toyota-windscreen.webp",
+    "/assets/images/products/toyota-windscreen-2.jpg",
+    "/assets/images/products/toyota-fielder-headlight.jpg",
+    "/assets/images/products/honda-headlight.jpg",
+    "/assets/images/products/toyota-windscreen.webp",
+    "/assets/images/products/toyota-windscreen-2.jpg",
+  ],
+  "Steering Systems": [
+    "/assets/images/products/bmw-steering-rack.jpg",
+    "/assets/images/products/abs-module.jpg",
+    "/assets/images/products/bmw-camshaft.jpg",
+    "/assets/images/products/bmw-sensor.jpg",
+    "/assets/images/products/bmw-steering-rack.jpg",
+    "/assets/images/products/abs-module.jpg",
+  ],
+  "Certified Used Parts": [
+    "/assets/images/products/toyota-vitz-gearbox.png",
+    "/assets/images/products/hyundai-alternator-2.jpg",
+    "/assets/images/products/mercedes-gearbox.jpg",
+    "/assets/images/products/bmw-gearbox.jpg",
+    "/assets/images/products/suzuki-clutch-kit-2.jpg",
+    "/assets/images/products/honda-civic-brake-disc.jpg",
+  ],
 };
 
 // Helper function to generate products for any model
 const generateProductsForModel = (brand: string, model: string, category: string, subcategory: string) => {
+  const imgs = CATEGORY_IMAGES[category] || [
+    "/assets/images/products/toyota-brake-pads.jpg",
+    "/assets/images/products/bmw-oil-filter.jpg",
+    "/assets/images/products/mercedes-shock-absorber.jpg",
+    "/assets/images/products/hyundai-alternator.jpg",
+    "/assets/images/products/lexus-alloy-rim.jpg",
+    "/assets/images/products/toyota-windscreen.webp",
+  ];
   const baseProducts = [
-    { name: `${brand} ${model} ${subcategory} - Premium OEM`, price: "KES 15,500", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
-    { name: `${brand} ${model} ${subcategory} - Standard Grade`, price: "KES 12,000", img: "/assets/images/real_parts/toyota_brake_pads.jpg", condition: "New" },
-    { name: `${brand} ${model} ${subcategory} - Performance Edition`, price: "KES 18,500", img: "/assets/images/parts/braking/toyota_fielder_pads.webp", condition: "New" },
-    { name: `${brand} ${model} ${subcategory} - Economy Option`, price: "KES 9,500", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
-    { name: `${brand} ${model} ${subcategory} - Heavy Duty`, price: "KES 22,000", img: "/assets/images/products/toyota-oil-filter-2.png", condition: "New" },
-    { name: `${brand} ${model} ${subcategory} - Racing Grade`, price: "KES 28,000", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
+    { name: `${brand} ${model} ${subcategory} - Premium OEM`, price: "KES 15,500", img: imgs[0], condition: "New" },
+    { name: `${brand} ${model} ${subcategory} - Standard Grade`, price: "KES 12,000", img: imgs[1], condition: "New" },
+    { name: `${brand} ${model} ${subcategory} - Performance Edition`, price: "KES 18,500", img: imgs[2], condition: "New" },
+    { name: `${brand} ${model} ${subcategory} - Economy Option`, price: "KES 9,500", img: imgs[3], condition: "New" },
+    { name: `${brand} ${model} ${subcategory} - Heavy Duty`, price: "KES 22,000", img: imgs[4], condition: "New" },
+    { name: `${brand} ${model} ${subcategory} - Racing Grade`, price: "KES 28,000", img: imgs[5], condition: "New" },
   ];
   return baseProducts;
 };
@@ -88,12 +206,12 @@ export default function Products() {
     const subcategory = params.get("subcategory");
     const brand = params.get("brand");
     const model = params.get("model");
-    
+
     if (category) setActiveCategory(decodeURIComponent(category));
     if (subcategory) setActiveSubcategory(decodeURIComponent(subcategory));
     if (brand) setActiveBrand(decodeURIComponent(brand));
     if (model) setActiveModel(decodeURIComponent(model));
-    
+
     setPage(1);
   }, [location]);
 
@@ -115,7 +233,13 @@ export default function Products() {
   const handleBrandSelect = (brand: string) => {
     setActiveBrand(brand);
     setActiveModel(null);
-    setLocation(`/products?category=${encodeURIComponent(activeCategory!)}&subcategory=${encodeURIComponent(activeSubcategory!)}&brand=${encodeURIComponent(brand)}`);
+    if (activeCategory && activeSubcategory) {
+      setLocation(`/products?category=${encodeURIComponent(activeCategory!)}&subcategory=${encodeURIComponent(activeSubcategory!)}&brand=${encodeURIComponent(brand)}`);
+    } else if (activeCategory) {
+      setLocation(`/products?category=${encodeURIComponent(activeCategory!)}&brand=${encodeURIComponent(brand)}`);
+    } else {
+      setLocation(`/products?brand=${encodeURIComponent(brand)}`);
+    }
   };
 
   const handleModelSelect = (model: string) => {
@@ -160,6 +284,17 @@ export default function Products() {
     setTimeout(() => setAddedToCart(null), 2000);
   };
 
+  // Determine what step we're on based on URL params
+  // If brand is set but no category, show category selection first (brand is pre-selected)
+  const showCategoryStep = !activeCategory;
+  const showSubcategoryStep = activeCategory && !activeSubcategory;
+  const showBrandStep = activeCategory && activeSubcategory && !activeBrand;
+  const showModelStep = activeCategory && activeSubcategory && activeBrand && !activeModel;
+  const showProducts = activeCategory && activeSubcategory && activeBrand && activeModel;
+
+  // Special case: brand set but no category — show category selection with brand pre-selected
+  const brandOnlyMode = activeBrand && !activeCategory;
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
@@ -191,7 +326,7 @@ export default function Products() {
                     </div>
                   </>
                 )}
-                {activeBrand && (
+                {activeBrand && !brandOnlyMode && (
                   <>
                     <div className="w-8 h-px bg-white/10" />
                     <div className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all ${activeBrand && !activeModel ? "bg-[oklch(0.45_0.22_27)] border-[oklch(0.45_0.22_27)] text-white" : "border-white/20 text-white/50"}`}>
@@ -212,8 +347,45 @@ export default function Products() {
 
         <section className="py-16 min-h-[60vh]">
           <div className="max-w-[1280px] mx-auto px-6">
+
+            {/* BRAND-ONLY MODE: Show category selection with brand pre-selected */}
+            {brandOnlyMode && (
+              <div className="animate-fadeIn">
+                <div className="mb-8 p-6 bg-gray-900 rounded-sm flex items-center justify-between">
+                  <div>
+                    <p className="text-[oklch(0.45_0.22_27)] font-black text-[10px] uppercase tracking-[0.4em] mb-1">Selected Brand</p>
+                    <h3 className="text-2xl font-black text-white uppercase tracking-tight">{activeBrand}</h3>
+                  </div>
+                  <button onClick={resetAll} className="text-white/40 hover:text-white">
+                    <X size={20} />
+                  </button>
+                </div>
+                <div className="mb-12">
+                  <p className="text-[oklch(0.45_0.22_27)] font-black text-[10px] uppercase tracking-[0.4em] mb-2">Step One</p>
+                  <h2 className="text-4xl font-black text-gray-900 uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>Select Part Category</h2>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                  {Object.keys(CATEGORIES_WITH_SUBCATEGORIES).map(category => (
+                    <button
+                      key={category}
+                      onClick={() => {
+                        setActiveCategory(category);
+                        setLocation(`/products?category=${encodeURIComponent(category)}&brand=${encodeURIComponent(activeBrand!)}`);
+                      }}
+                      className="group bg-white border border-gray-100 p-8 flex flex-col items-center justify-center gap-4 hover:border-[oklch(0.45_0.22_27)] hover:shadow-2xl transition-all duration-500 rounded-sm"
+                    >
+                      <div className="w-16 h-16 bg-gray-50 flex items-center justify-center rounded-full border border-gray-100 group-hover:bg-[oklch(0.45_0.22_27)] group-hover:text-white transition-all">
+                        <span className="text-2xl">⚙️</span>
+                      </div>
+                      <span className="text-[9px] font-black uppercase tracking-widest text-gray-900 text-center leading-tight group-hover:text-[oklch(0.45_0.22_27)]">{category}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* STEP 1: SELECT CATEGORY */}
-            {!activeCategory && (
+            {showCategoryStep && !brandOnlyMode && (
               <div className="animate-fadeIn">
                 <div className="mb-12">
                   <p className="text-[oklch(0.45_0.22_27)] font-black text-[10px] uppercase tracking-[0.4em] mb-2">Step One</p>
@@ -221,7 +393,7 @@ export default function Products() {
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                   {Object.keys(CATEGORIES_WITH_SUBCATEGORIES).map(category => (
-                    <button 
+                    <button
                       key={category}
                       onClick={() => handleCategorySelect(category)}
                       className="group bg-white border border-gray-100 p-8 flex flex-col items-center justify-center gap-4 hover:border-[oklch(0.45_0.22_27)] hover:shadow-2xl transition-all duration-500 rounded-sm"
@@ -237,20 +409,20 @@ export default function Products() {
             )}
 
             {/* STEP 2: SELECT SUBCATEGORY */}
-            {activeCategory && !activeSubcategory && (
+            {showSubcategoryStep && (
               <div className="animate-fadeIn">
                 <div className="mb-12 flex items-center justify-between">
                   <div>
                     <p className="text-[oklch(0.45_0.22_27)] font-black text-[10px] uppercase tracking-[0.4em] mb-2">Step Two</p>
                     <h2 className="text-4xl font-black text-gray-900 uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>{activeCategory} Types</h2>
                   </div>
-                  <button onClick={() => setActiveCategory(null)} className="text-[10px] font-black text-gray-400 hover:text-gray-900 uppercase tracking-widest flex items-center gap-2">
+                  <button onClick={() => { setActiveCategory(null); if (activeBrand) { setLocation(`/products?brand=${encodeURIComponent(activeBrand)}`); } else { setLocation("/products"); } }} className="text-[10px] font-black text-gray-400 hover:text-gray-900 uppercase tracking-widest flex items-center gap-2">
                     <X size={14} /> Back
                   </button>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                   {(CATEGORIES_WITH_SUBCATEGORIES[activeCategory as keyof typeof CATEGORIES_WITH_SUBCATEGORIES] || []).map((subcategory: string) => (
-                    <button 
+                    <button
                       key={subcategory}
                       onClick={() => handleSubcategorySelect(subcategory)}
                       className="group bg-white border border-gray-100 p-8 flex flex-col items-center justify-center gap-4 hover:border-[oklch(0.45_0.22_27)] hover:shadow-2xl transition-all duration-500 rounded-sm"
@@ -264,7 +436,7 @@ export default function Products() {
             )}
 
             {/* STEP 3: SELECT BRAND */}
-            {activeCategory && activeSubcategory && !activeBrand && (
+            {showBrandStep && (
               <div className="animate-fadeIn">
                 <div className="mb-12 flex items-center justify-between">
                   <div>
@@ -277,15 +449,16 @@ export default function Products() {
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
                   {Object.keys(VEHICLE_MODELS).map(brand => (
-                    <button 
+                    <button
                       key={brand}
                       onClick={() => handleBrandSelect(brand)}
                       className="group bg-white border border-gray-100 p-10 flex flex-col items-center justify-center gap-6 hover:border-[oklch(0.45_0.22_27)] hover:shadow-2xl transition-all duration-500 rounded-sm"
                     >
-                      <img 
-                        src={`/assets/images/brands/${brand.toLowerCase().replace(' ', '')}.png`} 
-                        alt={brand} 
+                      <img
+                        src={`/assets/images/brands/${brand.toLowerCase().replace(/-/g, '').replace(/\s+/g, '').replace(/\./g, '')}.png`}
+                        alt={brand}
                         className="h-16 w-auto object-contain grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all"
+                        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
                       />
                       <span className="text-[10px] font-black uppercase tracking-widest text-gray-900">{brand}</span>
                     </button>
@@ -295,7 +468,7 @@ export default function Products() {
             )}
 
             {/* STEP 4: SELECT MODEL */}
-            {activeCategory && activeSubcategory && activeBrand && !activeModel && (
+            {showModelStep && (
               <div className="animate-fadeIn">
                 <div className="mb-12 flex items-center justify-between">
                   <div>
@@ -307,8 +480,8 @@ export default function Products() {
                   </button>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                  {(VEHICLE_MODELS[activeBrand] || []).map(model => (
-                    <button 
+                  {(VEHICLE_MODELS[activeBrand!] || []).map(model => (
+                    <button
                       key={model.name}
                       onClick={() => handleModelSelect(model.name)}
                       className="group relative flex flex-col bg-white border border-gray-100 rounded-sm overflow-hidden hover:border-[oklch(0.45_0.22_27)] hover:shadow-2xl transition-all duration-500"
@@ -331,7 +504,7 @@ export default function Products() {
             )}
 
             {/* STEP 5: PRODUCTS GRID */}
-            {activeCategory && activeSubcategory && activeBrand && activeModel && (
+            {showProducts && (
               <div className="animate-fadeIn">
                 <div className="flex flex-col lg:flex-row gap-12">
                   {/* Sidebar Info */}
@@ -375,6 +548,15 @@ export default function Products() {
                           <CheckCircle2 size={16} />
                           <span className="text-[8px] font-black uppercase tracking-widest">Verified Fitment</span>
                         </div>
+                      </div>
+                      <div className="mt-6 pt-6 border-t border-white/10">
+                        <button
+                          onClick={() => setShowPartRequestForm(true)}
+                          className="w-full flex items-center justify-center gap-2 text-[8px] font-black uppercase tracking-widest text-white/60 hover:text-[oklch(0.45_0.22_27)] transition-colors py-2"
+                        >
+                          <MessageCircle size={14} />
+                          Can't find your part?
+                        </button>
                       </div>
                     </div>
                   </aside>
@@ -456,7 +638,7 @@ export default function Products() {
                             Request This Part
                           </button>
                           <button
-                            onClick={() => handleModelSelect(activeModel)}
+                            onClick={() => setActiveModel(null)}
                             className="w-full text-[oklch(0.45_0.22_27)] font-black uppercase tracking-widest hover:underline py-2"
                           >
                             Try another model
@@ -489,7 +671,7 @@ export default function Products() {
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
-                  const message = `Hi Supreme Autoparts,\n\nI'm looking for a part:\n\nBrand: ${activeBrand}\nModel: ${activeModel}\nCategory: ${activeCategory}\nType: ${activeSubcategory}\n\nPart Description: ${requestFormData.partDescription}\n\nMy Details:\nName: ${requestFormData.name}\nEmail: ${requestFormData.email}\nPhone: ${requestFormData.phone}\n\nPlease let me know if you have this part in stock.`;
+                  const message = `Hi Supreme Autoparts,\n\nI'm looking for a part:\n\nBrand: ${activeBrand || "Not specified"}\nModel: ${activeModel || "Not specified"}\nCategory: ${activeCategory || "Not specified"}\nType: ${activeSubcategory || "Not specified"}\n\nPart Description: ${requestFormData.partDescription}\n\nMy Details:\nName: ${requestFormData.name}\nEmail: ${requestFormData.email}\nPhone: ${requestFormData.phone}\n\nPlease let me know if you have this part in stock.`;
                   const whatsappUrl = `https://wa.me/254714498451?text=${encodeURIComponent(message)}`;
                   window.open(whatsappUrl, "_blank");
                   setShowPartRequestForm(false);
@@ -551,8 +733,8 @@ export default function Products() {
                   />
                 </div>
 
-                <div className="bg-blue-50 border border-blue-200 p-4 rounded-sm">
-                  <p className="text-xs text-blue-900">
+                <div className="bg-green-50 border border-green-200 p-4 rounded-sm">
+                  <p className="text-xs text-green-900">
                     <strong>Note:</strong> Clicking submit will open WhatsApp with your request. Our team will respond within 24 hours.
                   </p>
                 </div>

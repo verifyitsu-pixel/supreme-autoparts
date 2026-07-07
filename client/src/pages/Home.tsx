@@ -6,8 +6,8 @@ import { FloatingButtons } from "@/components/Layout";
 const FEATURED_CATEGORIES = [
   { name: "Braking Systems", img: "/assets/images/categories/braking.jpg", count: "240+ Parts" },
   { name: "Engine Components", img: "/assets/images/categories/engine.jpg", count: "580+ Parts" },
-  { name: "Transmission", img: "/assets/images/categories/transmission.jpg", count: "120+ Parts" },
-  { name: "Suspension", img: "/assets/images/products/mercedes-shock-absorber.jpg", count: "310+ Parts" },
+  { name: "Transmission & Gear", img: "/assets/images/categories/transmission.jpg", count: "120+ Parts" },
+  { name: "Suspension & Chassis", img: "/assets/images/products/mercedes-shock-absorber.jpg", count: "310+ Parts" },
 ];
 
 const CAR_BRANDS = [
