@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ProfilePictureUpload } from "@/components/ProfilePictureUpload";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLocation } from "wouter";
 import { Navbar, Footer } from "@/components/Layout";
@@ -36,6 +37,7 @@ export default function Dashboard() {
   const { user, logout } = useAuth();
   const [, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState<"profile" | "orders" | "returns" | "cart">("profile");
+  const [profilePicture, setProfilePicture] = useState<string | null>(null);
 
   // Mock data - replace with API calls
   const [orders] = useState<Order[]>([

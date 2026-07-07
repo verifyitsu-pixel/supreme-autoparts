@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 import { Navbar, Footer } from "@/components/Layout";
 import { Mail, Lock, ArrowRight, Loader2 } from "lucide-react";
 
@@ -106,6 +106,11 @@ export default function Login() {
                 </>
               )}
             </button>
+            <div className="text-center mt-3">
+              <Link href="/forgot-password" className="text-sm text-[#E42933] font-semibold hover:underline">
+                Forgot your password?
+              </Link>
+            </div>
           </form>
 
           <div className="relative mb-8">

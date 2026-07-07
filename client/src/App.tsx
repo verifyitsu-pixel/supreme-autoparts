@@ -20,6 +20,8 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Cart from "./pages/Cart";
 import Returns from "./pages/Returns";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function Router() {
   return (
@@ -35,6 +37,8 @@ function Router() {
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/cart" component={Cart} />
       <Route path="/returns" component={Returns} />
+      <Route path="/forgot-password" component={ForgotPassword} />
+      <Route path="/reset-password" component={ResetPassword} />
       <Route path="/terms-and-conditions" component={Terms} />
       <Route path="/refund-policy" component={RefundPolicy} />
       <Route path="/privacy-policy" component={PrivacyPolicy} />
