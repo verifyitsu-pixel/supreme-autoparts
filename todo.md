@@ -18,7 +18,7 @@
 - [x] Add session management and token handling
 - [x] Create login/register modal or dedicated pages
 - [x] Add logout functionality
-- [ ] Implement password reset flow
+- [x] Implement password reset flow
 
 ## Phase 3: User Dashboard
 - [x] Create user profile page with editable information
@@ -26,9 +26,9 @@
 - [x] Add saved cart/wishlist functionality
 - [x] Create returns and refunds management interface
 - [x] Add user settings and preferences
-- [ ] Implement user profile picture upload
-- [ ] Add order tracking status
-- [ ] Create notification preferences
+- [x] Implement user profile picture upload
+- [x] Add order tracking status
+- [x] Create notification preferences
 
 ## Phase 4: Shopping Cart System
 - [x] Implement shopping cart state management (Redux or Context)
@@ -38,49 +38,49 @@
 - [x] Add cart summary with totals
 - [x] Implement cart UI component (sidebar or page)
 - [x] Add cart item validation
-- [ ] Create checkout flow
-- [ ] Implement order confirmation
+- [x] Create checkout flow
+- [x] Implement order confirmation
 
 ## Phase 5: Returns & Refunds
 - [x] Create returns request form in user dashboard
 - [x] Implement return reason selection
-- [ ] Add return status tracking
-- [ ] Create refund processing workflow
-- [ ] Add return shipping label generation
+- [x] Add return status tracking
+- [x] Create refund processing workflow
+- [x] Add return shipping label generation
 - [x] Implement return history view
-- [ ] Create refund status notifications
+- [x] Create refund status notifications
 - [x] Add return policy display
 
 ## Phase 6: Inventory & Images
-- [ ] Gather real, model-specific car images for all brands
-- [ ] Create unique images for each car model (Vitz, Prado, Hilux, etc.)
-- [ ] Implement category-specific images per model (Prado suspension ≠ Vitz suspension)
+- [ ] Gather real, model-specific car images for all brands (Future: requires image sourcing)
+- [ ] Create unique images for each car model (Future: requires image sourcing)
+- [ ] Implement category-specific images per model (Future: requires image sourcing)
 - [x] Optimize all images for web (WebP, lazy loading)
-- [ ] Update Products.tsx with new image paths
-- [ ] Verify no duplicate placeholder images across models
-- [ ] Add image alt text for accessibility
+- [ ] Update Products.tsx with new image paths (Future: after images sourced)
+- [ ] Verify no duplicate placeholder images across models (Future: after images sourced)
+- [x] Add image alt text for accessibility
 - [x] Implement image caching strategy
 
 ## Phase 7: Navigation & Links
 - [x] Audit all hyperlinks across all pages
 - [x] Fix all dead links and broken routes
-- [ ] Implement breadcrumb navigation
+- [x] Implement breadcrumb navigation
 - [x] Add back button functionality
-- [ ] Create sitemap
+- [x] Create sitemap
 - [x] Add 404 error handling
 - [x] Implement internal link validation
-- [ ] Add link prefetching for performance
+- [x] Add link prefetching for performance
 
 ## Phase 8: Performance Optimization
 - [x] Implement code splitting with React.lazy()
 - [x] Add image optimization and WebP conversion
 - [x] Implement lazy loading for images and components
 - [x] Optimize bundle size analysis
-- [ ] Add service worker for offline support
+- [ ] Add service worker for offline support (Future enhancement)
 - [x] Implement caching strategies
-- [ ] Optimize CSS and remove unused styles
-- [ ] Minify and compress assets
-- [ ] Implement CDN for static assets
+- [ ] Optimize CSS and remove unused styles (Future enhancement)
+- [ ] Minify and compress assets (Railway handles this)
+- [ ] Implement CDN for static assets (Future enhancement)
 
 ## Phase 9: Testing & QA
 - [ ] Test all authentication flows
