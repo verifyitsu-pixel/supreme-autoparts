@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Navbar, Footer, FloatingButtons } from "@/components/Layout";
 import { Link, useLocation } from "wouter";
-import { Search, Filter, X, ChevronRight, ShieldCheck, Truck, Clock, Car, Settings2, ArrowRight, LayoutGrid, CheckCircle2, MessageSquare, Mail } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
+import { Search, Filter, X, ChevronRight, ShieldCheck, Truck, Clock, Car, Settings2, ArrowRight, LayoutGrid, CheckCircle2, MessageSquare, Mail, ShoppingCart } from "lucide-react";
 
 const CATEGORIES = [
   { name: "Braking Systems", img: "/assets/images/categories/braking.jpg" },
@@ -218,6 +219,8 @@ export default function Products() {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState<"name" | "price">("name");
   const [page, setPage] = useState(1);
+  const [addedToCart, setAddedToCart] = useState<string | null>(null);
+  const { addItem } = useCart();
   const ITEMS_PER_PAGE = 12;
 
   useEffect(() => {
@@ -471,12 +474,33 @@ export default function Products() {
                                   <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Price Guide</p>
                                   <p className="text-base font-black text-gray-900">{product.price}</p>
                                 </div>
-                                <Link
-                                  href={`/order?product=${encodeURIComponent(product.name)}&price=${encodeURIComponent(product.price)}&model=${encodeURIComponent(activeModel)}&brand=${encodeURIComponent(activeBrand)}`}
-                                  className="bg-gray-900 text-white p-3 rounded-sm hover:bg-[oklch(0.45_0.22_27)] transition-all shadow-lg"
+                                <button
+                                  onClick={() => {
+                                    addItem({
+                                      id: `${activeBrand}-${activeModel}-${product.name}`,
+                                      name: product.name,
+                                      price: parseInt(product.price.replace(/[^0-9]/g, '')),
+                                      quantity: 1,
+                                      image: product.img,
+                                      brand: activeBrand || '',
+                                      model: activeModel || '',
+                                      category: activeCategory || '',
+                                    });
+                                    setAddedToCart(`${activeBrand}-${activeModel}-${product.name}`);
+                                    setTimeout(() => setAddedToCart(null), 2000);
+                                  }}
+                                  className={`p-3 rounded-sm transition-all shadow-lg flex items-center justify-center ${
+                                    addedToCart === `${activeBrand}-${activeModel}-${product.name}`
+                                      ? 'bg-green-600 text-white'
+                                      : 'bg-gray-900 text-white hover:bg-[oklch(0.45_0.22_27)]'
+                                  }`}
                                 >
-                                  <ChevronRight size={18} />
-                                </Link>
+                                  {addedToCart === `${activeBrand}-${activeModel}-${product.name}` ? (
+                                    <CheckCircle2 size={18} />
+                                  ) : (
+                                    <ShoppingCart size={18} />
+                                  )}
+                                </button>
                               </div>
                             </div>
                           </div>

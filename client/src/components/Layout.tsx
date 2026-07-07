@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/contexts/AuthContext";
+import { useCart } from "@/contexts/CartContext";
 import { 
   Phone, Mail, MapPin, Instagram, Facebook, Twitter, 
   ChevronDown, X, ShieldCheck, Truck, Clock, Award,
@@ -13,6 +14,7 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user } = useAuth();
+  const { itemCount } = useCart();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -49,6 +51,14 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-6">
+          <Link href="/cart" className={`relative transition-colors duration-300 hover:text-[#E42933] ${isScrolled ? "text-gray-700" : "text-white"}`}>
+            <ShoppingBag size={20} />
+            {itemCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-[#E42933] text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
+                {itemCount}
+              </span>
+            )}
+          </Link>
           <button className={`transition-colors duration-300 hover:text-[#E42933] ${isScrolled ? "text-gray-700" : "text-white"}`}><Search size={20} /></button>
           <Link href="/products" className="hidden md:flex items-center gap-3 bg-[#E42933] text-white px-8 py-3 rounded-sm text-[10px] font-black uppercase tracking-widest hover:bg-gray-900 transition-all shadow-xl hover:shadow-2xl hover:scale-105">
             Browse Parts <ArrowRight size={14} />
