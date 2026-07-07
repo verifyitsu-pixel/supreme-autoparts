@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { Navbar, Footer } from "@/components/NavbarNew";
 import { FloatingButtons } from "@/components/Layout";
-import { Link, useLocation } from "wouter";
+import { useLocation } from "wouter";
 import { useCart } from "@/contexts/CartContext";
-import { Search, Filter, X, ChevronRight, ShieldCheck, Truck, Clock, Car, Settings2, ArrowRight, LayoutGrid, CheckCircle2, MessageSquare, Mail, ShoppingCart } from "lucide-react";
+import { Search, X, ArrowRight, Car, CheckCircle2 } from "lucide-react";
 
 const CATEGORIES_WITH_SUBCATEGORIES = {
   "Braking Systems": ["Brake Pads", "Brake Discs", "Brake Fluid", "Brake Calipers", "Brake Hoses"],
@@ -55,127 +55,17 @@ const VEHICLE_MODELS: Record<string, { name: string; img?: string }[]> = {
   ],
 };
 
-// Expanded product catalog with 5+ items per subcategory
-const PRODUCT_CATALOG: Record<string, Record<string, Record<string, any[]>>> = {
-  "Braking Systems": {
-    "Brake Pads": {
-      "Toyota Fielder": [
-        { name: "Bosch Blue Brake Pad Set", price: "KES 8,500", img: "/assets/images/parts/braking/toyota_fielder_pads.webp", condition: "New" },
-        { name: "Akebono Ceramic Brake Pads", price: "KES 12,000", img: "/assets/images/real_parts/toyota_brake_pads.jpg", condition: "New" },
-        { name: "Brembo OEM Brake Pads", price: "KES 15,500", img: "/assets/images/parts/braking/toyota_fielder_pads.webp", condition: "New" },
-        { name: "TRW Premium Brake Pads", price: "KES 11,000", img: "/assets/images/real_parts/toyota_brake_pads.jpg", condition: "New" },
-        { name: "Ferodo Racing Brake Pads", price: "KES 18,500", img: "/assets/images/parts/braking/toyota_fielder_pads.webp", condition: "New" },
-      ],
-      "BMW 3 Series (E90/F30/G20)": [
-        { name: "Brembo OEM Brake Pads", price: "KES 22,000", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
-        { name: "Bosch Premium Brake Pads", price: "KES 19,500", img: "/assets/images/parts/braking/toyota_fielder_pads.webp", condition: "New" },
-        { name: "Akebono Premium Pads", price: "KES 21,000", img: "/assets/images/real_parts/toyota_brake_pads.jpg", condition: "New" },
-        { name: "Pagid Racing Brake Pads", price: "KES 25,000", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
-        { name: "Mintex Performance Pads", price: "KES 23,500", img: "/assets/images/parts/braking/toyota_fielder_pads.webp", condition: "New" },
-      ],
-      "Mercedes-Benz C-Class (W204/W205/W206)": [
-        { name: "Mercedes OEM Brake Pads", price: "KES 24,500", img: "/assets/images/parts/braking/toyota_fielder_pads.webp", condition: "New" },
-        { name: "Brembo OEM Pads", price: "KES 26,000", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
-        { name: "Bosch Premium Pads", price: "KES 22,000", img: "/assets/images/real_parts/toyota_brake_pads.jpg", condition: "New" },
-        { name: "ATE Premium Brake Pads", price: "KES 25,500", img: "/assets/images/parts/braking/toyota_fielder_pads.webp", condition: "New" },
-        { name: "Pagid Racing Pads", price: "KES 28,000", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
-      ],
-    },
-    "Brake Discs": {
-      "Toyota Fielder": [
-        { name: "Brembo Ventilated Disc", price: "KES 18,500", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
-        { name: "Bosch Disc Rotor", price: "KES 16,000", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
-        { name: "TRW Brake Disc", price: "KES 17,500", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
-        { name: "Ferodo Disc Rotor", price: "KES 19,000", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
-        { name: "ATE Brake Disc", price: "KES 17,000", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
-      ],
-      "BMW 3 Series (E90/F30/G20)": [
-        { name: "Brembo Performance Disc", price: "KES 28,500", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
-        { name: "Bosch Premium Disc", price: "KES 25,000", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
-        { name: "ATE Brake Disc", price: "KES 26,500", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
-        { name: "Pagid Disc Rotor", price: "KES 29,000", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
-        { name: "Mintex Brake Disc", price: "KES 27,500", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
-      ],
-      "Mercedes-Benz C-Class (W204/W205/W206)": [
-        { name: "Mercedes OEM Disc", price: "KES 32,000", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
-        { name: "Brembo OEM Disc", price: "KES 34,500", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
-        { name: "Bosch Premium Disc", price: "KES 30,500", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
-        { name: "ATE Brake Disc", price: "KES 31,500", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
-        { name: "Pagid Performance Disc", price: "KES 35,000", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
-      ],
-    },
-    "Brake Fluid": {
-      "Toyota Fielder": [
-        { name: "Bosch DOT 4 Brake Fluid", price: "KES 3,500", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
-        { name: "ATE Type 200 Brake Fluid", price: "KES 4,000", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
-        { name: "Castrol Brake Fluid", price: "KES 3,800", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
-        { name: "Motul RBF600 Brake Fluid", price: "KES 5,500", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
-        { name: "Shell Brake Fluid DOT 4", price: "KES 3,600", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
-      ],
-      "BMW 3 Series (E90/F30/G20)": [
-        { name: "Bosch DOT 4 Plus", price: "KES 4,200", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
-        { name: "ATE Type 200 Premium", price: "KES 4,800", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
-        { name: "Motul RBF600 Racing", price: "KES 6,500", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
-        { name: "Castrol SRF Brake Fluid", price: "KES 7,000", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
-        { name: "Brembo Brake Fluid", price: "KES 5,200", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
-      ],
-      "Mercedes-Benz C-Class (W204/W205/W206)": [
-        { name: "Mercedes OEM Brake Fluid", price: "KES 5,500", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
-        { name: "Bosch DOT 4 Plus", price: "KES 4,800", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
-        { name: "ATE Type 200 Premium", price: "KES 5,200", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
-        { name: "Castrol SRF Racing", price: "KES 7,500", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
-        { name: "Motul RBF600", price: "KES 6,800", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
-      ],
-    },
-  },
-  "Lubricants & Fluids": {
-    "Engine Oil": {
-      "Toyota Fielder": [
-        { name: "Castrol EDGE 5W-30", price: "KES 9,500", img: "/assets/images/real_parts/bmw_oil_filter.jpg", condition: "New" },
-        { name: "Mobil 1 5W-30", price: "KES 10,500", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
-        { name: "Shell Helix Ultra 5W-30", price: "KES 8,800", img: "/assets/images/products/toyota-oil-filter-2.png", condition: "New" },
-        { name: "Motul 8100 X-cess 5W-30", price: "KES 11,000", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
-        { name: "Liqui Moly Top Tec 4200", price: "KES 12,500", img: "/assets/images/products/toyota-oil-filter-2.png", condition: "New" },
-      ],
-      "BMW 3 Series (E90/F30/G20)": [
-        { name: "Castrol EDGE 5W-40", price: "KES 11,500", img: "/assets/images/real_parts/bmw_oil_filter.jpg", condition: "New" },
-        { name: "Mobil 1 5W-40", price: "KES 12,500", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
-        { name: "Liqui Moly Leichtlauf", price: "KES 13,500", img: "/assets/images/products/toyota-oil-filter-2.png", condition: "New" },
-        { name: "Shell Helix Ultra 5W-40", price: "KES 10,800", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
-        { name: "Motul 8100 X-cess 5W-40", price: "KES 13,000", img: "/assets/images/products/toyota-oil-filter-2.png", condition: "New" },
-      ],
-      "Mercedes-Benz C-Class (W204/W205/W206)": [
-        { name: "Mercedes OEM Engine Oil", price: "KES 14,500", img: "/assets/images/real_parts/bmw_oil_filter.jpg", condition: "New" },
-        { name: "Castrol EDGE 5W-40", price: "KES 12,500", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
-        { name: "Mobil 1 5W-40", price: "KES 13,500", img: "/assets/images/products/toyota-oil-filter-2.png", condition: "New" },
-        { name: "Shell Helix Ultra 5W-40", price: "KES 11,500", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
-        { name: "Liqui Moly Leichtlauf", price: "KES 14,000", img: "/assets/images/products/toyota-oil-filter-2.png", condition: "New" },
-      ],
-    },
-    "Transmission Fluid": {
-      "Toyota Fielder": [
-        { name: "AISIN Automatic Transmission Fluid", price: "KES 15,000", img: "/assets/images/products/toyota-vitz-gearbox.png", condition: "New" },
-        { name: "Toyota OEM ATF", price: "KES 14,500", img: "/assets/images/products/toyota-vitz-gearbox.png", condition: "New" },
-        { name: "Castrol Transmax", price: "KES 16,500", img: "/assets/images/products/toyota-vitz-gearbox.png", condition: "New" },
-        { name: "Shell Tellus Transmission Fluid", price: "KES 15,500", img: "/assets/images/products/toyota-vitz-gearbox.png", condition: "New" },
-        { name: "Mobil ATF 220", price: "KES 14,800", img: "/assets/images/products/toyota-vitz-gearbox.png", condition: "New" },
-      ],
-      "BMW 3 Series (E90/F30/G20)": [
-        { name: "ZF Automatic Transmission Fluid", price: "KES 24,000", img: "/assets/images/products/bmw-gear-service-kit.jpg", condition: "New" },
-        { name: "Castrol Transmax", price: "KES 22,500", img: "/assets/images/products/bmw-gear-service-kit.jpg", condition: "New" },
-        { name: "Mobil ATF 220", price: "KES 21,000", img: "/assets/images/products/bmw-gear-service-kit.jpg", condition: "New" },
-        { name: "Shell Tellus Premium", price: "KES 23,000", img: "/assets/images/products/bmw-gear-service-kit.jpg", condition: "New" },
-        { name: "Liqui Moly ATF", price: "KES 25,000", img: "/assets/images/products/bmw-gear-service-kit.jpg", condition: "New" },
-      ],
-      "Mercedes-Benz C-Class (W204/W205/W206)": [
-        { name: "Mercedes OEM Transmission Fluid", price: "KES 28,000", img: "/assets/images/products/mercedes-gearbox.jpg", condition: "New" },
-        { name: "ZF Automatic Transmission Fluid", price: "KES 26,500", img: "/assets/images/products/mercedes-gearbox.jpg", condition: "New" },
-        { name: "Castrol Transmax Premium", price: "KES 25,000", img: "/assets/images/products/mercedes-gearbox.jpg", condition: "New" },
-        { name: "Shell Tellus Premium", price: "KES 26,000", img: "/assets/images/products/mercedes-gearbox.jpg", condition: "New" },
-        { name: "Mobil ATF 220", price: "KES 24,500", img: "/assets/images/products/mercedes-gearbox.jpg", condition: "New" },
-      ],
-    },
-  },
+// Helper function to generate products for any model
+const generateProductsForModel = (brand: string, model: string, category: string, subcategory: string) => {
+  const baseProducts = [
+    { name: `${brand} ${model} ${subcategory} - Premium OEM`, price: "KES 15,500", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
+    { name: `${brand} ${model} ${subcategory} - Standard Grade`, price: "KES 12,000", img: "/assets/images/real_parts/toyota_brake_pads.jpg", condition: "New" },
+    { name: `${brand} ${model} ${subcategory} - Performance Edition`, price: "KES 18,500", img: "/assets/images/parts/braking/toyota_fielder_pads.webp", condition: "New" },
+    { name: `${brand} ${model} ${subcategory} - Economy Option`, price: "KES 9,500", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
+    { name: `${brand} ${model} ${subcategory} - Heavy Duty`, price: "KES 22,000", img: "/assets/images/products/toyota-oil-filter-2.png", condition: "New" },
+    { name: `${brand} ${model} ${subcategory} - Racing Grade`, price: "KES 28,000", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
+  ];
+  return baseProducts;
 };
 
 export default function Products() {
@@ -228,7 +118,6 @@ export default function Products() {
 
   const handleModelSelect = (model: string) => {
     setActiveModel(model);
-    const products = PRODUCT_CATALOG[activeCategory!]?.[activeSubcategory!]?.[model] || [];
     setLocation(`/products?category=${encodeURIComponent(activeCategory!)}&subcategory=${encodeURIComponent(activeSubcategory!)}&brand=${encodeURIComponent(activeBrand!)}&model=${encodeURIComponent(model)}`);
   };
 
@@ -241,8 +130,8 @@ export default function Products() {
   };
 
   const getProducts = () => {
-    if (activeModel && activeSubcategory && activeCategory) {
-      return PRODUCT_CATALOG[activeCategory]?.[activeSubcategory]?.[activeModel] || [];
+    if (activeModel && activeSubcategory && activeCategory && activeBrand) {
+      return generateProductsForModel(activeBrand, activeModel, activeCategory, activeSubcategory);
     }
     return [];
   };
@@ -287,7 +176,7 @@ export default function Products() {
                     <div className="w-8 h-px bg-white/10" />
                     <div className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all ${activeCategory && !activeSubcategory ? "bg-[oklch(0.45_0.22_27)] border-[oklch(0.45_0.22_27)] text-white" : "border-white/20 text-white/50"}`}>
                       <span className="text-[10px] font-black">02</span>
-                      <span className="text-[10px] font-black uppercase tracking-widest">Subcategory</span>
+                      <span className="text-[10px] font-black uppercase tracking-widest">Type</span>
                     </div>
                   </>
                 )}
@@ -336,7 +225,7 @@ export default function Products() {
                       className="group bg-white border border-gray-100 p-8 flex flex-col items-center justify-center gap-4 hover:border-[oklch(0.45_0.22_27)] hover:shadow-2xl transition-all duration-500 rounded-sm"
                     >
                       <div className="w-16 h-16 bg-gray-50 flex items-center justify-center rounded-full border border-gray-100 group-hover:bg-[oklch(0.45_0.22_27)] group-hover:text-white transition-all">
-                        <Settings2 size={28} />
+                        <span className="text-2xl">⚙️</span>
                       </div>
                       <span className="text-[9px] font-black uppercase tracking-widest text-gray-900 text-center leading-tight group-hover:text-[oklch(0.45_0.22_27)]">{category}</span>
                     </button>
