@@ -1,76 +1,133 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-  :root {
-    /* AutoExpress Red #E42933 */
-    --brand-red: #E42933;
-    --brand-dark: #121212;
-    --brand-gray: #F4F4F4;
-    
-    --background: 0 0% 100%;
-    --foreground: 0 0% 7%;
-    
-    --primary: 358 79% 53%;
-    --primary-foreground: 0 0% 100%;
-    
-    --radius: 0rem; /* Sharp edges for premium look */
-  }
+@theme {
+  --color-brand-red: #E42933;
+  --color-brand-dark: #121212;
+  --color-brand-gray: #F4F4F4;
+  
+  --color-primary: #E42933;
+  --color-primary-foreground: #ffffff;
+  
+  --font-barlow: 'Barlow Condensed', sans-serif;
+  --font-inter: 'Inter', sans-serif;
 }
 
 @layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 7%;
+    --primary: 358 79% 53%;
+    --primary-foreground: 0 0% 100%;
+    --radius: 0rem;
+  }
+
   * {
-    @apply border-border;
+    border-color: #e5e7eb;
   }
+
   body {
-    @apply bg-background text-foreground antialiased;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: white;
+    color: #111827;
+    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Barlow Condensed', sans-serif;
-    @apply font-black uppercase tracking-tight leading-none;
+    font-family: var(--font-barlow);
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: -0.025em;
+    line-height: 1;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-[#E42933] text-white px-8 py-4 font-black uppercase tracking-widest text-[11px] hover:bg-black transition-all duration-300 flex items-center justify-center gap-3 relative overflow-hidden group;
+    background-color: #E42933;
+    color: white;
+    padding: 1rem 2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
   }
   
-  .btn-primary::before {
-    content: '';
-    @apply absolute inset-0 bg-black opacity-0 group-hover:opacity-100 transition-opacity duration-300;
-  }
-  
-  .btn-primary span {
-    @apply relative z-10;
+  .btn-primary:hover {
+    background-color: black;
   }
   
   .btn-outline {
-    @apply border-2 border-black text-black px-8 py-4 font-black uppercase tracking-widest text-[11px] hover:bg-black hover:text-white transition-all duration-300 flex items-center justify-center gap-3;
+    border: 2px solid black;
+    color: black;
+    padding: 1rem 2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    transition: all 0.3s ease;
+  }
+
+  .btn-outline:hover {
+    background-color: black;
+    color: white;
   }
 
   .section-title {
-    @apply text-5xl font-black uppercase tracking-tighter mb-12 border-l-[12px] border-[#E42933] pl-8 leading-none;
-    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 3rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.05em;
+    margin-bottom: 3rem;
+    border-left: 12px solid #E42933;
+    padding-left: 2rem;
+    line-height: 1;
+    font-family: var(--font-barlow);
   }
 
   .card-auto {
-    @apply bg-white border border-gray-200 hover:border-black transition-all duration-300 overflow-hidden;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    transition: all 0.3s ease;
+    overflow: hidden;
+  }
+
+  .card-auto:hover {
+    border-color: black;
   }
 
   .tag-red {
-    @apply bg-[#E42933] text-white text-[9px] font-black uppercase tracking-widest px-3 py-1;
+    background-color: #E42933;
+    color: white;
+    font-size: 9px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.25rem 0.75rem;
   }
   
   .premium-card {
-    @apply relative overflow-hidden bg-white border border-gray-100 hover:border-gray-300 transition-all duration-500 hover:shadow-2xl;
+    position: relative;
+    overflow: hidden;
+    background-color: white;
+    border: 1px solid #f3f4f6;
+    transition: all 0.5s ease;
   }
   
-  .premium-card::before {
-    content: '';
-    @apply absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#E42933] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500;
+  .premium-card:hover {
+    border-color: #d1d5db;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   }
 }
 
@@ -95,136 +152,43 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-40px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes slideInRight {
-  from { opacity: 0; transform: translateX(40px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-@keyframes pulse-slow {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.8; }
-}
-
-@keyframes shimmer {
-  0% { background-position: -1000px 0; }
-  100% { background-position: 1000px 0; }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
-}
-
-@keyframes glow {
-  0%, 100% { box-shadow: 0 0 5px rgba(228, 41, 51, 0.3); }
-  50% { box-shadow: 0 0 20px rgba(228, 41, 51, 0.6); }
-}
-
 .animate-fadeIn {
   animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.animate-slideInLeft {
-  animation: slideInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.animate-slideInRight {
-  animation: slideInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.animate-scaleIn {
-  animation: scaleIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.animate-pulse-slow {
-  animation: pulse-slow 3s ease-in-out infinite;
-}
-
-.animate-float {
-  animation: float 3s ease-in-out infinite;
-}
-
-.animate-glow {
-  animation: glow 2s ease-in-out infinite;
-}
-
-/* Smooth Transitions */
-.transition-smooth {
-  @apply transition-all duration-500 ease-out;
-}
-
-/* Premium Hover Effects */
-.hover-lift {
-  @apply hover:-translate-y-2 hover:shadow-2xl transition-all duration-300;
-}
-
-.hover-scale {
-  @apply hover:scale-105 transition-transform duration-300;
-}
-
-.hover-darken {
-  @apply hover:bg-gray-900 transition-colors duration-300;
-}
-
-/* Glass Morphism */
-.glass {
-  @apply bg-white/10 backdrop-blur-md border border-white/20;
-}
-
-/* Premium Typography */
+/* Premium Typography Utility Classes */
 .text-headline {
-  @apply text-5xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9];
-  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 3rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+  font-family: var(--font-barlow);
+}
+
+@media (min-width: 768px) {
+  .text-headline {
+    font-size: 4.5rem;
+  }
 }
 
 .text-subheadline {
-  @apply text-2xl md:text-4xl font-black uppercase tracking-tight;
-  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+  font-family: var(--font-barlow);
+}
+
+@media (min-width: 768px) {
+  .text-subheadline {
+    font-size: 2.25rem;
+  }
 }
 
 .text-label {
-  @apply text-[10px] font-black uppercase tracking-[0.3em];
-}
-
-/* Premium Grid */
-.grid-auto-fit {
-  @apply grid gap-6 auto-cols-max;
-}
-
-/* Loading Skeleton */
-.skeleton {
-  @apply bg-gray-200 animate-pulse;
-}
-
-/* Badge Styles */
-.badge-primary {
-  @apply bg-[#E42933] text-white text-[9px] font-black uppercase tracking-widest px-3 py-1 inline-block;
-}
-
-.badge-secondary {
-  @apply bg-gray-100 text-gray-900 text-[9px] font-black uppercase tracking-widest px-3 py-1 inline-block;
-}
-
-/* Input Styles */
-input[type="text"],
-input[type="email"],
-input[type="tel"],
-select,
-textarea {
-  @apply w-full px-4 py-3 border border-gray-300 focus:border-[#E42933] focus:ring-2 focus:ring-[#E42933]/20 outline-none transition-all duration-300 font-medium;
-}
-
-/* Focus Visible */
-*:focus-visible {
-  @apply outline-none ring-2 ring-[#E42933] ring-offset-2;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
 }
