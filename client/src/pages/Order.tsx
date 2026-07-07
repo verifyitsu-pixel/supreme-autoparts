@@ -11,12 +11,23 @@ export default function Order() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
+    const productName = params.get("product") || "Special Part Inquiry";
+    const brand = params.get("brand") || "General";
+    const model = params.get("model") || "Universal";
+    const price = params.get("price") || "Market Rate";
+
     setProductInfo({
-      name: params.get("product") || "Special Part Inquiry",
-      price: params.get("price") || "Market Rate",
-      model: params.get("model") || "Universal",
-      brand: params.get("brand") || "General",
+      name: productName,
+      price: price,
+      model: model,
+      brand: brand,
     });
+
+    // Auto-prefill the details field with the selected part info
+    setForm(prev => ({
+      ...prev,
+      details: `Inquiry for: ${productName}\nVehicle: ${brand} ${model}\nEstimated Price: ${price}\n\n(Please add your Chassis/VIN number here for verification)`
+    }));
   }, [location]);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -35,7 +46,7 @@ export default function Order() {
       `*Technical Notes:*%0A${form.details || "None provided."}`;
 
     const whatsappUrl = `https://wa.me/254714498451?text=${message}`;
-    
+
     setTimeout(() => {
       window.open(whatsappUrl, "_blank");
       setIsSubmitting(false);
@@ -56,7 +67,6 @@ export default function Order() {
             <div className="lg:col-span-7">
               <div className="bg-white p-10 md:p-16 rounded-sm shadow-2xl shadow-gray-200/50 border border-gray-100 relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-1.5 bg-[oklch(0.45_0.22_27)]" />
-                
                 <h1 className="text-4xl font-black text-gray-900 uppercase tracking-tight mb-4" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
                   Order Specification
                 </h1>
@@ -115,9 +125,9 @@ export default function Order() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">Additional Specifications (Chassis/VIN, Engine Code, etc.)</label>
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">Order Details & Specifications</label>
                     <textarea
-                      rows={4}
+                      rows={6}
                       value={form.details}
                       onChange={(e) => setForm({ ...form, details: e.target.value })}
                       className="w-full border border-gray-100 bg-gray-50 p-4 text-sm font-medium focus:outline-none focus:border-[oklch(0.45_0.22_27)] transition-colors resize-none rounded-sm"
@@ -146,7 +156,6 @@ export default function Order() {
                   <h2 className="text-3xl font-black uppercase tracking-tight mb-8 leading-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
                     {productInfo.name}
                   </h2>
-                  
                   <div className="space-y-6">
                     <div className="flex justify-between items-center border-b border-white/10 pb-4">
                       <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Brand / Model</span>
@@ -157,7 +166,6 @@ export default function Order() {
                       <span className="text-2xl font-black text-[oklch(0.45_0.22_27)]">{productInfo.price}</span>
                     </div>
                   </div>
-
                   <div className="mt-12 flex items-center gap-4 bg-white/5 p-4 rounded-sm border border-white/5">
                     <ShieldCheck className="text-[oklch(0.45_0.22_27)]" size={24} />
                     <div>
