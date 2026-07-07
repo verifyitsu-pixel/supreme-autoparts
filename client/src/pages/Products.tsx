@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Navbar, Footer, FloatingButtons } from "@/components/Layout";
 import { Link, useLocation } from "wouter";
-import { Search, Filter, X, ChevronRight, ShieldCheck, Truck, Clock, Car, Settings2, ArrowRight, LayoutGrid, CheckCircle2 } from "lucide-react";
+import { Search, Filter, X, ChevronRight, ShieldCheck, Truck, Clock, Car, Settings2, ArrowRight, LayoutGrid, CheckCircle2, MessageSquare, Mail } from "lucide-react";
 
 const CATEGORIES = [
   { name: "Braking Systems", img: "/assets/images/categories/braking.jpg" },
@@ -489,9 +489,35 @@ export default function Products() {
                         <p className="text-gray-500 text-sm max-w-md mx-auto mb-8">
                           We are currently updating the inventory for this specific model and category. Please contact us directly for a quote.
                         </p>
-                        <Link href="/contact" className="btn-primary py-3 px-8 text-xs">REQUEST MANUAL QUOTE</Link>
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                          <a href="https://wa.me/254714498451?text=I'm looking for a part that's not listed on your website." target="_blank" rel="noopener noreferrer" className="btn-primary py-3 px-8 text-xs flex items-center gap-2">
+                            <MessageSquare size={16} /> REQUEST VIA WHATSAPP
+                          </a>
+                          <a href="mailto:calvin@supremeautoparts.co.ke?subject=Part Inquiry&body=I'm looking for a part that's not listed on your website." className="bg-white border border-gray-200 text-gray-900 py-3 px-8 text-xs font-black uppercase tracking-widest rounded-sm hover:bg-gray-50 transition-all flex items-center gap-2">
+                            <Mail size={16} /> REQUEST VIA EMAIL
+                          </a>
+                        </div>
                       </div>
                     )}
+                    
+                    {/* General "Can't Find Your Part?" Section */}
+                    <div className="mt-20 p-10 bg-gray-900 rounded-sm text-white relative overflow-hidden">
+                      <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+                      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                        <div>
+                          <h3 className="text-2xl font-black uppercase tracking-tight mb-2" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>Can't Find What You Need?</h3>
+                          <p className="text-gray-400 text-sm max-w-lg">Not all our 50,000+ parts are listed online yet. Contact our experts directly and we'll find it for you in minutes.</p>
+                        </div>
+                        <div className="flex flex-col sm:flex-row gap-4">
+                          <a href="https://wa.me/254714498451" target="_blank" rel="noopener noreferrer" className="bg-[oklch(0.45_0.22_27)] text-white py-3 px-6 text-[10px] font-black uppercase tracking-widest rounded-sm hover:scale-105 transition-all flex items-center gap-2">
+                            <MessageSquare size={14} /> WHATSAPP EXPERT
+                          </a>
+                          <a href="mailto:calvin@supremeautoparts.co.ke" className="bg-white/10 text-white border border-white/20 py-3 px-6 text-[10px] font-black uppercase tracking-widest rounded-sm hover:bg-white/20 transition-all flex items-center gap-2">
+                            <Mail size={14} /> EMAIL INQUIRY
+                          </a>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
