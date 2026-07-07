@@ -55,8 +55,8 @@ const BRAND_DATA: Record<string, { logo: string; country: string }> = {
 // ─── REAL CAR MODEL IMAGES (HUMAN-TAKEN PHOTOGRAPHS) ──────────────────────────
 const VEHICLE_MODELS: Record<string, { name: string; img: string; year: string; type: string }[]> = {
   "Toyota": [
-    { name: "Hilux (Vigo/Revo)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/2018_Toyota_Hilux_Invincible_X_D-4D_4WD_2.4_Front.jpg/1200px-2018_Toyota_Hilux_Invincible_X_D-4D_4WD_2.4_Front.jpg", year: "2005–2024", type: "Pickup Truck" },
-    { name: "Fielder", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Toyota_Corolla_Fielder_1.5X_2012_%2814881387690%29.jpg/1200px-Toyota_Corolla_Fielder_1.5X_2012_%2814881387690%29.jpg", year: "2006–2021", type: "Station Wagon" },
+    { name: "Hilux (Vigo/Revo)", img: "None", year: "2005–2024", type: "Pickup Truck" },
+    { name: "Fielder", img: "None", year: "2006–2021", type: "Station Wagon" },
     { name: "Corolla", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/2019_Toyota_Corolla_Icon_Tech_VVT-i_Hybrid_1.8_Front.jpg/1200px-2019_Toyota_Corolla_Icon_Tech_VVT-i_Hybrid_1.8_Front.jpg", year: "2000–2024", type: "Sedan" },
     { name: "Prado (J120/J150)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/2018_Toyota_Land_Cruiser_Prado_VXL_Front.jpg/1200px-2018_Toyota_Land_Cruiser_Prado_VXL_Front.jpg", year: "2002–2024", type: "SUV" },
     { name: "Vitz", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/2017_Toyota_Yaris_Icon_Tech_VVT-i_Hybrid_1.5_Front.jpg/1200px-2017_Toyota_Yaris_Icon_Tech_VVT-i_Hybrid_1.5_Front.jpg", year: "2005–2020", type: "Hatchback" },
@@ -65,7 +65,7 @@ const VEHICLE_MODELS: Record<string, { name: string; img: string; year: string; 
     { name: "Hiace", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Toyota_Hiace_V_LWB_Front.jpg/1200px-Toyota_Hiace_V_LWB_Front.jpg", year: "2005–2024", type: "Van" },
   ],
   "BMW": [
-    { name: "3 Series (E90/F30/G20)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/2019_BMW_330i_M_Sport_Automatic_2.0_Front.jpg/1200px-2019_BMW_330i_M_Sport_Automatic_2.0_Front.jpg", year: "2005–2024", type: "Sedan" },
+    { name: "3 Series (E90/F30/G20)", img: "None", year: "2005–2024", type: "Sedan" },
     { name: "5 Series (F10/G30)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/2017_BMW_520d_M_Sport_Automatic_2.0_Front.jpg/1200px-2017_BMW_520d_M_Sport_Automatic_2.0_Front.jpg", year: "2010–2024", type: "Sedan" },
     { name: "7 Series (F01/G11)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/2019_BMW_745Le_xDrive_M_Sport_Automatic_3.0_Front.jpg/1200px-2019_BMW_745Le_xDrive_M_Sport_Automatic_3.0_Front.jpg", year: "2008–2024", type: "Luxury Sedan" },
     { name: "X3 (F25/G01)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/2018_BMW_X3_xDrive20d_M_Sport_2.0_Front.jpg/1200px-2018_BMW_X3_xDrive20d_M_Sport_2.0_Front.jpg", year: "2010–2024", type: "Compact SUV" },
