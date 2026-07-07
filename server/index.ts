@@ -859,6 +859,145 @@ async function startServer() {
     res.json({ lowStock, outOfStock });
   });
 
+  // ─── ADMIN ORDER CREATION ──────────────────────────────────────────────────────
+  app.post("/api/admin/orders/create", adminAuthMiddleware, (req: any, res: Response) => {
+    const { items, customerEmail, customerName, customerPhone, shippingAddress, paymentMethod, notes } = req.body;
+    if (!items?.length) return res.status(400).json({ error: "No items in order" });
+    if (!customerEmail) return res.status(400).json({ error: "Customer email required" });
+    
+    const subtotal = items.reduce((s: number, i: any) => s + (i.price * i.quantity), 0);
+    const tax = Math.round(subtotal * (settings.taxRate / 100));
+    const shipping = subtotal >= settings.freeShippingThreshold ? 0 : settings.shippingFee;
+    const total = subtotal + tax + shipping;
+    
+    const order: StoredOrder = {
+      id: crypto.randomUUID(), orderNumber: generateOrderNumber(), userId: "",
+      customerName, customerEmail, date: new Date().toISOString(), items,
+      subtotal, tax, shipping, total,
+      status: "pending", paymentStatus: "unpaid", paymentMethod: paymentMethod || "manual",
+      shippingAddress: shippingAddress || {}, notes
+    };
+    orders.set(order.id, order); saveOrders();
+    // Update product stock
+    for (const item of items) {
+      const product = Array.from(products.values()).find(p => p.id === item.id);
+      if (product) { product.stock = Math.max(0, product.stock - item.quantity); product.sales = (product.sales || 0) + item.quantity; products.set(product.id, product); }
+    }
+    saveProducts();
+    res.status(201).json(order);
+  });
+
+  // ─── ADMIN PAYMENT PROCESSING ──────────────────────────────────────────────────
+  app.post("/api/admin/orders/:id/process-payment", adminAuthMiddleware, (req: any, res: Response) => {
+    const order = orders.get(req.params.id);
+    if (!order) return res.status(404).json({ error: "Order not found" });
+    const { amount, method, transactionId } = req.body;
+    order.paymentStatus = "paid";
+    order.paidAt = new Date().toISOString();
+    order.paymentMethod = method || order.paymentMethod;
+    order.notes = (order.notes || "") + `\n[Payment] KES ${amount} via ${method} (Ref: ${transactionId || "manual"})`;
+    orders.set(order.id, order); saveOrders();
+    res.json(order);
+  });
+
+  // ─── ADMIN INVOICE GENERATION ──────────────────────────────────────────────────
+  app.get("/api/admin/orders/:id/invoice", adminAuthMiddleware, (req: any, res: Response) => {
+    const order = orders.get(req.params.id);
+    if (!order) return res.status(404).json({ error: "Order not found" });
+    const invoiceData = {
+      orderNumber: order.orderNumber,
+      date: order.date,
+      customerName: order.customerName,
+      customerEmail: order.customerEmail,
+      items: order.items,
+      subtotal: order.subtotal,
+      tax: order.tax,
+      shipping: order.shipping,
+      total: order.total,
+      paymentStatus: order.paymentStatus,
+      shippingAddress: order.shippingAddress,
+      storeInfo: {
+        name: settings.storeName,
+        email: settings.storeEmail,
+        phone: settings.storePhone,
+        address: settings.storeAddress,
+      }
+    };
+    res.json(invoiceData);
+  });
+
+  // ─── ADMIN FINANCIAL REPORTS ───────────────────────────────────────────────────
+  app.get("/api/admin/reports/financial", adminAuthMiddleware, (req: any, res: Response) => {
+    const allOrders = Array.from(orders.values());
+    const paidOrders = allOrders.filter(o => o.paymentStatus === "paid");
+    const unpaidOrders = allOrders.filter(o => o.paymentStatus === "unpaid");
+    const refundedOrders = allOrders.filter(o => o.paymentStatus === "refunded");
+    
+    const totalRevenue = paidOrders.reduce((s, o) => s + o.total, 0);
+    const totalCost = Array.from(products.values()).reduce((s, p) => s + ((p.cost || 0) * (p.sales || 0)), 0);
+    const totalProfit = totalRevenue - totalCost;
+    const profitMargin = totalRevenue > 0 ? (totalProfit / totalRevenue * 100).toFixed(2) : "0";
+    
+    // Revenue by payment status
+    const paymentStatusBreakdown = {
+      paid: paidOrders.length,
+      unpaid: unpaidOrders.length,
+      refunded: refundedOrders.length,
+      paidAmount: totalRevenue,
+      unpaidAmount: unpaidOrders.reduce((s, o) => s + o.total, 0),
+    };
+    
+    // Top products by revenue
+    const topProductsByRevenue = Array.from(products.values())
+      .map(p => ({ name: p.name, sales: p.sales || 0, revenue: (p.sales || 0) * p.price, profit: ((p.sales || 0) * (p.price - (p.cost || 0))) }))
+      .sort((a, b) => b.revenue - a.revenue)
+      .slice(0, 10);
+    
+    res.json({
+      totalRevenue,
+      totalCost,
+      totalProfit,
+      profitMargin,
+      paymentStatusBreakdown,
+      topProductsByRevenue,
+      orderCount: allOrders.length,
+      averageOrderValue: allOrders.length > 0 ? (totalRevenue / allOrders.length).toFixed(2) : "0",
+    });
+  });
+
+  // ─── ADMIN FULFILLMENT TRACKING ────────────────────────────────────────────────
+  app.put("/api/admin/orders/:id/fulfillment", adminAuthMiddleware, (req: any, res: Response) => {
+    const order = orders.get(req.params.id);
+    if (!order) return res.status(404).json({ error: "Order not found" });
+    const { status, trackingNumber, carrier, estimatedDelivery } = req.body;
+    if (status) order.status = status;
+    if (trackingNumber) order.trackingNumber = trackingNumber;
+    if (status === "shipped") order.notes = (order.notes || "") + `\n[Shipped] ${carrier || "Standard"} - Tracking: ${trackingNumber}`;
+    if (status === "delivered") order.deliveredAt = new Date().toISOString();
+    orders.set(order.id, order); saveOrders();
+    res.json(order);
+  });
+
+  // ─── ADMIN EXPORT ORDERS ──────────────────────────────────────────────────────
+  app.get("/api/admin/orders/export/csv", adminAuthMiddleware, (req: any, res: Response) => {
+    const allOrders = Array.from(orders.values());
+    const csv = [
+      ["Order Number", "Date", "Customer", "Email", "Total", "Status", "Payment Status"].join(","),
+      ...allOrders.map(o => [
+        o.orderNumber,
+        new Date(o.date).toLocaleDateString(),
+        o.customerName || "",
+        o.customerEmail || "",
+        o.total,
+        o.status,
+        o.paymentStatus
+      ].map(v => `"${v}"`).join(","))
+    ].join("\n");
+    res.setHeader("Content-Type", "text/csv");
+    res.setHeader("Content-Disposition", "attachment; filename=orders.csv");
+    res.send(csv);
+  });
+
   // ─── Static Files ──────────────────────────────────────────────────────────
   const staticPath =
     process.env.NODE_ENV === "production"
