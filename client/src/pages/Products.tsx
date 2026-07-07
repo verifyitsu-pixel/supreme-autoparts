@@ -20,44 +20,34 @@ import { motion, AnimatePresence } from "framer-motion";
 
 // ─── BRAND DATA ───────────────────────────────────────────────────────────────
 const BRAND_DATA: Record<string, { logo: string; country: string }> = {
-  "Toyota": { 
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Toyota_carlogo.svg/1200px-Toyota_carlogo.svg.png", 
+  "Toyota": { logo: "/assets/images/brands/toyota.png", 
     country: "Japan" 
   },
-  "BMW": { 
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/BMW.svg/1200px-BMW.svg.png", 
+  "BMW": { logo: "/assets/images/brands/bmw.png", 
     country: "Germany" 
   },
-  "Mercedes-Benz": { 
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Mercedes-Benz_logo%2C_2010.svg/1200px-Mercedes-Benz_logo%2C_2010.svg.png", 
+  "Mercedes-Benz": { logo: "/assets/images/brands/mercedesbenz.png", 
     country: "Germany" 
   },
-  "Honda": { 
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Honda_Logo.svg/1200px-Honda_Logo.svg.png", 
+  "Honda": { logo: "/assets/images/brands/honda.png", 
     country: "Japan" 
   },
-  "Ford": { 
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Ford_logo.svg/1200px-Ford_logo.svg.png", 
+  "Ford": { logo: "/assets/images/brands/ford.png", 
     country: "USA" 
   },
-  "Hyundai": { 
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Hyundai_Motor_Company_logo.svg/1200px-Hyundai_Motor_Company_logo.svg.png", 
+  "Hyundai": { logo: "/assets/images/brands/hyundai.png", 
     country: "South Korea" 
   },
-  "Suzuki": { 
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Suzuki_logo_2.svg/1200px-Suzuki_logo_2.svg.png", 
+  "Suzuki": { logo: "/assets/images/brands/suzuki.png", 
     country: "Japan" 
   },
-  "Lexus": { 
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Lexus_division_logo.svg/1200px-Lexus_division_logo.svg.png", 
+  "Lexus": { logo: "/assets/images/brands/lexus.png", 
     country: "Japan" 
   },
-  "Nissan": { 
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Nissan_logo.svg/1200px-Nissan_logo.svg.png", 
+  "Nissan": { logo: "/assets/images/brands/nissan.png", 
     country: "Japan" 
   },
-  "Mitsubishi": { 
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Mitsubishi_logo.svg/1200px-Mitsubishi_logo.svg.png", 
+  "Mitsubishi": { logo: "/assets/images/brands/mitsubishi.png", 
     country: "Japan" 
   },
 };
@@ -143,67 +133,67 @@ const CATEGORIES_WITH_SUBCATEGORIES: Record<string, { subcategories: string[]; i
   "Braking Systems": {
     subcategories: ["Brake Pads", "Brake Discs", "Brake Fluid", "Brake Calipers", "Brake Hoses"],
     icon: "🛑",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Automobile_brake_pad.jpg/1200px-Automobile_brake_pad.jpg",
+    image: "/assets/images/categories/braking.jpg",
     description: "Pads, discs, calipers & more"
   },
   "Engine Components": {
     subcategories: ["Air Filters", "Oil Filters", "Spark Plugs", "Engine Belts", "Fuel Injectors"],
     icon: "⚙️",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Car_engine_parts.jpg/1200px-Car_engine_parts.jpg",
+    image: "/assets/images/categories/engine.jpg",
     description: "Filters, plugs, belts & injectors"
   },
   "Transmission & Gear": {
     subcategories: ["Transmission Fluid", "Clutch Kits", "Gaskets", "Seals", "Gearbox"],
     icon: "🔧",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Car_gearbox.jpg/1200px-Car_gearbox.jpg",
+    image: "/assets/images/categories/transmission.jpg",
     description: "Clutch kits, gearbox & fluids"
   },
   "Steering Systems": {
     subcategories: ["Steering Racks", "Tie Rod Ends", "Power Steering Pumps", "Steering Sensors", "Steering Linkage"],
     icon: "🎯",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Car_chassis_parts.jpg/1200px-Car_chassis_parts.jpg",
+    image: "/assets/images/categories/steering.jpg",
     description: "Racks, pumps & linkage"
   },
   "Suspension & Chassis": {
     subcategories: ["Shock Absorbers", "Springs", "Struts", "Control Arms", "Suspension Bushings"],
     icon: "🚗",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Car_shock_absorber.jpg/1200px-Car_shock_absorber.jpg",
+    image: "/assets/images/categories/suspension.jpg",
     description: "Shocks, springs & control arms"
   },
   "Electrical & Sensors": {
     subcategories: ["Alternators", "Batteries", "Starters", "Oxygen Sensors", "ECU Modules"],
     icon: "⚡",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Car_alternator.jpg/1200px-Car_alternator.jpg",
+    image: "/assets/images/categories/electrical.jpg",
     description: "Alternators, sensors & ECUs"
   },
   "Alloys & Rims": {
     subcategories: ["Alloy Wheels", "Wheel Caps", "Lug Nuts", "Wheel Spacers"],
     icon: "🔵",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Alloy_wheel.jpg/1200px-Alloy_wheel.jpg",
+    image: "/assets/images/categories/alloys.jpg",
     description: "Alloys & wheel accessories"
   },
   "Lubricants & Fluids": {
     subcategories: ["Engine Oil", "Transmission Fluid", "Coolant", "Brake Fluid", "Power Steering Fluid"],
     icon: "🛢️",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Car_engine_oil_filter.jpg/1200px-Car_engine_oil_filter.jpg",
+    image: "/assets/images/categories/lubricants.jpg",
     description: "Oils, coolants & fluids"
   },
   "Body Kits & Styling": {
     subcategories: ["Front Bumpers", "Rear Bumpers", "Side Skirts", "Spoilers", "Headlights"],
     icon: "🎨",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/2017_Honda_Civic_VTEC_Turbo_SR_1.0_Front.jpg/1200px-2017_Honda_Civic_VTEC_Turbo_SR_1.0_Front.jpg",
+    image: "/assets/images/categories/bodykits.jpg",
     description: "Bumpers, headlights & styling"
   },
   "Glass & Windscreens": {
     subcategories: ["Windscreens", "Door Glass", "Rear Glass", "Glass Seals", "Wipers"],
     icon: "🪟",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Air_filter_car.jpg/1200px-Air_filter_car.jpg",
+    image: "/assets/images/categories/glass.jpg",
     description: "Windscreens, glass & wipers"
   },
   "Tyres": {
     subcategories: ["Bridgestone", "Michelin", "Continental", "Pirelli", "Goodyear", "Dunlop"],
     icon: "🛞",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Car_tire_tread.jpg/1200px-Car_tire_tread.jpg",
+    image: "/assets/images/categories/tyres.jpg",
     description: "Premium tyres from top brands"
   },
 };

@@ -5,23 +5,23 @@ import { Navbar, Footer } from "@/components/NavbarNew";
 import { useCart } from "@/contexts/CartContext";
 
 const FEATURED_CATEGORIES = [
-  { name: "Braking Systems", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Automobile_brake_pad.jpg/1200px-Automobile_brake_pad.jpg", count: "240+ Parts", icon: "🛑" },
-  { name: "Engine Components", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Car_engine_parts.jpg/1200px-Car_engine_parts.jpg", count: "580+ Parts", icon: "⚙️" },
-  { name: "Suspension & Chassis", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Car_shock_absorber.jpg/1200px-Car_shock_absorber.jpg", count: "310+ Parts", icon: "🚗" },
-  { name: "Electrical & Sensors", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Car_alternator.jpg/1200px-Car_alternator.jpg", count: "190+ Parts", icon: "⚡" },
-  { name: "Transmission & Gear", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Car_gearbox.jpg/1200px-Car_gearbox.jpg", count: "120+ Parts", icon: "🔧" },
-  { name: "Alloys & Rims", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Alloy_wheel.jpg/1200px-Alloy_wheel.jpg", count: "80+ Parts", icon: "🔵" },
+  { name: "Braking Systems", img: "/assets/images/categories/braking.jpg", count: "240+ Parts", icon: "🛑" },
+  { name: "Engine Components", img: "/assets/images/categories/engine.jpg", count: "580+ Parts", icon: "⚙️" },
+  { name: "Suspension & Chassis", img: "/assets/images/categories/suspension.jpg", count: "310+ Parts", icon: "🚗" },
+  { name: "Electrical & Sensors", img: "/assets/images/categories/electrical.jpg", count: "190+ Parts", icon: "⚡" },
+  { name: "Transmission & Gear", img: "/assets/images/categories/transmission.jpg", count: "120+ Parts", icon: "🔧" },
+  { name: "Alloys & Rims", img: "/assets/images/categories/alloys.jpg", count: "80+ Parts", icon: "🔵" },
 ];
 
 const CAR_BRANDS = [
-  { name: "Toyota", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Toyota_carlogo.svg/1200px-Toyota_carlogo.svg.png" },
-  { name: "BMW", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/BMW.svg/1200px-BMW.svg.png" },
-  { name: "Mercedes-Benz", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Mercedes-Benz_logo%2C_2010.svg/1200px-Mercedes-Benz_logo%2C_2010.svg.png" },
-  { name: "Honda", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Honda_Logo.svg/1200px-Honda_Logo.svg.png" },
-  { name: "Ford", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Ford_logo.svg/1200px-Ford_logo.svg.png" },
-  { name: "Hyundai", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Hyundai_Motor_Company_logo.svg/1200px-Hyundai_Motor_Company_logo.svg.png" },
-  { name: "Suzuki", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Suzuki_logo_2.svg/1200px-Suzuki_logo_2.svg.png" },
-  { name: "Lexus", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Lexus_division_logo.svg/1200px-Lexus_division_logo.svg.png" },
+  { name: "Toyota", logo: "/assets/images/brands/toyota.png" },
+  { name: "BMW", logo: "/assets/images/brands/bmw.png" },
+  { name: "Mercedes-Benz", logo: "/assets/images/brands/mercedesbenz.png" },
+  { name: "Honda", logo: "/assets/images/brands/honda.png" },
+  { name: "Ford", logo: "/assets/images/brands/ford.png" },
+  { name: "Hyundai", logo: "/assets/images/brands/hyundai.png" },
+  { name: "Suzuki", logo: "/assets/images/brands/suzuki.png" },
+  { name: "Lexus", logo: "/assets/images/brands/lexus.png" },
 ];
 
 const TRUST_BADGES = [
