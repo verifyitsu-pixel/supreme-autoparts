@@ -57,6 +57,9 @@ export default function CheckoutNew() {
   });
 
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>({ type: "mpesa" });
+  const [policiesAccepted, setPoliciesAccepted] = useState(false);
+
+  const WHATSAPP_NUMBER = "+254714498451";
 
   // Get county/region options based on selected country
   const countryData = getCountryData(shippingAddress.country);
@@ -184,19 +187,27 @@ Please confirm this order and provide payment instructions.
             <p className="text-gray-500 mb-1">Order Reference</p>
             <p className="text-xl font-black text-[#E42933] mb-6">{orderNumberRef.current}</p>
 
-            <div className="bg-gray-50 rounded-xl p-6 mb-6 text-left space-y-3">
-              <h3 className="font-black text-gray-900 mb-3">What happens next?</h3>
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-6 text-left space-y-4">
+              <h3 className="font-black text-gray-900 mb-3 flex items-center gap-2"><MessageCircle size={18} className="text-blue-600" /> Post-Order Process</h3>
+              <p className="text-sm text-gray-700 mb-4">Our team will contact you shortly via WhatsApp to confirm your order details and provide an invoice.</p>
               {[
-                { step: "1", text: "Our team reviews your order on WhatsApp" },
-                { step: "2", text: "We send you payment instructions" },
-                { step: "3", text: "Once payment confirmed, we process & ship" },
-                { step: "4", text: "Track your order in your dashboard" },
+                { step: "1", icon: "📋", text: "Order Received - We review your order details" },
+                { step: "2", icon: "💬", text: `WhatsApp Contact - Our team confirms product info via WhatsApp at ${WHATSAPP_NUMBER}` },
+                { step: "3", icon: "🧾", text: "Invoice Shared - We send you an official invoice with payment details" },
+                { step: "4", icon: "💳", text: "Payment & Shipping - Once payment confirmed, we dispatch your order" },
+                { step: "5", icon: "🚚", text: "Track Your Order - Monitor delivery in your dashboard" },
               ].map(s => (
                 <div key={s.step} className="flex items-start gap-3">
-                  <div className="w-6 h-6 bg-[#E42933] rounded-full flex items-center justify-center text-white text-xs font-black flex-shrink-0 mt-0.5">{s.step}</div>
-                  <p className="text-sm text-gray-700">{s.text}</p>
+                  <div className="text-2xl flex-shrink-0">{s.icon}</div>
+                  <div>
+                    <p className="text-sm text-gray-700"><span className="font-black text-[#E42933]">Step {s.step}:</span> {s.text}</p>
+                  </div>
                 </div>
               ))}
+            </div>
+
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6 text-left">
+              <p className="text-sm text-amber-900"><span className="font-semibold">💡 Tip:</span> Make sure your WhatsApp is active and notifications are enabled. We'll contact you at <span className="font-semibold">{WHATSAPP_NUMBER}</span> to confirm your order and share the invoice.</p>
             </div>
 
             <div className="flex gap-3">
@@ -379,9 +390,32 @@ Please confirm this order and provide payment instructions.
                     <button onClick={() => setStep("shipping")} className="mt-3 text-sm text-[#E42933] font-semibold hover:underline">Edit Address</button>
                   </div>
 
+                  {/* Policy Acceptance */}
+                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
+                    <h3 className="font-black text-gray-900 mb-4 flex items-center gap-2"><Shield size={18} className="text-blue-600" /> Terms & Policies</h3>
+                    <div className="space-y-4 mb-4 text-sm text-gray-700">
+                      <div>
+                        <p className="font-semibold text-gray-900 mb-2">📋 Refund Policy</p>
+                        <p className="text-gray-600">We offer a 14-day refund policy on all products. Items must be in original condition with all packaging. Refunds are processed within 5-7 business days after inspection.</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-900 mb-2">❌ Cancellation Policy</p>
+                        <p className="text-gray-600">Orders can be cancelled within 24 hours of placement. After 24 hours, items may have already been dispatched. For cancellations after dispatch, standard refund policy applies.</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-900 mb-2">💬 Post-Order Communication</p>
+                        <p className="text-gray-600">Once your order is placed, our team will contact you via WhatsApp at <span className="font-semibold">{WHATSAPP_NUMBER}</span> to confirm product details and provide an invoice. This helps us ensure accuracy and quick delivery.</p>
+                      </div>
+                    </div>
+                    <label className="flex items-start gap-3 cursor-pointer">
+                      <input type="checkbox" checked={policiesAccepted} onChange={e => setPoliciesAccepted(e.target.checked)} className="mt-1 w-5 h-5 text-[#E42933] rounded focus:ring-2 focus:ring-[#E42933]" />
+                      <span className="text-sm text-gray-700">I have read and accept the <span className="font-semibold">Refund Policy</span>, <span className="font-semibold">Cancellation Policy</span>, and understand that I will be contacted via WhatsApp for order confirmation.</span>
+                    </label>
+                  </div>
+
                   <div className="flex gap-4">
                     <button onClick={() => setStep("shipping")} className="flex-1 px-6 py-3 border border-gray-300 rounded-lg font-semibold hover:bg-gray-50 text-sm">← Edit Shipping</button>
-                    <button onClick={() => setStep("payment")} className="flex-1 px-6 py-3 bg-[#E42933] text-white rounded-lg font-semibold hover:bg-[#d41f28] flex items-center justify-center gap-2 text-sm">
+                    <button onClick={(e) => { e.preventDefault(); if (!policiesAccepted) { alert("Please accept the policies to proceed."); return; } setStep("payment"); }} className="flex-1 px-6 py-3 bg-[#E42933] text-white rounded-lg font-semibold hover:bg-[#d41f28] flex items-center justify-center gap-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed" disabled={!policiesAccepted}>
                       Proceed to Payment <ArrowRight size={16} />
                     </button>
                   </div>
