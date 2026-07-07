@@ -55,22 +55,22 @@ const BRAND_DATA: Record<string, { logo: string; country: string }> = {
 // ─── REAL CAR MODEL IMAGES (HUMAN-TAKEN PHOTOGRAPHS) ──────────────────────────
 const VEHICLE_MODELS: Record<string, { name: string; img: string; year: string; type: string }[]> = {
   "Toyota": [
-    { name: "Hilux (Vigo/Revo)", img: "None", year: "2005–2024", type: "Pickup Truck" },
-    { name: "Fielder", img: "None", year: "2006–2021", type: "Station Wagon" },
-    { name: "Corolla", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/2019_Toyota_Corolla_Icon_Tech_VVT-i_Hybrid_1.8_Front.jpg/1200px-2019_Toyota_Corolla_Icon_Tech_VVT-i_Hybrid_1.8_Front.jpg", year: "2000–2024", type: "Sedan" },
-    { name: "Prado (J120/J150)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/2018_Toyota_Land_Cruiser_Prado_VXL_Front.jpg/1200px-2018_Toyota_Land_Cruiser_Prado_VXL_Front.jpg", year: "2002–2024", type: "SUV" },
-    { name: "Vitz", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/2017_Toyota_Yaris_Icon_Tech_VVT-i_Hybrid_1.5_Front.jpg/1200px-2017_Toyota_Yaris_Icon_Tech_VVT-i_Hybrid_1.5_Front.jpg", year: "2005–2020", type: "Hatchback" },
-    { name: "Land Cruiser (V8/300)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Toyota_Land_Cruiser_V8_2012.jpg/1200px-Toyota_Land_Cruiser_V8_2012.jpg", year: "2007–2024", type: "Full-Size SUV" },
-    { name: "Harrier", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Toyota_Harrier_Hybrid_Z_2020_Front.jpg/1200px-Toyota_Harrier_Hybrid_Z_2020_Front.jpg", year: "2013–2024", type: "Crossover SUV" },
-    { name: "Hiace", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Toyota_Hiace_V_LWB_Front.jpg/1200px-Toyota_Hiace_V_LWB_Front.jpg", year: "2005–2024", type: "Van" },
+    { name: "Hilux (Vigo/Revo)", img: "/assets/images/models/toyota_hilux.jpg", year: "2005–2024", type: "Pickup Truck" },
+    { name: "Fielder", img: "/assets/images/models/toyota_fielder.jpg", year: "2006–2021", type: "Station Wagon" },
+    { name: "Corolla", img: "/assets/images/models/toyota_corolla.jpg", year: "2000–2024", type: "Sedan" },
+    { name: "Prado (J120/J150)", img: "/assets/images/models/toyota_prado.jpg", year: "2002–2024", type: "SUV" },
+    { name: "Vitz", img: "/assets/images/models/toyota_vitz.jpg", year: "2005–2020", type: "Hatchback" },
+    { name: "Land Cruiser (V8/300)", img: "/assets/images/models/toyota_landcruiser.jpg", year: "2007–2024", type: "Full-Size SUV" },
+    { name: "Harrier", img: "/assets/images/models/toyota_harrier.jpg", year: "2013–2024", type: "Crossover SUV" },
+    { name: "Hiace", img: "/assets/images/models/toyota_hiace.jpg", year: "2005–2024", type: "Van" },
   ],
   "BMW": [
-    { name: "3 Series (E90/F30/G20)", img: "None", year: "2005–2024", type: "Sedan" },
-    { name: "5 Series (F10/G30)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/2017_BMW_520d_M_Sport_Automatic_2.0_Front.jpg/1200px-2017_BMW_520d_M_Sport_Automatic_2.0_Front.jpg", year: "2010–2024", type: "Sedan" },
-    { name: "7 Series (F01/G11)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/2019_BMW_745Le_xDrive_M_Sport_Automatic_3.0_Front.jpg/1200px-2019_BMW_745Le_xDrive_M_Sport_Automatic_3.0_Front.jpg", year: "2008–2024", type: "Luxury Sedan" },
-    { name: "X3 (F25/G01)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/2018_BMW_X3_xDrive20d_M_Sport_2.0_Front.jpg/1200px-2018_BMW_X3_xDrive20d_M_Sport_2.0_Front.jpg", year: "2010–2024", type: "Compact SUV" },
-    { name: "X5 (E70/F15/G05)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/2019_BMW_X5_xDrive30d_M_Sport_Automatic_3.0_Front.jpg/1200px-2019_BMW_X5_xDrive30d_M_Sport_Automatic_3.0_Front.jpg", year: "2006–2024", type: "Mid-Size SUV" },
-    { name: "X6 (F16/G06)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/2020_BMW_X6_xDrive30d_M_Sport_Automatic_3.0_Front.jpg/1200px-2020_BMW_X6_xDrive30d_M_Sport_Automatic_3.0_Front.jpg", year: "2014–2024", type: "Sports SAV" },
+    { name: "3 Series (E90/F30/G20)", img: "/assets/images/models/bmw_3series.jpg", year: "2005–2024", type: "Sedan" },
+    { name: "5 Series (F10/G30)", img: "/assets/images/models/bmw_5series.jpg", year: "2010–2024", type: "Sedan" },
+    { name: "7 Series (F01/G11)", img: "/assets/images/models/bmw_7series.jpg", year: "2008–2024", type: "Luxury Sedan" },
+    { name: "X3 (F25/G01)", img: "/assets/images/models/bmw_x3.jpg", year: "2010–2024", type: "Compact SUV" },
+    { name: "X5 (E70/F15/G05)", img: "/assets/images/models/bmw_x5.jpg", year: "2006–2024", type: "Mid-Size SUV" },
+    { name: "X6 (F16/G06)", img: "/assets/images/models/bmw_x6.jpg", year: "2014–2024", type: "Sports SAV" },
   ],
   "Mercedes-Benz": [
     { name: "C-Class (W204/W205/W206)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/2019_Mercedes-Benz_C200_AMG_Line_Premium_Automatic_1.5_Front.jpg/1200px-2019_Mercedes-Benz_C200_AMG_Line_Premium_Automatic_1.5_Front.jpg", year: "2007–2024", type: "Sedan" },
@@ -107,11 +107,11 @@ const VEHICLE_MODELS: Record<string, { name: string; img: string; year: string; 
     { name: "Ertiga", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/2019_Suzuki_Ertiga_GL_1.5_Front.jpg/1200px-2019_Suzuki_Ertiga_GL_1.5_Front.jpg", year: "2012–2024", type: "MPV" },
   ],
   "Lexus": [
-    { name: "RX350", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/2019_Lexus_RX_450h_Luxury_Automatic_3.5_Front.jpg/1200px-2019_Lexus_RX_450h_Luxury_Automatic_3.5_Front.jpg", year: "2009–2024", type: "Luxury SUV" },
-    { name: "LX570", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/2016_Lexus_LX570_Front.jpg/1200px-2016_Lexus_LX570_Front.jpg", year: "2007–2021", type: "Full-Size Luxury SUV" },
-    { name: "IS250", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/2017_Lexus_IS300h_Luxury_Automatic_2.5_Front.jpg/1200px-2017_Lexus_IS300h_Luxury_Automatic_2.5_Front.jpg", year: "2005–2015", type: "Luxury Sedan" },
-    { name: "GX460", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/2020_Lexus_GX460_Front.jpg/1200px-2020_Lexus_GX460_Front.jpg", year: "2009–2024", type: "Luxury SUV" },
-    { name: "ES300h", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/2019_Lexus_ES300h_Luxury_Automatic_2.5_Front.jpg/1200px-2019_Lexus_ES300h_Luxury_Automatic_2.5_Front.jpg", year: "2012–2024", type: "Hybrid Luxury Sedan" },
+    { name: "RX350", img: "/assets/images/models/lexus_rx350.jpg", year: "2009–2024", type: "Luxury SUV" },
+    { name: "LX570", img: "/assets/images/models/lexus_lx570.jpg", year: "2007–2021", type: "Full-Size Luxury SUV" },
+    { name: "IS250", img: "/assets/images/models/lexus_is250.jpg", year: "2005–2015", type: "Luxury Sedan" },
+    { name: "GX460", img: "/assets/images/models/lexus_gx460.jpg", year: "2009–2024", type: "Luxury SUV" },
+    { name: "ES300h", img: "/assets/images/models/lexus_es300h.jpg", year: "2012–2024", type: "Hybrid Luxury Sedan" },
   ],
   "Nissan": [
     { name: "Navara (D40/D23)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/2019_Nissan_Navara_Tekna_4WD_DCi_2.3_Front.jpg/1200px-2019_Nissan_Navara_Tekna_4WD_DCi_2.3_Front.jpg", year: "2005–2024", type: "Pickup Truck" },
@@ -130,70 +130,37 @@ const VEHICLE_MODELS: Record<string, { name: string; img: string; year: string; 
 
 // ─── CATEGORIES WITH REAL PART IMAGES ─────────────────────────────────────────
 const CATEGORIES_WITH_SUBCATEGORIES: Record<string, { subcategories: string[]; icon: string; image: string; description: string }> = {
-  "Braking Systems": {
-    subcategories: ["Brake Pads", "Brake Discs", "Brake Fluid", "Brake Calipers", "Brake Hoses"],
-    icon: "🛑",
-    image: "/assets/images/categories/braking.jpg",
+  "Braking Systems": { subcategories: ["Brake Pads", "Brake Discs", "Brake Fluid", "Brake Calipers", "Brake Hoses"], icon: "🛑", image: "/assets/images/categories/braking.jpg",
     description: "Pads, discs, calipers & more"
   },
-  "Engine Components": {
-    subcategories: ["Air Filters", "Oil Filters", "Spark Plugs", "Engine Belts", "Fuel Injectors"],
-    icon: "⚙️",
-    image: "/assets/images/categories/engine.jpg",
+  "Engine Components": { subcategories: ["Air Filters", "Oil Filters", "Spark Plugs", "Engine Belts", "Fuel Injectors"], icon: "⚙️", image: "/assets/images/categories/engine.jpg",
     description: "Filters, plugs, belts & injectors"
   },
-  "Transmission & Gear": {
-    subcategories: ["Transmission Fluid", "Clutch Kits", "Gaskets", "Seals", "Gearbox"],
-    icon: "🔧",
-    image: "/assets/images/categories/transmission.jpg",
+  "Transmission & Gear": { subcategories: ["Transmission Fluid", "Clutch Kits", "Gaskets", "Seals", "Gearbox"], icon: "🔧", image: "/assets/images/categories/transmission.jpg",
     description: "Clutch kits, gearbox & fluids"
   },
-  "Steering Systems": {
-    subcategories: ["Steering Racks", "Tie Rod Ends", "Power Steering Pumps", "Steering Sensors", "Steering Linkage"],
-    icon: "🎯",
-    image: "/assets/images/categories/steering.jpg",
+  "Steering Systems": { subcategories: ["Steering Racks", "Tie Rod Ends", "Power Steering Pumps", "Steering Sensors", "Steering Linkage"], icon: "🎯", image: "/assets/images/categories/steering.jpg",
     description: "Racks, pumps & linkage"
   },
-  "Suspension & Chassis": {
-    subcategories: ["Shock Absorbers", "Springs", "Struts", "Control Arms", "Suspension Bushings"],
-    icon: "🚗",
-    image: "/assets/images/categories/suspension.jpg",
+  "Suspension & Chassis": { subcategories: ["Shock Absorbers", "Springs", "Struts", "Control Arms", "Suspension Bushings"], icon: "🚗", image: "/assets/images/categories/suspension.jpg",
     description: "Shocks, springs & control arms"
   },
-  "Electrical & Sensors": {
-    subcategories: ["Alternators", "Batteries", "Starters", "Oxygen Sensors", "ECU Modules"],
-    icon: "⚡",
-    image: "/assets/images/categories/electrical.jpg",
+  "Electrical & Sensors": { subcategories: ["Alternators", "Batteries", "Starters", "Oxygen Sensors", "ECU Modules"], icon: "⚡", image: "/assets/images/categories/electrical.jpg",
     description: "Alternators, sensors & ECUs"
   },
-  "Alloys & Rims": {
-    subcategories: ["Alloy Wheels", "Wheel Caps", "Lug Nuts", "Wheel Spacers"],
-    icon: "🔵",
-    image: "/assets/images/categories/alloys.jpg",
+  "Alloys & Rims": { subcategories: ["Alloy Wheels", "Wheel Caps", "Lug Nuts", "Wheel Spacers"], icon: "🔵", image: "/assets/images/categories/alloys.jpg",
     description: "Alloys & wheel accessories"
   },
-  "Lubricants & Fluids": {
-    subcategories: ["Engine Oil", "Transmission Fluid", "Coolant", "Brake Fluid", "Power Steering Fluid"],
-    icon: "🛢️",
-    image: "/assets/images/categories/lubricants.jpg",
+  "Lubricants & Fluids": { subcategories: ["Engine Oil", "Transmission Fluid", "Coolant", "Brake Fluid", "Power Steering Fluid"], icon: "🛢️", image: "/assets/images/categories/lubricants.jpg",
     description: "Oils, coolants & fluids"
   },
-  "Body Kits & Styling": {
-    subcategories: ["Front Bumpers", "Rear Bumpers", "Side Skirts", "Spoilers", "Headlights"],
-    icon: "🎨",
-    image: "/assets/images/categories/bodykits.jpg",
+  "Body Kits & Styling": { subcategories: ["Front Bumpers", "Rear Bumpers", "Side Skirts", "Spoilers", "Headlights"], icon: "🎨", image: "/assets/images/categories/bodykits.jpg",
     description: "Bumpers, headlights & styling"
   },
-  "Glass & Windscreens": {
-    subcategories: ["Windscreens", "Door Glass", "Rear Glass", "Glass Seals", "Wipers"],
-    icon: "🪟",
-    image: "/assets/images/categories/glass.jpg",
+  "Glass & Windscreens": { subcategories: ["Windscreens", "Door Glass", "Rear Glass", "Glass Seals", "Wipers"], icon: "🪟", image: "/assets/images/categories/glass.jpg",
     description: "Windscreens, glass & wipers"
   },
-  "Tyres": {
-    subcategories: ["Bridgestone", "Michelin", "Continental", "Pirelli", "Goodyear", "Dunlop"],
-    icon: "🛞",
-    image: "/assets/images/categories/tyres.jpg",
+  "Tyres": { subcategories: ["Bridgestone", "Michelin", "Continental", "Pirelli", "Goodyear", "Dunlop"], icon: "🛞", image: "/assets/images/categories/tyres.jpg",
     description: "Premium tyres from top brands"
   },
 };
