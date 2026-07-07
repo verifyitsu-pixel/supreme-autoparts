@@ -170,7 +170,7 @@ export function Footer() {
               </li>
               <li className="flex gap-4">
                 <Mail className="text-[oklch(0.45_0.22_27)] shrink-0" size={18} />
-                <span className="text-xs text-gray-400 font-medium">info@supremeautoparts.co.ke</span>
+                <span className="text-xs text-gray-400 font-medium">calvin@supremeautoparts.co.ke</span>
               </li>
             </ul>
           </div>
