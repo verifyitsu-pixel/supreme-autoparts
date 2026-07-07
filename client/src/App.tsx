@@ -5,6 +5,7 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { AuthProvider } from "./contexts/AuthContext";
+import { CartProvider } from "./contexts/CartContext";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -17,6 +18,8 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import Cart from "./pages/Cart";
+import Returns from "./pages/Returns";
 
 function Router() {
   return (
@@ -30,6 +33,8 @@ function Router() {
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
       <Route path="/dashboard" component={Dashboard} />
+      <Route path="/cart" component={Cart} />
+      <Route path="/returns" component={Returns} />
       <Route path="/terms-and-conditions" component={Terms} />
       <Route path="/refund-policy" component={RefundPolicy} />
       <Route path="/privacy-policy" component={PrivacyPolicy} />
@@ -43,12 +48,14 @@ function App() {
   return (
     <ErrorBoundary>
       <AuthProvider>
-        <ThemeProvider defaultTheme="light">
-          <TooltipProvider>
-            <Toaster />
-            <Router />
-          </TooltipProvider>
-        </ThemeProvider>
+        <CartProvider>
+          <ThemeProvider defaultTheme="light">
+            <TooltipProvider>
+              <Toaster />
+              <Router />
+            </TooltipProvider>
+          </ThemeProvider>
+        </CartProvider>
       </AuthProvider>
     </ErrorBoundary>
   );
