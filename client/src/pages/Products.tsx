@@ -117,118 +117,98 @@ const VEHICLE_MODELS: Record<string, { name: string; img?: string }[]> = {
   ],
 };
 
-const PRODUCTS = [
-  // Generate a baseline for every model to ensure no empty states
-  ...Object.entries(VEHICLE_MODELS).flatMap(([brand, models]) => 
-    models.flatMap(model => [
-      { 
-        name: `${brand} ${model.name} Genuine Brake Pad Set`, 
-        category: "Braking Systems", 
-        brand, 
-        price: brand === "BMW" ? "KES 12,500" : brand === "Mercedes-Benz" ? "KES 14,000" : "KES 6,500", 
-        img: brand === "BMW" ? "/assets/images/products/bmw3-brake-pads.jpg" : "/assets/images/real_parts/toyota_brake_pads.jpg", 
-        condition: "New", 
-        models: [model.name] 
-      },
-      { 
-        name: `${brand} ${model.name} High-Flow Oil Filter`, 
-        category: "Engine Components", 
-        brand, 
-        price: "KES 1,800", 
-        img: brand === "BMW" ? "/assets/images/real_parts/bmw_oil_filter.jpg" : "/assets/images/products/toyota-oil-filter.jpg", 
-        condition: "New", 
-        models: [model.name] 
-      },
-      { 
-        name: `${brand} ${model.name} OEM Air Filter`, 
-        category: "Engine Components", 
-        brand, 
-        price: "KES 2,500", 
-        img: brand === "Toyota" ? "/assets/images/products/toyota-air-filter.jpg" : "/assets/images/real_parts/bmw_oil_filter.jpg", 
-        condition: "New", 
-        models: [model.name] 
-      },
-      { 
-        name: `${brand} ${model.name} Performance Spark Plugs`, 
-        category: "Electrical & Sensors", 
-        brand, 
-        price: "KES 4,500", 
-        img: brand === "Honda" ? "/assets/images/products/honda-civic-alternator.jpg" : "/assets/images/products/bmw-sensor.jpg", 
-        condition: "New", 
-        models: [model.name] 
-      },
-      { 
-        name: `${brand} ${model.name} Premium Windscreen`, 
-        category: "Glass & Windscreens", 
-        brand, 
-        price: "KES 18,000", 
-        img: brand === "Toyota" ? "/assets/images/products/toyota-windscreen.webp" : "/assets/images/products/toyota-windscreen-2.jpg", 
-        condition: "New", 
-        models: [model.name] 
-      },
-      { 
-        name: `${brand} ${model.name} Shock Absorber Set`, 
-        category: "Suspension & Chassis", 
-        brand, 
-        price: brand === "Mercedes-Benz" ? "KES 35,000" : "KES 22,000", 
-        img: brand === "Mercedes-Benz" ? "/assets/images/real_parts/mercedes_shock_absorber.jpg" : "/assets/images/products/mercedes-shock-absorber.jpg", 
-        condition: "New", 
-        models: [model.name] 
-      },
-      { 
-        name: `${brand} ${model.name} Transmission Service Kit`, 
-        category: "Transmission & Gear", 
-        brand, 
-        price: "KES 15,000", 
-        img: brand === "BMW" ? "/assets/images/products/bmw-gear-service-kit.jpg" : "/assets/images/products/toyota-vitz-gearbox.png", 
-        condition: "New", 
-        models: [model.name] 
-      },
-      { 
-        name: `${brand} ${model.name} Power Steering Pump`, 
-        category: "Steering Systems", 
-        brand, 
-        price: "KES 28,000", 
-        img: "/assets/images/products/bmw-steering-rack.jpg", 
-        condition: "Certified Used", 
-        models: [model.name] 
-      },
-      { 
-        name: `${brand} ${model.name} Alloy Wheel Set (17\")`, 
-        category: "Alloys & Rims", 
-        brand, 
-        price: "KES 65,000", 
-        img: brand === "Mercedes-Benz" ? "/assets/images/products/mercedes-alloy-rim.jpg" : "/assets/images/products/lexus-alloy-rim.jpg", 
-        condition: "New", 
-        models: [model.name] 
-      },
-      { 
-        name: `${brand} ${model.name} Fully Synthetic Engine Oil`, 
-        category: "Lubricants & Fluids", 
-        brand, 
-        price: "KES 8,500", 
-        img: brand === "BMW" ? "/assets/images/real_parts/bmw_oil_filter.jpg" : "/assets/images/products/toyota-oil-filter.jpg", 
-        condition: "New", 
-        models: [model.name] 
-      },
-      { 
-        name: `${brand} ${model.name} Body Styling Kit`, 
-        category: "Body Kits & Styling", 
-        brand, 
-        price: "KES 45,000", 
-        img: "/assets/images/products/mercedes-bumper.jpg", 
-        condition: "New", 
-        models: [model.name] 
-      },
-    ])
-  ),
-  // Specific High-End Items
-  { name: "Mercedes S550 Front Air Suspension Strut (Genuine)", category: "Suspension & Chassis", brand: "Mercedes-Benz", price: "KES 85,000", img: "/assets/images/products/mercedes-s550-strut.jpg", condition: "New", models: ["S550 (W221/W222)", "S-Class (W221/W222)"] },
-  { name: "Mercedes S550 Rear Brake Disc Rotor (OEM)", category: "Braking Systems", brand: "Mercedes-Benz", price: "KES 18,500", img: "/assets/images/products/mercedes-s550-brake-disc.webp", condition: "New", models: ["S550 (W221/W222)", "S-Class (W221/W222)"] },
-  { name: "Mercedes S550 Hydraulic Engine Mount Set", category: "Engine Components", brand: "Mercedes-Benz", price: "KES 24,000", img: "/assets/images/products/mercedes-s550-mount.jpg", condition: "New", models: ["S550 (W221/W222)", "S-Class (W221/W222)"] },
-  { name: "BMW 8-Speed Automatic Transmission (ZF 8HP)", category: "Transmission & Gear", brand: "BMW", price: "KES 120,000", img: "/assets/images/products/bmw-gearbox.jpg", condition: "Certified Used", models: ["3 Series (E90/F30/G20)", "5 Series (F10/G30)", "X5 (E70/F15/G05)"] },
-  { name: "Toyota Vitz CVT Automatic Gearbox (K410)", category: "Transmission & Gear", brand: "Toyota", price: "KES 45,000", img: "/assets/images/products/toyota-vitz-gearbox.png", condition: "Certified Used", models: ["Vitz"] },
-];
+const CATEGORY_PRODUCTS_MAP: Record<string, (brand: string, model: string) => any[]> = {
+  "Braking Systems": (brand, model) => [
+    { name: `${brand} ${model} Brembo Performance Brake Disc`, price: "KES 28,500", img: "/assets/images/parts/braking/bmw_brembo_disc.jpg", condition: "New" },
+    { name: `${brand} ${model} Bosch Blue Brake Pad Set`, price: "KES 8,500", img: "/assets/images/parts/braking/toyota_fielder_pads.webp", condition: "New" },
+    { name: `${brand} ${model} Brembo Big Brake Kit (Front)`, price: "KES 145,000", img: "/assets/images/parts/braking/bmw_brembo_big_brake_kit.jpg", condition: "New" },
+    { name: `${brand} ${model} Akebono Ceramic Brake Pads`, price: "KES 12,000", img: "/assets/images/real_parts/toyota_brake_pads.jpg", condition: "New" },
+    { name: `${brand} ${model} Brembo Carbon Ceramic Kit`, price: "KES 850,000", img: "/assets/images/parts/braking/bmw_carbon_ceramic_kit.png", condition: "New" },
+  ],
+  "Engine Components": (brand, model) => [
+    { name: `${brand} ${model} Bosch High-Performance Oil Filter`, price: "KES 2,200", img: "/assets/images/parts/engine/bmw_3series_oil_filter.jpg", condition: "New" },
+    { name: `${brand} ${model} NGK Laser Iridium Spark Plug Set`, price: "KES 14,500", img: "/assets/images/products/chevrolet-ignition-coil.jpg", condition: "New" },
+    { name: `${brand} ${model} Gates Racing Timing Belt Kit`, price: "KES 28,000", img: "/assets/images/products/toyota-air-filter.jpg", condition: "New" },
+    { name: `${brand} ${model} Mahle Original Air Filter`, price: "KES 3,500", img: "/assets/images/products/toyota-air-filter.jpg", condition: "New" },
+    { name: `${brand} ${model} Bosch Fuel Injector Set`, price: "KES 45,000", img: "/assets/images/parts/engine/bmw_5series_oil_filter.jpg", condition: "New" },
+  ],
+  "Transmission & Gear": (brand, model) => [
+    { name: `${brand} ${model} ZF 8HP Transmission Service Kit`, price: "KES 24,000", img: "/assets/images/products/bmw-gear-service-kit.jpg", condition: "New" },
+    { name: `${brand} ${model} Exedy Stage 1 Clutch Kit`, price: "KES 48,000", img: "/assets/images/products/suzuki-clutch-kit.jpg", condition: "New" },
+    { name: `${brand} ${model} AISIN Automatic Transmission Fluid`, price: "KES 15,000", img: "/assets/images/products/toyota-vitz-gearbox.png", condition: "New" },
+    { name: `${brand} ${model} Luk Dual Mass Flywheel`, price: "KES 65,000", img: "/assets/images/products/mercedes-gearbox.jpg", condition: "New" },
+    { name: `${brand} ${model} ZF Rebuilt Automatic Transmission`, price: "KES 185,000", img: "/assets/images/products/bmw-gearbox.jpg", condition: "Certified Used" },
+  ],
+  "Steering Systems": (brand, model) => [
+    { name: `${brand} ${model} Bosch Power Steering Pump`, price: "KES 32,000", img: "/assets/images/products/bmw-steering-rack.jpg", condition: "New" },
+    { name: `${brand} ${model} Moog Tie Rod End Assembly`, price: "KES 9,500", img: "/assets/images/products/bmw-sensor-2.jpg", condition: "New" },
+    { name: `${brand} ${model} TRW Steering Rack & Pinion`, price: "KES 55,000", img: "/assets/images/products/bmw-steering-rack.jpg", condition: "Certified Used" },
+    { name: `${brand} ${model} Lemforder Steering Linkage Kit`, price: "KES 18,000", img: "/assets/images/products/bmw-steering-rack.jpg", condition: "New" },
+    { name: `${brand} ${model} Bosch Steering Angle Sensor`, price: "KES 12,500", img: "/assets/images/products/bmw-sensor.jpg", condition: "New" },
+  ],
+  "Suspension & Chassis": (brand, model) => [
+    { name: `${brand} ${model} Bilstein B4 Gas Pressure Shock`, price: "KES 18,500", img: "/assets/images/parts/suspension/mercedes_cclass_shock.jpg", condition: "New" },
+    { name: `${brand} ${model} KYB Excel-G Shock Absorber Set`, price: "KES 35,000", img: "/assets/images/real_parts/mercedes_shock_absorber.jpg", condition: "New" },
+    { name: `${brand} ${model} Lemforder Control Arm Assembly`, price: "KES 28,000", img: "/assets/images/products/mercedes-s550-strut.jpg", condition: "New" },
+    { name: `${brand} ${model} Eibach Pro-Kit Lowering Springs`, price: "KES 42,000", img: "/assets/images/real_parts/mercedes_springs.webp", condition: "New" },
+    { name: `${brand} ${model} Sachs Suspension Strut Mount`, price: "KES 8,500", img: "/assets/images/parts/suspension/mercedes_sclass_shock.jpg", condition: "New" },
+  ],
+  "Electrical & Sensors": (brand, model) => [
+    { name: `${brand} ${model} Denso Alternator (Original)`, price: "KES 45,000", img: "/assets/images/parts/electrical/toyota_denso_alternator.webp", condition: "New" },
+    { name: `${brand} ${model} Bosch S5 Premium Battery`, price: "KES 18,500", img: "/assets/images/products/hyundai-alternator.jpg", condition: "New" },
+    { name: `${brand} ${model} Denso High Output Alternator`, price: "KES 65,000", img: "/assets/images/parts/electrical/toyota_high_output_alternator.jpg", condition: "New" },
+    { name: `${brand} ${model} Bosch Oxygen Sensor`, price: "KES 14,000", img: "/assets/images/products/bmw-sensor.jpg", condition: "New" },
+    { name: `${brand} ${model} Valeo Starter Motor`, price: "KES 22,000", img: "/assets/images/products/hyundai-alternator-2.jpg", condition: "New" },
+  ],
+  "Alloys & Rims": (brand, model) => [
+    { name: `${brand} ${model} BBS Forged Alloy Wheel (18\")`, price: "KES 125,000", img: "/assets/images/products/lexus-alloy-rim.jpg", condition: "New" },
+    { name: `${brand} ${model} Enkei Performance Rim Set (17\")`, price: "KES 85,000", img: "/assets/images/products/mercedes-alloy-rim.jpg", condition: "New" },
+    { name: `${brand} ${model} Vossen Custom Alloy Wheel (20\")`, price: "KES 245,000", img: "/assets/images/products/lexus-alloy-rim-2.jpg", condition: "New" },
+    { name: `${brand} ${model} BBS Center Cap Set`, price: "KES 6,500", img: "/assets/images/products/lexus-alloy-rim.jpg", condition: "New" },
+    { name: `${brand} ${model} Michelin Pilot Sport 4S Tire`, price: "KES 32,000", img: "/assets/images/products/lexus-alloy-rim-2.jpg", condition: "New" },
+  ],
+  "Lubricants & Fluids": (brand, model) => [
+    { name: `${brand} ${model} Castrol EDGE 5W-30 Full Synthetic`, price: "KES 9,500", img: "/assets/images/real_parts/bmw_oil_filter.jpg", condition: "New" },
+    { name: `${brand} ${model} Mobil 1 Advanced Full Synthetic`, price: "KES 10,500", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
+    { name: `${brand} ${model} Motul 8100 X-cess Engine Oil`, price: "KES 11,000", img: "/assets/images/products/toyota-oil-filter-2.png", condition: "New" },
+    { name: `${brand} ${model} Liqui Moly Top Tec 4200 Oil`, price: "KES 12,500", img: "/assets/images/products/toyota-oil-filter.jpg", condition: "New" },
+    { name: `${brand} ${model} Shell Helix Ultra Engine Oil`, price: "KES 8,800", img: "/assets/images/products/toyota-oil-filter-2.png", condition: "New" },
+  ],
+  "Body Kits & Styling": (brand, model) => [
+    { name: `${brand} ${model} M-Performance Style Body Kit`, price: "KES 145,000", img: "/assets/images/products/mercedes-bumper.jpg", condition: "New" },
+    { name: `${brand} ${model} AMG Style Front Bumper`, price: "KES 65,000", img: "/assets/images/products/mercedes-bumper.jpg", condition: "New" },
+    { name: `${brand} ${model} Wald International Body Styling`, price: "KES 285,000", img: "/assets/images/products/mercedes-bumper.jpg", condition: "New" },
+    { name: `${brand} ${model} Carbon Fiber Mirror Caps`, price: "KES 18,500", img: "/assets/images/products/mercedes-bumper.jpg", condition: "New" },
+    { name: `${brand} ${model} Rear Diffuser with Quad Tips`, price: "KES 32,000", img: "/assets/images/products/mercedes-bumper.jpg", condition: "New" },
+  ],
+  "Glass & Windscreens": (brand, model) => [
+    { name: `${brand} ${model} Pilkington Front Windscreen`, price: "KES 24,000", img: "/assets/images/products/toyota-windscreen.webp", condition: "New" },
+    { name: `${brand} ${model} Saint-Gobain Sekurit Side Glass`, price: "KES 12,500", img: "/assets/images/products/toyota-windscreen-2.jpg", condition: "New" },
+    { name: `${brand} ${model} AGC Automotive Rear Glass`, price: "KES 18,500", img: "/assets/images/products/toyota-windscreen.webp", condition: "New" },
+    { name: `${brand} ${model} Fuyao Laminated Front Glass`, price: "KES 15,000", img: "/assets/images/products/toyota-windscreen-2.jpg", condition: "New" },
+    { name: `${brand} ${model} Guardian Glass Door Assembly`, price: "KES 9,500", img: "/assets/images/products/toyota-windscreen.webp", condition: "New" },
+  ],
+  "Certified Used Parts": (brand, model) => [
+    { name: `${brand} ${model} Used Engine (Japan Import)`, price: "KES 350,000", img: "/assets/images/products/bmw-steering-rack.jpg", condition: "Certified Used" },
+    { name: `${brand} ${model} Used Automatic Transmission`, price: "KES 145,000", img: "/assets/images/products/bmw-gearbox.jpg", condition: "Certified Used" },
+    { name: `${brand} ${model} Used Xenon Headlight Pair`, price: "KES 85,000", img: "/assets/images/products/honda-headlight.jpg", condition: "Certified Used" },
+    { name: `${brand} ${model} Used Instrument Cluster`, price: "KES 24,000", img: "/assets/images/products/bmw-sensor.jpg", condition: "Certified Used" },
+    { name: `${brand} ${model} Used Infotainment Screen`, price: "KES 45,000", img: "/assets/images/products/bmw-sensor-2.jpg", condition: "Certified Used" },
+  ],
+};
+
+const PRODUCTS = Object.entries(VEHICLE_MODELS).flatMap(([brand, models]) => 
+  models.flatMap(model => 
+    Object.entries(CATEGORY_PRODUCTS_MAP).flatMap(([category, getProducts]) => 
+      getProducts(brand, model.name).map(p => ({
+        ...p,
+        category,
+        brand,
+        models: [model.name]
+      }))
+    )
+  )
+);
 
 export default function Products() {
   const [location, setLocation] = useLocation();
