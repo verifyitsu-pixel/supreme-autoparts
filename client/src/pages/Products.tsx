@@ -3,7 +3,7 @@ import { Navbar, Footer } from "@/components/NavbarNew";
 import { FloatingButtons } from "@/components/Layout";
 import { useLocation } from "wouter";
 import { useCart } from "@/contexts/CartContext";
-import { Search, X, ArrowRight, Car, CheckCircle2 } from "lucide-react";
+import { Search, X, ArrowRight, Car, CheckCircle2, MessageCircle, Mail, Phone } from "lucide-react";
 
 const CATEGORIES_WITH_SUBCATEGORIES = {
   "Braking Systems": ["Brake Pads", "Brake Discs", "Brake Fluid", "Brake Calipers", "Brake Hoses"],
@@ -77,6 +77,8 @@ export default function Products() {
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
   const [addedToCart, setAddedToCart] = useState<string | null>(null);
+  const [showPartRequestForm, setShowPartRequestForm] = useState(false);
+  const [requestFormData, setRequestFormData] = useState({ name: "", email: "", phone: "", partDescription: "" });
   const { addItem } = useCart();
   const ITEMS_PER_PAGE = 12;
 
@@ -444,13 +446,22 @@ export default function Products() {
                       </>
                     ) : (
                       <div className="text-center py-12">
-                        <p className="text-gray-500 text-lg">No products found for this selection.</p>
-                        <button
-                          onClick={() => handleModelSelect(activeModel)}
-                          className="mt-6 text-[oklch(0.45_0.22_27)] font-black uppercase tracking-widest hover:underline"
-                        >
-                          Try another model
-                        </button>
+                        <p className="text-gray-500 text-lg mb-8">No products found for this selection.</p>
+                        <div className="space-y-4">
+                          <button
+                            onClick={() => setShowPartRequestForm(true)}
+                            className="w-full bg-[oklch(0.45_0.22_27)] text-white py-4 px-6 rounded-sm font-black uppercase tracking-widest hover:scale-105 transition-all flex items-center justify-center gap-3"
+                          >
+                            <MessageCircle size={20} />
+                            Request This Part
+                          </button>
+                          <button
+                            onClick={() => handleModelSelect(activeModel)}
+                            className="w-full text-[oklch(0.45_0.22_27)] font-black uppercase tracking-widest hover:underline py-2"
+                          >
+                            Try another model
+                          </button>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -459,6 +470,104 @@ export default function Products() {
             )}
           </div>
         </section>
+
+        {/* Part Request Form Modal */}
+        {showPartRequestForm && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[1000] p-4">
+            <div className="bg-white rounded-sm max-w-md w-full p-8 shadow-2xl">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tight">Request Part</h3>
+                <button onClick={() => setShowPartRequestForm(false)} className="text-gray-400 hover:text-gray-900">
+                  <X size={24} />
+                </button>
+              </div>
+
+              <p className="text-sm text-gray-600 mb-6">
+                Don't see what you're looking for? Fill in your details and we'll help you find the exact part you need.
+              </p>
+
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const message = `Hi Supreme Autoparts,\n\nI'm looking for a part:\n\nBrand: ${activeBrand}\nModel: ${activeModel}\nCategory: ${activeCategory}\nType: ${activeSubcategory}\n\nPart Description: ${requestFormData.partDescription}\n\nMy Details:\nName: ${requestFormData.name}\nEmail: ${requestFormData.email}\nPhone: ${requestFormData.phone}\n\nPlease let me know if you have this part in stock.`;
+                  const whatsappUrl = `https://wa.me/254714498451?text=${encodeURIComponent(message)}`;
+                  window.open(whatsappUrl, "_blank");
+                  setShowPartRequestForm(false);
+                  setRequestFormData({ name: "", email: "", phone: "", partDescription: "" });
+                }}
+                className="space-y-4"
+              >
+                <div>
+                  <label className="block text-sm font-semibold text-gray-900 mb-2">Your Name *</label>
+                  <input
+                    type="text"
+                    required
+                    value={requestFormData.name}
+                    onChange={(e) => setRequestFormData({ ...requestFormData, name: e.target.value })}
+                    placeholder="John Doe"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-[oklch(0.45_0.22_27)]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-900 mb-2">Email Address *</label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                    <input
+                      type="email"
+                      required
+                      value={requestFormData.email}
+                      onChange={(e) => setRequestFormData({ ...requestFormData, email: e.target.value })}
+                      placeholder="john@example.com"
+                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-[oklch(0.45_0.22_27)]"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-900 mb-2">Phone Number *</label>
+                  <div className="relative">
+                    <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                    <input
+                      type="tel"
+                      required
+                      value={requestFormData.phone}
+                      onChange={(e) => setRequestFormData({ ...requestFormData, phone: e.target.value })}
+                      placeholder="+254 7XX XXX XXX"
+                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-[oklch(0.45_0.22_27)]"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-900 mb-2">Part Description *</label>
+                  <textarea
+                    required
+                    value={requestFormData.partDescription}
+                    onChange={(e) => setRequestFormData({ ...requestFormData, partDescription: e.target.value })}
+                    placeholder="Describe the part you're looking for (e.g., OEM brake pads, specific model number, etc.)"
+                    rows={4}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-[oklch(0.45_0.22_27)] resize-none"
+                  />
+                </div>
+
+                <div className="bg-blue-50 border border-blue-200 p-4 rounded-sm">
+                  <p className="text-xs text-blue-900">
+                    <strong>Note:</strong> Clicking submit will open WhatsApp with your request. Our team will respond within 24 hours.
+                  </p>
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full bg-[oklch(0.45_0.22_27)] text-white py-3 px-4 rounded-sm font-black uppercase tracking-widest hover:scale-105 transition-all flex items-center justify-center gap-2"
+                >
+                  <MessageCircle size={18} />
+                  Send via WhatsApp
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
       </main>
       <Footer />
       <FloatingButtons />
