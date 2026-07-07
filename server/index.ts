@@ -196,6 +196,9 @@ let admins: Map<string, StoredAdmin> = new Map(
 let adminTokens: Map<string, string> = new Map(
   Object.entries(readStore<Record<string, string>>("admin_tokens.json", {}))
 );
+let discounts: Map<string, any> = new Map(
+  Object.entries(readStore<Record<string, any>>("discounts.json", {}))
+);
 
 const DEFAULT_SETTINGS: StoredSettings = {
   storeName: "Supreme Autoparts",
@@ -231,6 +234,7 @@ function saveProducts() { writeStore("products.json", Object.fromEntries(product
 function saveAdmins() { writeStore("admins.json", Object.fromEntries(admins)); }
 function saveAdminTokens() { writeStore("admin_tokens.json", Object.fromEntries(adminTokens)); }
 function saveSettings() { writeStore("settings.json", settings); }
+function saveDiscounts() { writeStore("discounts.json", Object.fromEntries(discounts)); }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 function generateToken() { return crypto.randomBytes(32).toString("hex"); }
@@ -979,6 +983,80 @@ async function startServer() {
     res.setHeader("Content-Type", "text/csv");
     res.setHeader("Content-Disposition", "attachment; filename=orders.csv");
     res.send(csv);
+  });
+
+  // ─── DISCOUNTS ─────────────────────────────────────────────────────────────
+  app.get("/api/admin/discounts", adminAuthMiddleware, (_req: any, res: Response) => {
+    res.json(Array.from(discounts.values()));
+  });
+
+  app.post("/api/admin/discounts", adminAuthMiddleware, (req: any, res: Response) => {
+    const id = crypto.randomUUID();
+    const discount = {
+      id,
+      code: (req.body.code || "").toUpperCase().trim(),
+      type: req.body.type || "percentage",
+      value: Number(req.body.value) || 0,
+      minOrder: Number(req.body.minOrder) || 0,
+      maxUses: req.body.maxUses ? Number(req.body.maxUses) : null,
+      expiresAt: req.body.expiresAt || null,
+      active: req.body.active !== false,
+      usedCount: 0,
+      totalSavings: 0,
+      createdAt: new Date().toISOString(),
+    };
+    if (!discount.code) return res.status(400).json({ error: "Code is required" });
+    discounts.set(id, discount);
+    saveDiscounts();
+    res.json(discount);
+  });
+
+  app.put("/api/admin/discounts/:id", adminAuthMiddleware, (req: any, res: Response) => {
+    const d = discounts.get(req.params.id);
+    if (!d) return res.status(404).json({ error: "Not found" });
+    const updated = { ...d, ...req.body };
+    discounts.set(req.params.id, updated);
+    saveDiscounts();
+    res.json(updated);
+  });
+
+  app.delete("/api/admin/discounts/:id", adminAuthMiddleware, (req: any, res: Response) => {
+    discounts.delete(req.params.id);
+    saveDiscounts();
+    res.json({ success: true });
+  });
+
+  // Validate discount code (public)
+  app.post("/api/discounts/validate", (req: Request, res: Response) => {
+    const { code, orderTotal } = req.body;
+    const d = Array.from(discounts.values()).find(d => d.code === (code || "").toUpperCase() && d.active);
+    if (!d) return res.status(404).json({ error: "Invalid discount code" });
+    if (d.expiresAt && new Date(d.expiresAt) < new Date()) return res.status(400).json({ error: "Discount code has expired" });
+    if (d.maxUses && d.usedCount >= d.maxUses) return res.status(400).json({ error: "Discount code has reached its usage limit" });
+    if (d.minOrder && orderTotal < d.minOrder) return res.status(400).json({ error: `Minimum order of KES ${d.minOrder.toLocaleString()} required` });
+    const savings = d.type === "percentage" ? Math.round(orderTotal * d.value / 100) : d.value;
+    res.json({ valid: true, discount: d, savings });
+  });
+
+  // ─── Customer status update ───────────────────────────────────────────────────
+  app.put("/api/admin/customers/:id/status", adminAuthMiddleware, (req: any, res: Response) => {
+    const user = users.get(req.params.id);
+    if (!user) return res.status(404).json({ error: "Not found" });
+    user.status = req.body.status;
+    users.set(req.params.id, user);
+    saveUsers();
+    res.json(user);
+  });
+
+  // ─── Refund status update ─────────────────────────────────────────────────────
+  app.put("/api/admin/refunds/:id/status", adminAuthMiddleware, (req: any, res: Response) => {
+    const refund = refunds.get(req.params.id);
+    if (!refund) return res.status(404).json({ error: "Not found" });
+    refund.status = req.body.status;
+    if (req.body.status === "approved") refund.resolvedAt = new Date().toISOString();
+    refunds.set(req.params.id, refund);
+    saveRefunds();
+    res.json(refund);
   });
 
   // ─── Static Files ──────────────────────────────────────────────────────────

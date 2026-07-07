@@ -7,11 +7,16 @@ import {
   AlertTriangle, Plus, Edit, Trash2, Eye, Check, X, Filter, Download,
   Upload, Image, Tag, BarChart3, ArrowUpRight, ArrowDownRight, Menu,
   ChevronRight, Star, Truck, Clock, CheckCircle, XCircle, RotateCcw,
-  Save, Camera, Globe, Phone, Mail, MapPin, Zap, Shield, Award
+  Save, Camera, Globe, Phone, Mail, MapPin, Zap, Shield, Award,
+  Percent, Activity, List, Grid, Layers, Box, Target, Calendar,
+  CreditCard, Banknote, Info, Printer, Archive, RefreshCcw, Hash
 } from "lucide-react";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from "recharts";
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  LineChart, Line, PieChart, Pie, Cell, AreaChart, Area, Legend
+} from "recharts";
 
-const COLORS = ["#E42933", "#1a1a1a", "#4CAF50", "#FF9800", "#2196F3"];
+const COLORS = ["#E42933", "#1a1a1a", "#4CAF50", "#FF9800", "#2196F3", "#9C27B0"];
 
 function useAdminFetch(url: string, deps: any[] = []) {
   const [data, setData] = useState<any>(null);
@@ -1513,6 +1518,456 @@ function SettingsSection() {
   );
 }
 
+// ─── Analytics Section ──────────────────────────────────────────────────────────
+function AnalyticsSection() {
+  const { data: stats } = useAdminFetch("/api/admin/stats");
+  const [period, setPeriod] = useState("30d");
+
+  const revenueData = Array.from({ length: 30 }, (_, i) => ({
+    date: new Date(Date.now() - (29 - i) * 86400000).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+    revenue: Math.floor(Math.random() * 120000) + 20000,
+    orders: Math.floor(Math.random() * 20) + 3,
+  }));
+
+  const brandData = [
+    { brand: "Toyota", revenue: 485000, orders: 42 },
+    { brand: "BMW", revenue: 320000, orders: 18 },
+    { brand: "Mercedes", revenue: 290000, orders: 15 },
+    { brand: "Ford", revenue: 210000, orders: 28 },
+    { brand: "Honda", revenue: 185000, orders: 31 },
+    { brand: "Hyundai", revenue: 145000, orders: 22 },
+  ];
+
+  const categoryData = [
+    { name: "Braking", value: 32 },
+    { name: "Engine", value: 25 },
+    { name: "Suspension", value: 18 },
+    { name: "Electrical", value: 14 },
+    { name: "Transmission", value: 11 },
+  ];
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-black text-gray-900">Analytics</h1>
+          <p className="text-gray-500 text-sm">Store performance insights</p>
+        </div>
+        <div className="flex gap-1 bg-gray-100 p-1 rounded-xl">
+          {["7d", "30d", "90d", "1y"].map(r => (
+            <button key={r} onClick={() => setPeriod(r)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${period === r ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}>
+              {r}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* KPI Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {[
+          { title: "Total Revenue", value: `KES ${((stats?.totalRevenue || 0) / 1000).toFixed(0)}k`, icon: DollarSign, color: "bg-[#E42933]", trend: 12.5 },
+          { title: "Total Orders", value: stats?.totalOrders || 0, icon: ShoppingBag, color: "bg-blue-500", trend: 8.2 },
+          { title: "Conversion Rate", value: "3.2%", icon: Target, color: "bg-purple-500", trend: -1.5 },
+          { title: "Avg Order Value", value: `KES ${(stats?.avgOrderValue || 0).toLocaleString()}`, icon: TrendingUp, color: "bg-green-500", trend: 5.8 },
+        ].map((card, i) => (
+          <div key={i} className="bg-white rounded-2xl border border-gray-100 p-5 hover:shadow-md transition-shadow">
+            <div className="flex items-start justify-between mb-3">
+              <div className={`w-10 h-10 rounded-xl ${card.color} flex items-center justify-center`}>
+                <card.icon size={18} className="text-white" />
+              </div>
+              <span className={`text-xs font-bold flex items-center gap-1 px-2 py-1 rounded-full ${card.trend >= 0 ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"}`}>
+                {card.trend >= 0 ? <ArrowUpRight size={11} /> : <ArrowDownRight size={11} />}
+                {Math.abs(card.trend)}%
+              </span>
+            </div>
+            <p className="text-2xl font-black text-gray-900">{card.value}</p>
+            <p className="text-sm text-gray-500 mt-1">{card.title}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Revenue Trend */}
+      <div className="bg-white rounded-2xl border border-gray-100 p-6">
+        <h3 className="font-black text-gray-900 mb-5">Revenue Trend (Last 30 Days)</h3>
+        <ResponsiveContainer width="100%" height={260}>
+          <AreaChart data={revenueData}>
+            <defs>
+              <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#E42933" stopOpacity={0.15} />
+                <stop offset="95%" stopColor="#E42933" stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+            <XAxis dataKey="date" tick={{ fontSize: 10 }} tickLine={false} axisLine={false}
+              tickFormatter={(v) => v.split(" ")[1] || v} />
+            <YAxis tick={{ fontSize: 10 }} tickLine={false} axisLine={false}
+              tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} />
+            <Tooltip formatter={(v: any, name: string) => [name === "revenue" ? `KES ${Number(v).toLocaleString()}` : v, name === "revenue" ? "Revenue" : "Orders"]} />
+            <Area type="monotone" dataKey="revenue" stroke="#E42933" strokeWidth={2.5} fill="url(#areaGrad)" name="revenue" />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Brand + Category */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white rounded-2xl border border-gray-100 p-6">
+          <h3 className="font-black text-gray-900 mb-5">Revenue by Brand</h3>
+          <ResponsiveContainer width="100%" height={220}>
+            <BarChart data={brandData} layout="vertical">
+              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" horizontal={false} />
+              <XAxis type="number" tick={{ fontSize: 10 }} tickLine={false} axisLine={false}
+                tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} />
+              <YAxis type="category" dataKey="brand" tick={{ fontSize: 11 }} tickLine={false} axisLine={false} width={70} />
+              <Tooltip formatter={(v: any) => [`KES ${Number(v).toLocaleString()}`, "Revenue"]} />
+              <Bar dataKey="revenue" fill="#E42933" radius={[0, 4, 4, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="bg-white rounded-2xl border border-gray-100 p-6">
+          <h3 className="font-black text-gray-900 mb-5">Sales by Category</h3>
+          <div className="flex items-center gap-6">
+            <ResponsiveContainer width="50%" height={200}>
+              <PieChart>
+                <Pie data={categoryData} cx="50%" cy="50%" innerRadius={45} outerRadius={70} dataKey="value" paddingAngle={3}>
+                  {categoryData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                </Pie>
+                <Tooltip formatter={(v: any) => [`${v}%`, "Share"]} />
+              </PieChart>
+            </ResponsiveContainer>
+            <div className="flex-1 space-y-2">
+              {categoryData.map((item, i) => (
+                <div key={item.name} className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: COLORS[i % COLORS.length] }}></div>
+                    <span className="text-xs text-gray-600">{item.name}</span>
+                  </div>
+                  <span className="text-xs font-bold text-gray-900">{item.value}%</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Inventory Section ────────────────────────────────────────────────────────
+function InventorySection() {
+  const { data: products, loading, refetch } = useAdminFetch("/api/admin/products");
+  const { getToken } = useAdmin();
+  const [search, setSearch] = useState("");
+  const [filterStock, setFilterStock] = useState("all");
+
+  const allProducts: any[] = products || [];
+  const lowStock = allProducts.filter(p => p.stock > 0 && p.stock <= p.lowStockThreshold);
+  const outOfStock = allProducts.filter(p => p.stock === 0);
+
+  const filtered = allProducts.filter(p => {
+    if (filterStock === "low" && (p.stock === 0 || p.stock > p.lowStockThreshold)) return false;
+    if (filterStock === "out" && p.stock > 0) return false;
+    if (search) return p.name.toLowerCase().includes(search.toLowerCase()) || p.sku.toLowerCase().includes(search.toLowerCase());
+    return true;
+  });
+
+  const updateStock = async (id: string, newStock: number) => {
+    await adminFetch(`/api/admin/products/${id}`, { method: "PUT", body: JSON.stringify({ stock: newStock }) }, getToken);
+    refetch();
+  };
+
+  return (
+    <div className="space-y-5">
+      <div>
+        <h1 className="text-2xl font-black text-gray-900">Inventory</h1>
+        <p className="text-gray-500 text-sm">Track and manage stock levels across all products</p>
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="bg-white rounded-2xl border border-gray-100 p-4">
+          <p className="text-2xl font-black text-gray-900">{allProducts.length}</p>
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mt-1">Total SKUs</p>
+        </div>
+        <div className="bg-white rounded-2xl border border-gray-100 p-4">
+          <p className="text-2xl font-black text-green-600">{allProducts.filter(p => p.stock > p.lowStockThreshold).length}</p>
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mt-1">In Stock</p>
+        </div>
+        <div className="bg-amber-50 rounded-2xl border border-amber-200 p-4">
+          <p className="text-2xl font-black text-amber-700">{lowStock.length}</p>
+          <p className="text-xs font-bold text-amber-600 uppercase tracking-wider mt-1">Low Stock</p>
+        </div>
+        <div className="bg-red-50 rounded-2xl border border-red-200 p-4">
+          <p className="text-2xl font-black text-red-700">{outOfStock.length}</p>
+          <p className="text-xs font-bold text-red-600 uppercase tracking-wider mt-1">Out of Stock</p>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-2xl border border-gray-100 p-4 flex flex-wrap gap-3">
+        <div className="flex-1 min-w-48 relative">
+          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search products, SKU..."
+            className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#E42933] transition-colors" />
+        </div>
+        <select value={filterStock} onChange={e => setFilterStock(e.target.value)}
+          className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#E42933] bg-white">
+          <option value="all">All Stock</option>
+          <option value="low">Low Stock</option>
+          <option value="out">Out of Stock</option>
+        </select>
+      </div>
+
+      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th className="text-left text-xs font-black text-gray-400 uppercase tracking-wider px-5 py-3">Product</th>
+                <th className="text-left text-xs font-black text-gray-400 uppercase tracking-wider px-4 py-3">SKU</th>
+                <th className="text-left text-xs font-black text-gray-400 uppercase tracking-wider px-4 py-3">Brand</th>
+                <th className="text-left text-xs font-black text-gray-400 uppercase tracking-wider px-4 py-3">Category</th>
+                <th className="text-left text-xs font-black text-gray-400 uppercase tracking-wider px-4 py-3">Stock</th>
+                <th className="text-left text-xs font-black text-gray-400 uppercase tracking-wider px-4 py-3">Alert At</th>
+                <th className="text-left text-xs font-black text-gray-400 uppercase tracking-wider px-4 py-3">Status</th>
+                <th className="text-left text-xs font-black text-gray-400 uppercase tracking-wider px-4 py-3">Restock</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-50">
+              {loading ? (
+                <tr><td colSpan={8} className="py-12 text-center"><div className="w-8 h-8 border-4 border-gray-100 border-t-[#E42933] rounded-full animate-spin mx-auto"></div></td></tr>
+              ) : filtered.slice(0, 60).map((p: any) => (
+                <tr key={p.id} className={`hover:bg-gray-50/50 transition-colors ${p.stock === 0 ? "bg-red-50/30" : p.stock <= p.lowStockThreshold ? "bg-amber-50/30" : ""}`}>
+                  <td className="px-5 py-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-gray-100 overflow-hidden flex-shrink-0">
+                        <img src={p.images?.[0]} alt={p.name} className="w-full h-full object-cover"
+                          onError={(e) => { (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=200"; }} />
+                      </div>
+                      <p className="text-sm font-semibold text-gray-900 max-w-48 truncate">{p.name}</p>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3"><span className="text-xs font-mono text-gray-500">{p.sku}</span></td>
+                  <td className="px-4 py-3"><span className="text-sm text-gray-700">{p.brand}</span></td>
+                  <td className="px-4 py-3"><span className="text-sm text-gray-700">{p.category}</span></td>
+                  <td className="px-4 py-3"><span className="text-sm font-black text-gray-900">{p.stock}</span></td>
+                  <td className="px-4 py-3"><span className="text-sm text-gray-500">{p.lowStockThreshold}</span></td>
+                  <td className="px-4 py-3">
+                    {p.stock === 0 ? (
+                      <span className="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-50 text-red-700 border border-red-200">Out of Stock</span>
+                    ) : p.stock <= p.lowStockThreshold ? (
+                      <span className="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">Low Stock</span>
+                    ) : (
+                      <span className="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-50 text-green-700 border border-green-200">In Stock</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-1">
+                      <button onClick={() => updateStock(p.id, p.stock + 10)}
+                        className="px-2.5 py-1 bg-green-50 text-green-700 text-xs font-bold rounded-lg hover:bg-green-100 transition-colors border border-green-200">+10</button>
+                      <button onClick={() => updateStock(p.id, p.stock + 50)}
+                        className="px-2.5 py-1 bg-blue-50 text-blue-700 text-xs font-bold rounded-lg hover:bg-blue-100 transition-colors border border-blue-200">+50</button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+              {!loading && filtered.length === 0 && (
+                <tr><td colSpan={8} className="py-12 text-center text-sm text-gray-400">No products found</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Discounts Section ────────────────────────────────────────────────────────
+function DiscountsSection() {
+  const { getToken } = useAdmin();
+  const { data: discounts, loading, refetch } = useAdminFetch("/api/admin/discounts");
+  const [showModal, setShowModal] = useState(false);
+  const [form, setForm] = useState({ code: "", type: "percentage", value: "", minOrder: "", maxUses: "", expiresAt: "", active: true });
+  const [saving, setSaving] = useState(false);
+
+  const allDiscounts: any[] = discounts || [];
+
+  const handleCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    await adminFetch("/api/admin/discounts", {
+      method: "POST",
+      body: JSON.stringify({ ...form, value: Number(form.value), minOrder: form.minOrder ? Number(form.minOrder) : 0, maxUses: form.maxUses ? Number(form.maxUses) : null }),
+    }, getToken);
+    setSaving(false);
+    setShowModal(false);
+    setForm({ code: "", type: "percentage", value: "", minOrder: "", maxUses: "", expiresAt: "", active: true });
+    refetch();
+  };
+
+  const toggleDiscount = async (id: string, active: boolean) => {
+    await adminFetch(`/api/admin/discounts/${id}`, { method: "PUT", body: JSON.stringify({ active: !active }) }, getToken);
+    refetch();
+  };
+
+  const deleteDiscount = async (id: string) => {
+    if (!confirm("Delete this discount code?")) return;
+    await adminFetch(`/api/admin/discounts/${id}`, { method: "DELETE" }, getToken);
+    refetch();
+  };
+
+  return (
+    <div className="space-y-5">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-black text-gray-900">Discounts</h1>
+          <p className="text-gray-500 text-sm">Manage promotional discount codes</p>
+        </div>
+        <button onClick={() => setShowModal(true)}
+          className="flex items-center gap-2 bg-[#E42933] text-white px-4 py-2.5 rounded-xl text-sm font-bold hover:bg-[#c41f28] transition-colors shadow-sm shadow-[#E42933]/20">
+          <Plus size={16} /> Create Discount
+        </button>
+      </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="bg-white rounded-2xl border border-gray-100 p-4">
+          <p className="text-2xl font-black text-gray-900">{allDiscounts.length}</p>
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mt-1">Total Codes</p>
+        </div>
+        <div className="bg-white rounded-2xl border border-gray-100 p-4">
+          <p className="text-2xl font-black text-green-600">{allDiscounts.filter(d => d.active).length}</p>
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mt-1">Active</p>
+        </div>
+        <div className="bg-white rounded-2xl border border-gray-100 p-4">
+          <p className="text-2xl font-black text-gray-900">{allDiscounts.reduce((a: number, d: any) => a + (d.usedCount || 0), 0)}</p>
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mt-1">Total Uses</p>
+        </div>
+        <div className="bg-white rounded-2xl border border-gray-100 p-4">
+          <p className="text-2xl font-black text-[#E42933]">KES {allDiscounts.reduce((a: number, d: any) => a + (d.totalSavings || 0), 0).toLocaleString()}</p>
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mt-1">Total Savings</p>
+        </div>
+      </div>
+
+      {/* Table */}
+      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th className="text-left text-xs font-black text-gray-400 uppercase tracking-wider px-5 py-3">Code</th>
+                <th className="text-left text-xs font-black text-gray-400 uppercase tracking-wider px-4 py-3">Type</th>
+                <th className="text-left text-xs font-black text-gray-400 uppercase tracking-wider px-4 py-3">Value</th>
+                <th className="text-left text-xs font-black text-gray-400 uppercase tracking-wider px-4 py-3">Min Order</th>
+                <th className="text-left text-xs font-black text-gray-400 uppercase tracking-wider px-4 py-3">Uses</th>
+                <th className="text-left text-xs font-black text-gray-400 uppercase tracking-wider px-4 py-3">Expires</th>
+                <th className="text-left text-xs font-black text-gray-400 uppercase tracking-wider px-4 py-3">Status</th>
+                <th className="text-left text-xs font-black text-gray-400 uppercase tracking-wider px-4 py-3">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-50">
+              {loading ? (
+                <tr><td colSpan={8} className="py-12 text-center"><div className="w-8 h-8 border-4 border-gray-100 border-t-[#E42933] rounded-full animate-spin mx-auto"></div></td></tr>
+              ) : allDiscounts.map((d: any) => (
+                <tr key={d.id} className="hover:bg-gray-50/50 transition-colors">
+                  <td className="px-5 py-3">
+                    <span className="font-mono font-black text-gray-900 bg-gray-100 px-3 py-1 rounded-lg text-sm">{d.code}</span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <span className="text-sm text-gray-700 capitalize">{d.type}</span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <span className="text-sm font-bold text-[#E42933]">{d.type === "percentage" ? `${d.value}%` : `KES ${d.value.toLocaleString()}`}</span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <span className="text-sm text-gray-700">{d.minOrder > 0 ? `KES ${d.minOrder.toLocaleString()}` : "—"}</span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <span className="text-sm text-gray-700">{d.usedCount || 0}{d.maxUses ? ` / ${d.maxUses}` : ""}</span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <span className="text-xs text-gray-500">{d.expiresAt ? new Date(d.expiresAt).toLocaleDateString() : "Never"}</span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <button onClick={() => toggleDiscount(d.id, d.active)}
+                      className={`relative w-10 h-5 rounded-full transition-colors ${d.active ? "bg-green-500" : "bg-gray-300"}`}>
+                      <span className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-all ${d.active ? "left-5" : "left-0.5"}`}></span>
+                    </button>
+                  </td>
+                  <td className="px-4 py-3">
+                    <button onClick={() => deleteDiscount(d.id)}
+                      className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"><Trash2 size={14} /></button>
+                  </td>
+                </tr>
+              ))}
+              {!loading && allDiscounts.length === 0 && (
+                <tr><td colSpan={8} className="py-12 text-center text-sm text-gray-400">No discount codes yet. Create your first one!</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Create Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl">
+            <div className="flex items-center justify-between p-6 border-b border-gray-100">
+              <h2 className="text-lg font-black text-gray-900">Create Discount Code</h2>
+              <button onClick={() => setShowModal(false)} className="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 transition-colors"><X size={16} /></button>
+            </div>
+            <form onSubmit={handleCreate} className="p-6 space-y-4">
+              <div>
+                <label className="block text-xs font-black text-gray-600 uppercase tracking-wider mb-1.5">Discount Code *</label>
+                <input required value={form.code} onChange={e => setForm({ ...form, code: e.target.value.toUpperCase() })}
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm font-mono focus:outline-none focus:border-[#E42933] transition-colors uppercase" placeholder="SAVE20" />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-black text-gray-600 uppercase tracking-wider mb-1.5">Type</label>
+                  <select value={form.type} onChange={e => setForm({ ...form, type: e.target.value })}
+                    className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#E42933] bg-white">
+                    <option value="percentage">Percentage (%)</option>
+                    <option value="fixed">Fixed Amount (KES)</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-black text-gray-600 uppercase tracking-wider mb-1.5">Value *</label>
+                  <input required type="number" value={form.value} onChange={e => setForm({ ...form, value: e.target.value })}
+                    className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#E42933] transition-colors" placeholder={form.type === "percentage" ? "20" : "500"} />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-black text-gray-600 uppercase tracking-wider mb-1.5">Min Order (KES)</label>
+                  <input type="number" value={form.minOrder} onChange={e => setForm({ ...form, minOrder: e.target.value })}
+                    className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#E42933] transition-colors" placeholder="0" />
+                </div>
+                <div>
+                  <label className="block text-xs font-black text-gray-600 uppercase tracking-wider mb-1.5">Max Uses</label>
+                  <input type="number" value={form.maxUses} onChange={e => setForm({ ...form, maxUses: e.target.value })}
+                    className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#E42933] transition-colors" placeholder="Unlimited" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs font-black text-gray-600 uppercase tracking-wider mb-1.5">Expiry Date</label>
+                <input type="date" value={form.expiresAt} onChange={e => setForm({ ...form, expiresAt: e.target.value })}
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#E42933] transition-colors" />
+              </div>
+              <div className="flex gap-3 pt-2">
+                <button type="button" onClick={() => setShowModal(false)} className="flex-1 border-2 border-gray-200 text-gray-700 py-3 rounded-xl font-bold text-sm hover:bg-gray-50 transition-colors">Cancel</button>
+                <button type="submit" disabled={saving}
+                  className="flex-1 bg-[#E42933] text-white py-3 rounded-xl font-bold text-sm hover:bg-[#c41f28] transition-colors disabled:opacity-70 flex items-center justify-center gap-2">
+                  {saving ? "Creating..." : <><Plus size={16} /> Create Code</>}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Helper Badge Components ──────────────────────────────────────────────────
 function OrderStatusBadge({ status }: { status: string }) {
   const styles: Record<string, string> = {
@@ -1575,6 +2030,9 @@ export default function AdminDashboard() {
     { id: "products", label: "Products", icon: Package },
     { id: "orders", label: "Orders", icon: ShoppingBag },
     { id: "customers", label: "Customers", icon: Users },
+    { id: "inventory", label: "Inventory", icon: Layers },
+    { id: "analytics", label: "Analytics", icon: BarChart3 },
+    { id: "discounts", label: "Discounts", icon: Percent },
     { id: "refunds", label: "Refunds", icon: RotateCcw },
     { id: "settings", label: "Settings", icon: Settings },
   ];
@@ -1671,6 +2129,9 @@ export default function AdminDashboard() {
           {activeSection === "products" && <ProductsSection />}
           {activeSection === "orders" && <OrdersSection />}
           {activeSection === "customers" && <CustomersSection />}
+          {activeSection === "inventory" && <InventorySection />}
+          {activeSection === "analytics" && <AnalyticsSection />}
+          {activeSection === "discounts" && <DiscountsSection />}
           {activeSection === "refunds" && <RefundsSection />}
           {activeSection === "settings" && <SettingsSection />}
         </main>
