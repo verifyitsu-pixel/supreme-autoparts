@@ -15,8 +15,8 @@ import Order from "./pages/Order";
 import Terms from "./pages/Terms";
 import RefundPolicy from "./pages/RefundPolicy";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import LoginNew from "./pages/LoginNew";
+import RegisterNew from "./pages/RegisterNew";
 import Dashboard from "./pages/Dashboard";
 import Cart from "./pages/Cart";
 import Returns from "./pages/Returns";
@@ -33,8 +33,8 @@ function Router() {
       <Route path="/products" component={Products} />
       <Route path="/order" component={Order} />
       <Route path="/brands" component={Brands} />
-      <Route path="/login" component={Login} />
-      <Route path="/register" component={Register} />
+      <Route path="/login" component={LoginNew} />
+      <Route path="/register" component={RegisterNew} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/cart" component={Cart} />
       <Route path="/returns" component={Returns} />

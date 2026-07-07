@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Navbar, Footer, FloatingButtons } from "@/components/Layout";
+import { Navbar, Footer } from "@/components/NavbarNew";
+import { FloatingButtons } from "@/components/Layout";
 import { Link, useLocation } from "wouter";
 import { useCart } from "@/contexts/CartContext";
 import { Search, Filter, X, ChevronRight, ShieldCheck, Truck, Clock, Car, Settings2, ArrowRight, LayoutGrid, CheckCircle2, MessageSquare, Mail, ShoppingCart } from "lucide-react";

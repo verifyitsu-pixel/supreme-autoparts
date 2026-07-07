@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { Navbar, Footer } from "@/components/Layout";
+import { Navbar, Footer } from "@/components/NavbarNew";
 import { Mail, ArrowRight, Loader2, CheckCircle } from "lucide-react";
 
 export default function ForgotPassword() {

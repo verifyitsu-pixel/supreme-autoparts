@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLocation } from "wouter";
-import { Navbar, Footer } from "@/components/Layout";
+import { Navbar, Footer } from "@/components/NavbarNew";
 import {
   Trash2,
   Plus,

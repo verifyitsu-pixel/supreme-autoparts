@@ -1,6 +1,7 @@
-import { Navbar, Footer, FloatingButtons } from "@/components/Layout";
 import { Link } from "wouter";
 import { ArrowRight, ShieldCheck, Truck, Clock, Award, ChevronRight, Star, Zap, Settings2 } from "lucide-react";
+import { Navbar, Footer } from "@/components/NavbarNew";
+import { FloatingButtons } from "@/components/Layout";
 
 const FEATURED_CATEGORIES = [
   { name: "Braking Systems", img: "/assets/images/categories/braking.jpg", count: "240+ Parts" },

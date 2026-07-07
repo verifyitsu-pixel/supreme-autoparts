@@ -1,4 +1,5 @@
-import { Navbar, Footer, FloatingButtons } from "@/components/Layout";
+import { Navbar, Footer } from "@/components/NavbarNew";
+import { FloatingButtons } from "@/components/Layout";
 import { Link } from "wouter";
 
 export default function RefundPolicy() {

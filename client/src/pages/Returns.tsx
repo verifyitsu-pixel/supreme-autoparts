@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLocation } from "wouter";
-import { Navbar, Footer } from "@/components/Layout";
+import { Navbar, Footer } from "@/components/NavbarNew";
 import {
   RotateCcw,
   Upload,

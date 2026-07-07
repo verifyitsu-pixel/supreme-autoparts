@@ -1,4 +1,5 @@
-import { Navbar, Footer, FloatingButtons } from "@/components/Layout";
+import { Navbar, Footer } from "@/components/NavbarNew";
+import { FloatingButtons } from "@/components/Layout";
 import { ShieldCheck, Users, Truck, Award, CheckCircle2, Settings, History, Globe } from "lucide-react";
 
 export default function About() {

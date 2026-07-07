@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Navbar, Footer, FloatingButtons } from "@/components/Layout";
+import { Navbar, Footer } from "@/components/NavbarNew";
+import { FloatingButtons } from "@/components/Layout";
 import { Link, useLocation } from "wouter";
 import { Send, CheckCircle2, ShieldCheck, Truck, Clock, ChevronLeft } from "lucide-react";
 

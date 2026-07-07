@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Navbar, Footer, FloatingButtons } from "@/components/Layout";
+import { Navbar, Footer } from "@/components/NavbarNew";
+import { FloatingButtons } from "@/components/Layout";
 import { Phone, Mail, MapPin, Clock, Send, ShieldCheck, MessageCircle } from "lucide-react";
 
 export default function Contact() {
