@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
+import { useAuth } from "@/contexts/AuthContext";
 import { 
   Phone, Mail, MapPin, Instagram, Facebook, Twitter, 
   ChevronDown, X, ShieldCheck, Truck, Clock, Award,
@@ -11,6 +12,7 @@ export function Navbar() {
   const [location] = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -51,6 +53,17 @@ export function Navbar() {
           <Link href="/products" className="hidden md:flex items-center gap-3 bg-[#E42933] text-white px-8 py-3 rounded-sm text-[10px] font-black uppercase tracking-widest hover:bg-gray-900 transition-all shadow-xl hover:shadow-2xl hover:scale-105">
             Browse Parts <ArrowRight size={14} />
           </Link>
+          {user ? (
+            <Link href="/dashboard" className={`hidden md:flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${isScrolled ? "text-gray-700 hover:bg-gray-100" : "text-white hover:bg-white/10"}`}>
+              <User size={18} />
+              <span className="text-xs font-semibold">{user.name.split(' ')[0]}</span>
+            </Link>
+          ) : (
+            <Link href="/login" className={`hidden md:flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${isScrolled ? "text-gray-700 hover:bg-gray-100" : "text-white hover:bg-white/10"}`}>
+              <User size={18} />
+              <span className="text-xs font-semibold">Sign In</span>
+            </Link>
+          )}
           <button onClick={() => setMobileMenuOpen(true)} className={`lg:hidden transition-colors duration-300 ${isScrolled ? "text-gray-700" : "text-white"}`}><Menu size={24} /></button>
         </div>
       </div>
@@ -62,7 +75,7 @@ export function Navbar() {
             <img src="/assets/images/logo-horizontal.png" alt="Supreme Autoparts" className="h-12" />
             <button onClick={() => setMobileMenuOpen(false)} className="text-white hover:text-[#E42933] transition-colors"><X size={32} /></button>
           </div>
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-8 flex-1">
             {[
               { name: "Products", path: "/products" },
               { name: "About", path: "/about" },
@@ -78,6 +91,27 @@ export function Navbar() {
                 {item.name}
               </Link>
             ))}
+          </div>
+          <div className="border-t border-gray-700 pt-8 mt-8">
+            {user ? (
+              <>
+                <Link href="/dashboard" className="block text-white text-lg font-black uppercase tracking-tighter hover:text-[#E42933] transition-colors mb-4">
+                  Dashboard
+                </Link>
+                <Link href="/" onClick={() => setMobileMenuOpen(false)} className="block text-gray-400 text-lg font-black uppercase tracking-tighter hover:text-[#E42933] transition-colors">
+                  Sign Out
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="block text-white text-lg font-black uppercase tracking-tighter hover:text-[#E42933] transition-colors mb-4">
+                  Sign In
+                </Link>
+                <Link href="/register" onClick={() => setMobileMenuOpen(false)} className="block text-gray-400 text-lg font-black uppercase tracking-tighter hover:text-[#E42933] transition-colors">
+                  Create Account
+                </Link>
+              </>
+            )}
           </div>
         </div>
       )}
