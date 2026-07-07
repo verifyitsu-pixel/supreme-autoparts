@@ -1,140 +1,140 @@
-import { useState, useEffect } from "react";
-import { Navbar, Footer } from "@/components/NavbarNew";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "wouter";
-import { useCart } from "@/contexts/CartContext";
-import {
-  Search, X, ChevronRight, Star, ShoppingCart, Heart,
-  Grid, List, SlidersHorizontal, Check, Package, ArrowLeft,
-  Car, Wrench, Zap, Shield
+import { 
+  ChevronRight, 
+  Search, 
+  Car, 
+  Wrench, 
+  Zap, 
+  Shield, 
+  ArrowLeft, 
+  SlidersHorizontal, 
+  LayoutGrid, 
+  List as ListIcon,
+  ShoppingCart,
+  Filter
 } from "lucide-react";
+import { Navbar, Footer } from "@/components/NavbarNew";
+import { useCart } from "@/contexts/CartContext";
+import { motion, AnimatePresence } from "framer-motion";
 
-// ─── REAL BRAND LOGOS ─────────────────────────────────────────────────────────
-const BRAND_DATA: Record<string, { logo: string; color: string; country: string }> = {
-  "Toyota": {
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Toyota_carlogo.svg/200px-Toyota_carlogo.svg.png",
-    color: "#EB0A1E",
-    country: "Japan"
+// ─── BRAND DATA ───────────────────────────────────────────────────────────────
+const BRAND_DATA: Record<string, { logo: string; country: string }> = {
+  "Toyota": { 
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Toyota_carlogo.svg/1200px-Toyota_carlogo.svg.png", 
+    country: "Japan" 
   },
-  "BMW": {
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/BMW.svg/200px-BMW.svg.png",
-    color: "#0066B1",
-    country: "Germany"
+  "BMW": { 
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/BMW.svg/1200px-BMW.svg.png", 
+    country: "Germany" 
   },
-  "Mercedes-Benz": {
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Mercedes-Logo.svg/200px-Mercedes-Logo.svg.png",
-    color: "#333333",
-    country: "Germany"
+  "Mercedes-Benz": { 
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Mercedes-Benz_logo%2C_2010.svg/1200px-Mercedes-Benz_logo%2C_2010.svg.png", 
+    country: "Germany" 
   },
-  "Honda": {
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Honda_Logo.svg/200px-Honda_Logo.svg.png",
-    color: "#CC0000",
-    country: "Japan"
+  "Honda": { 
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Honda_Logo.svg/1200px-Honda_Logo.svg.png", 
+    country: "Japan" 
   },
-  "Ford": {
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Ford_logo_flat.svg/200px-Ford_logo_flat.svg.png",
-    color: "#003478",
-    country: "USA"
+  "Ford": { 
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Ford_logo.svg/1200px-Ford_logo.svg.png", 
+    country: "USA" 
   },
-  "Hyundai": {
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Hyundai_Motor_Company_logo.svg/200px-Hyundai_Motor_Company_logo.svg.png",
-    color: "#002C5F",
-    country: "South Korea"
+  "Hyundai": { 
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Hyundai_Motor_Company_logo.svg/1200px-Hyundai_Motor_Company_logo.svg.png", 
+    country: "South Korea" 
   },
-  "Suzuki": {
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Suzuki_logo_2.svg/200px-Suzuki_logo_2.svg.png",
-    color: "#1A4C8B",
-    country: "Japan"
+  "Suzuki": { 
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Suzuki_logo_2.svg/1200px-Suzuki_logo_2.svg.png", 
+    country: "Japan" 
   },
-  "Lexus": {
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Lexus_division_emblem.svg/200px-Lexus_division_emblem.svg.png",
-    color: "#1A1A1A",
-    country: "Japan"
+  "Lexus": { 
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Lexus_division_logo.svg/1200px-Lexus_division_logo.svg.png", 
+    country: "Japan" 
   },
-  "Nissan": {
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Nissan_2020_logo.svg/200px-Nissan_2020_logo.svg.png",
-    color: "#C3002F",
-    country: "Japan"
+  "Nissan": { 
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Nissan_logo.svg/1200px-Nissan_logo.svg.png", 
+    country: "Japan" 
   },
-  "Mitsubishi": {
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Mitsubishi_logo.svg/200px-Mitsubishi_logo.svg.png",
-    color: "#CC0000",
-    country: "Japan"
+  "Mitsubishi": { 
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Mitsubishi_logo.svg/1200px-Mitsubishi_logo.svg.png", 
+    country: "Japan" 
   },
 };
 
-// ─── REAL CAR MODEL IMAGES ────────────────────────────────────────────────────
+// ─── REAL CAR MODEL IMAGES (HUMAN-TAKEN PHOTOGRAPHS) ──────────────────────────
 const VEHICLE_MODELS: Record<string, { name: string; img: string; year: string; type: string }[]> = {
   "Toyota": [
-    { name: "Hilux (Vigo/Revo)", img: "https://images.toyota-europe.com/eu/hilux/0/exterior/front-view.jpg", year: "2005–2024", type: "Pickup Truck" },
-    { name: "Fielder", img: "https://m.media-amazon.com/images/I/71Yw5TCcPLL._AC_SL1500_.jpg", year: "2006–2021", type: "Station Wagon" },
-    { name: "Corolla", img: "https://images.toyota-europe.com/eu/corolla/0/exterior/front-view.jpg", year: "2000–2024", type: "Sedan" },
-    { name: "Prado (J120/J150)", img: "https://images.toyota-europe.com/eu/land-cruiser-prado/0/exterior/front-view.jpg", year: "2002–2024", type: "SUV" },
-    { name: "Vitz", img: "https://images.toyota-europe.com/eu/yaris/0/exterior/front-view.jpg", year: "2005–2020", type: "Hatchback" },
-    { name: "Land Cruiser (V8/300)", img: "https://images.toyota-europe.com/eu/land-cruiser/0/exterior/front-view.jpg", year: "2007–2024", type: "Full-Size SUV" },
-    { name: "Harrier", img: "https://images.toyota-europe.com/eu/rav4/0/exterior/front-view.jpg", year: "2013–2024", type: "Crossover SUV" },
-    { name: "Hiace", img: "https://images.toyota-europe.com/eu/proace/0/exterior/front-view.jpg", year: "2005–2024", type: "Van" },
+    { name: "Hilux (Vigo/Revo)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/2018_Toyota_Hilux_Invincible_X_D-4D_4WD_2.4_Front.jpg/1200px-2018_Toyota_Hilux_Invincible_X_D-4D_4WD_2.4_Front.jpg", year: "2005–2024", type: "Pickup Truck" },
+    { name: "Fielder", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Toyota_Corolla_Fielder_1.5X_2012_%2814881387690%29.jpg/1200px-Toyota_Corolla_Fielder_1.5X_2012_%2814881387690%29.jpg", year: "2006–2021", type: "Station Wagon" },
+    { name: "Corolla", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/2019_Toyota_Corolla_Icon_Tech_VVT-i_Hybrid_1.8_Front.jpg/1200px-2019_Toyota_Corolla_Icon_Tech_VVT-i_Hybrid_1.8_Front.jpg", year: "2000–2024", type: "Sedan" },
+    { name: "Prado (J120/J150)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/2018_Toyota_Land_Cruiser_Prado_VXL_Front.jpg/1200px-2018_Toyota_Land_Cruiser_Prado_VXL_Front.jpg", year: "2002–2024", type: "SUV" },
+    { name: "Vitz", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/2017_Toyota_Yaris_Icon_Tech_VVT-i_Hybrid_1.5_Front.jpg/1200px-2017_Toyota_Yaris_Icon_Tech_VVT-i_Hybrid_1.5_Front.jpg", year: "2005–2020", type: "Hatchback" },
+    { name: "Land Cruiser (V8/300)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Toyota_Land_Cruiser_V8_2012.jpg/1200px-Toyota_Land_Cruiser_V8_2012.jpg", year: "2007–2024", type: "Full-Size SUV" },
+    { name: "Harrier", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Toyota_Harrier_Hybrid_Z_2020_Front.jpg/1200px-Toyota_Harrier_Hybrid_Z_2020_Front.jpg", year: "2013–2024", type: "Crossover SUV" },
+    { name: "Hiace", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Toyota_Hiace_V_LWB_Front.jpg/1200px-Toyota_Hiace_V_LWB_Front.jpg", year: "2005–2024", type: "Van" },
   ],
   "BMW": [
-    { name: "3 Series (E90/F30/G20)", img: "https://www.bmw.co.ke/content/dam/bmw/common/all-models/3-series/sedan/2022/navigation/bmw-3-series-sedan-lci-modelfinder.png", year: "2005–2024", type: "Sedan" },
-    { name: "5 Series (F10/G30)", img: "https://www.bmw.co.ke/content/dam/bmw/common/all-models/5-series/sedan/2023/navigation/bmw-5-series-sedan-modelfinder.png", year: "2010–2024", type: "Sedan" },
-    { name: "7 Series (F01/G11)", img: "https://www.bmw.co.ke/content/dam/bmw/common/all-models/7-series/sedan/2022/navigation/bmw-7-series-sedan-modelfinder.png", year: "2008–2024", type: "Luxury Sedan" },
-    { name: "X3 (F25/G01)", img: "https://www.bmw.co.ke/content/dam/bmw/common/all-models/x-series/x3/2021/navigation/bmw-x3-modelfinder.png", year: "2010–2024", type: "Compact SUV" },
-    { name: "X5 (E70/F15/G05)", img: "https://www.bmw.co.ke/content/dam/bmw/common/all-models/x-series/x5/2023/navigation/bmw-x5-modelfinder.png", year: "2006–2024", type: "Mid-Size SUV" },
-    { name: "X6 (F16/G06)", img: "https://www.bmw.co.ke/content/dam/bmw/common/all-models/x-series/x6/2023/navigation/bmw-x6-modelfinder.png", year: "2014–2024", type: "Sports SAV" },
+    { name: "3 Series (E90/F30/G20)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/2019_BMW_330i_M_Sport_Automatic_2.0_Front.jpg/1200px-2019_BMW_330i_M_Sport_Automatic_2.0_Front.jpg", year: "2005–2024", type: "Sedan" },
+    { name: "5 Series (F10/G30)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/2017_BMW_520d_M_Sport_Automatic_2.0_Front.jpg/1200px-2017_BMW_520d_M_Sport_Automatic_2.0_Front.jpg", year: "2010–2024", type: "Sedan" },
+    { name: "7 Series (F01/G11)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/2019_BMW_745Le_xDrive_M_Sport_Automatic_3.0_Front.jpg/1200px-2019_BMW_745Le_xDrive_M_Sport_Automatic_3.0_Front.jpg", year: "2008–2024", type: "Luxury Sedan" },
+    { name: "X3 (F25/G01)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/2018_BMW_X3_xDrive20d_M_Sport_2.0_Front.jpg/1200px-2018_BMW_X3_xDrive20d_M_Sport_2.0_Front.jpg", year: "2010–2024", type: "Compact SUV" },
+    { name: "X5 (E70/F15/G05)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/2019_BMW_X5_xDrive30d_M_Sport_Automatic_3.0_Front.jpg/1200px-2019_BMW_X5_xDrive30d_M_Sport_Automatic_3.0_Front.jpg", year: "2006–2024", type: "Mid-Size SUV" },
+    { name: "X6 (F16/G06)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/2020_BMW_X6_xDrive30d_M_Sport_Automatic_3.0_Front.jpg/1200px-2020_BMW_X6_xDrive30d_M_Sport_Automatic_3.0_Front.jpg", year: "2014–2024", type: "Sports SAV" },
   ],
   "Mercedes-Benz": [
-    { name: "C-Class (W204/W205/W206)", img: "https://www.mercedes-benz.co.ke/passengercars/models/saloon/c-class/overview/_jcr_content/root/responsivegrid/tabs/tabitem/simple_teaser/simple_teaser_item/image.component.dam_ts.1691584824584.jpg/mercedes-benz-c-class-w206-saloon-exterior-960x540-08-2021.jpg", year: "2007–2024", type: "Sedan" },
-    { name: "S550 (W221/W222)", img: "https://www.mercedes-benz.co.ke/passengercars/models/saloon/s-class/overview/_jcr_content/root/responsivegrid/tabs/tabitem/simple_teaser/simple_teaser_item/image.component.dam_ts.1691584824584.jpg/mercedes-benz-s-class-w223-saloon-exterior-960x540-08-2021.jpg", year: "2005–2024", type: "Luxury Sedan" },
-    { name: "E-Class (W212/W213)", img: "https://www.mercedes-benz.co.ke/passengercars/models/saloon/e-class/overview/_jcr_content/root/responsivegrid/tabs/tabitem/simple_teaser/simple_teaser_item/image.component.dam_ts.1691584824584.jpg/mercedes-benz-e-class-w213-saloon-exterior-960x540-08-2021.jpg", year: "2009–2024", type: "Sedan" },
-    { name: "GLC-Class", img: "https://www.mercedes-benz.co.ke/passengercars/models/suv/glc/overview/_jcr_content/root/responsivegrid/tabs/tabitem/simple_teaser/simple_teaser_item/image.component.dam_ts.1691584824584.jpg/mercedes-benz-glc-x254-suv-exterior-960x540-08-2021.jpg", year: "2015–2024", type: "Compact SUV" },
-    { name: "GLE-Class", img: "https://www.mercedes-benz.co.ke/passengercars/models/suv/gle/overview/_jcr_content/root/responsivegrid/tabs/tabitem/simple_teaser/simple_teaser_item/image.component.dam_ts.1691584824584.jpg/mercedes-benz-gle-v167-suv-exterior-960x540-08-2021.jpg", year: "2015–2024", type: "Mid-Size SUV" },
+    { name: "C-Class (W204/W205/W206)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/2019_Mercedes-Benz_C200_AMG_Line_Premium_Automatic_1.5_Front.jpg/1200px-2019_Mercedes-Benz_C200_AMG_Line_Premium_Automatic_1.5_Front.jpg", year: "2007–2024", type: "Sedan" },
+    { name: "S550 (W221/W222)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/2018_Mercedes-Benz_S350d_L_AMG_Line_Premium_3.0_Front.jpg/1200px-2018_Mercedes-Benz_S350d_L_AMG_Line_Premium_3.0_Front.jpg", year: "2005–2024", type: "Luxury Sedan" },
+    { name: "E-Class (W212/W213)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/2017_Mercedes-Benz_E220d_AMG_Line_Premium_Automatic_2.0_Front.jpg/1200px-2017_Mercedes-Benz_E220d_AMG_Line_Premium_Automatic_2.0_Front.jpg", year: "2009–2024", type: "Sedan" },
+    { name: "GLC-Class", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/2019_Mercedes-Benz_GLC_220d_4MATIC_AMG_Line_Premium_2.0_Front.jpg/1200px-2019_Mercedes-Benz_GLC_220d_4MATIC_AMG_Line_Premium_2.0_Front.jpg", year: "2015–2024", type: "Compact SUV" },
+    { name: "GLE-Class", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/2020_Mercedes-Benz_GLE_350d_4MATIC_AMG_Line_Premium_3.0_Front.jpg/1200px-2020_Mercedes-Benz_GLE_350d_4MATIC_AMG_Line_Premium_3.0_Front.jpg", year: "2015–2024", type: "Mid-Size SUV" },
   ],
   "Honda": [
-    { name: "Civic (FD/FB/FC)", img: "https://images.unsplash.com/photo-1606152421802-db97b9c7a11b?q=80&w=800&auto=format", year: "2006–2024", type: "Sedan/Hatchback" },
-    { name: "CR-V", img: "https://images.unsplash.com/photo-1617469767053-d3b523a0b982?q=80&w=800&auto=format", year: "2007–2024", type: "Compact SUV" },
-    { name: "Accord", img: "https://images.unsplash.com/photo-1590362891991-f776e747a588?q=80&w=800&auto=format", year: "2008–2024", type: "Sedan" },
-    { name: "HR-V", img: "https://images.unsplash.com/photo-1590362891991-f776e747a588?q=80&w=800&auto=format", year: "2014–2024", type: "Subcompact SUV" },
-    { name: "Fit/Jazz", img: "https://images.unsplash.com/photo-1606152421802-db97b9c7a11b?q=80&w=800&auto=format", year: "2008–2020", type: "Hatchback" },
+    { name: "Civic (FD/FB/FC)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/2017_Honda_Civic_VTEC_Turbo_SR_1.0_Front.jpg/1200px-2017_Honda_Civic_VTEC_Turbo_SR_1.0_Front.jpg", year: "2006–2024", type: "Sedan/Hatchback" },
+    { name: "CR-V", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/2018_Honda_CR-V_EX_i-VTEC_1.5_Front.jpg/1200px-2018_Honda_CR-V_EX_i-VTEC_1.5_Front.jpg", year: "2007–2024", type: "Compact SUV" },
+    { name: "Accord", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Honda_Accord_Sedan_L_2018.jpg/1200px-Honda_Accord_Sedan_L_2018.jpg", year: "2008–2024", type: "Sedan" },
+    { name: "HR-V", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/2019_Honda_HR-V_EX_i-VTEC_1.5_Front.jpg/1200px-2019_Honda_HR-V_EX_i-VTEC_1.5_Front.jpg", year: "2014–2024", type: "Subcompact SUV" },
+    { name: "Fit/Jazz", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/2018_Honda_Jazz_SE_i-VTEC_1.3_Front.jpg/1200px-2018_Honda_Jazz_SE_i-VTEC_1.3_Front.jpg", year: "2008–2020", type: "Hatchback" },
   ],
   "Ford": [
-    { name: "Ranger (T6/T7/T8)", img: "https://images.unsplash.com/photo-1533473359331-35acde7260c9?q=80&w=800&auto=format", year: "2011–2024", type: "Pickup Truck" },
-    { name: "Everest", img: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?q=80&w=800&auto=format", year: "2015–2024", type: "SUV" },
-    { name: "Focus", img: "https://images.unsplash.com/photo-1590362891991-f776e747a588?q=80&w=800&auto=format", year: "2011–2022", type: "Hatchback/Sedan" },
-    { name: "Explorer", img: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?q=80&w=800&auto=format", year: "2011–2024", type: "Full-Size SUV" },
+    { name: "Ranger (T6/T7/T8)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/2019_Ford_Ranger_Wildtrak_4WD_2.0_Front.jpg/1200px-2019_Ford_Ranger_Wildtrak_4WD_2.0_Front.jpg", year: "2011–2024", type: "Pickup Truck" },
+    { name: "Everest", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/2019_Ford_Everest_Titanium_Front.jpg/1200px-2019_Ford_Everest_Titanium_Front.jpg", year: "2015–2024", type: "SUV" },
+    { name: "Focus", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/2019_Ford_Focus_ST-Line_X_1.0_Front.jpg/1200px-2019_Ford_Focus_ST-Line_X_1.0_Front.jpg", year: "2011–2022", type: "Hatchback/Sedan" },
+    { name: "Explorer", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/2020_Ford_Explorer_Limited_Front.jpg/1200px-2020_Ford_Explorer_Limited_Front.jpg", year: "2011–2024", type: "Full-Size SUV" },
   ],
   "Hyundai": [
-    { name: "Tucson", img: "https://images.unsplash.com/photo-1617469767053-d3b523a0b982?q=80&w=800&auto=format", year: "2009–2024", type: "Compact SUV" },
-    { name: "Santa Fe", img: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?q=80&w=800&auto=format", year: "2006–2024", type: "Mid-Size SUV" },
-    { name: "Elantra", img: "https://images.unsplash.com/photo-1590362891991-f776e747a588?q=80&w=800&auto=format", year: "2010–2024", type: "Sedan" },
-    { name: "i10", img: "https://images.unsplash.com/photo-1617469767053-d3b523a0b982?q=80&w=800&auto=format", year: "2013–2024", type: "City Car" },
-    { name: "i20", img: "https://images.unsplash.com/photo-1617469767053-d3b523a0b982?q=80&w=800&auto=format", year: "2014–2024", type: "Supermini" },
+    { name: "Tucson", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/2019_Hyundai_Tucson_N-Line_1.6_Front.jpg/1200px-2019_Hyundai_Tucson_N-Line_1.6_Front.jpg", year: "2009–2024", type: "Compact SUV" },
+    { name: "Santa Fe", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/2019_Hyundai_Santa_Fe_Premium_SE_CRDi_2.2_Front.jpg/1200px-2019_Hyundai_Santa_Fe_Premium_SE_CRDi_2.2_Front.jpg", year: "2006–2024", type: "Mid-Size SUV" },
+    { name: "Elantra", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/2019_Hyundai_Elantra_Luxury_Front.jpg/1200px-2019_Hyundai_Elantra_Luxury_Front.jpg", year: "2010–2024", type: "Sedan" },
+    { name: "i10", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/2020_Hyundai_i10_Premium_1.0_Front.jpg/1200px-2020_Hyundai_i10_Premium_1.0_Front.jpg", year: "2013–2024", type: "City Car" },
+    { name: "i20", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/2019_Hyundai_i20_Premium_Nav_MPI_1.2_Front.jpg/1200px-2019_Hyundai_i20_Premium_Nav_MPI_1.2_Front.jpg", year: "2014–2024", type: "Supermini" },
   ],
   "Suzuki": [
-    { name: "Swift", img: "https://images.unsplash.com/photo-1617469767053-d3b523a0b982?q=80&w=800&auto=format", year: "2010–2024", type: "Supermini" },
-    { name: "Vitara", img: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?q=80&w=800&auto=format", year: "2015–2024", type: "Compact SUV" },
-    { name: "Jimny", img: "https://images.unsplash.com/photo-1533473359331-35acde7260c9?q=80&w=800&auto=format", year: "1998–2024", type: "Mini SUV" },
-    { name: "Alto", img: "https://images.unsplash.com/photo-1617469767053-d3b523a0b982?q=80&w=800&auto=format", year: "2009–2024", type: "City Car" },
-    { name: "Ertiga", img: "https://images.unsplash.com/photo-1617469767053-d3b523a0b982?q=80&w=800&auto=format", year: "2012–2024", type: "MPV" },
+    { name: "Swift", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/2018_Suzuki_Swift_SZ5_Boosterjet_1.0_Front.jpg/1200px-2018_Suzuki_Swift_SZ5_Boosterjet_1.0_Front.jpg", year: "2010–2024", type: "Supermini" },
+    { name: "Vitara", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/2019_Suzuki_Vitara_SZ-T_Boosterjet_1.0_Front.jpg/1200px-2019_Suzuki_Vitara_SZ-T_Boosterjet_1.0_Front.jpg", year: "2015–2024", type: "Compact SUV" },
+    { name: "Jimny", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/2019_Suzuki_Jimny_SZ5_Allgrip_1.5_Front.jpg/1200px-2019_Suzuki_Jimny_SZ5_Allgrip_1.5_Front.jpg", year: "1998–2024", type: "Mini SUV" },
+    { name: "Alto", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/2019_Suzuki_Alto_SZ3_1.0_Front.jpg/1200px-2019_Suzuki_Alto_SZ3_1.0_Front.jpg", year: "2009–2024", type: "City Car" },
+    { name: "Ertiga", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/2019_Suzuki_Ertiga_GL_1.5_Front.jpg/1200px-2019_Suzuki_Ertiga_GL_1.5_Front.jpg", year: "2012–2024", type: "MPV" },
   ],
   "Lexus": [
-    { name: "RX350", img: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?q=80&w=800&auto=format", year: "2009–2024", type: "Luxury SUV" },
-    { name: "LX570", img: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?q=80&w=800&auto=format", year: "2007–2021", type: "Full-Size Luxury SUV" },
-    { name: "IS250", img: "https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=800&auto=format", year: "2005–2015", type: "Luxury Sedan" },
-    { name: "GX460", img: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?q=80&w=800&auto=format", year: "2009–2024", type: "Luxury SUV" },
-    { name: "ES300h", img: "https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=800&auto=format", year: "2012–2024", type: "Hybrid Luxury Sedan" },
+    { name: "RX350", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/2019_Lexus_RX_450h_Luxury_Automatic_3.5_Front.jpg/1200px-2019_Lexus_RX_450h_Luxury_Automatic_3.5_Front.jpg", year: "2009–2024", type: "Luxury SUV" },
+    { name: "LX570", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/2016_Lexus_LX570_Front.jpg/1200px-2016_Lexus_LX570_Front.jpg", year: "2007–2021", type: "Full-Size Luxury SUV" },
+    { name: "IS250", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/2017_Lexus_IS300h_Luxury_Automatic_2.5_Front.jpg/1200px-2017_Lexus_IS300h_Luxury_Automatic_2.5_Front.jpg", year: "2005–2015", type: "Luxury Sedan" },
+    { name: "GX460", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/2020_Lexus_GX460_Front.jpg/1200px-2020_Lexus_GX460_Front.jpg", year: "2009–2024", type: "Luxury SUV" },
+    { name: "ES300h", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/2019_Lexus_ES300h_Luxury_Automatic_2.5_Front.jpg/1200px-2019_Lexus_ES300h_Luxury_Automatic_2.5_Front.jpg", year: "2012–2024", type: "Hybrid Luxury Sedan" },
   ],
   "Nissan": [
-    { name: "Navara (D40/D23)", img: "https://images.unsplash.com/photo-1533473359331-35acde7260c9?q=80&w=800&auto=format", year: "2005–2024", type: "Pickup Truck" },
-    { name: "X-Trail", img: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?q=80&w=800&auto=format", year: "2007–2024", type: "Compact SUV" },
-    { name: "Patrol", img: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?q=80&w=800&auto=format", year: "2010–2024", type: "Full-Size SUV" },
-    { name: "Note", img: "https://images.unsplash.com/photo-1617469767053-d3b523a0b982?q=80&w=800&auto=format", year: "2012–2024", type: "Hatchback" },
-    { name: "Tiida", img: "https://images.unsplash.com/photo-1617469767053-d3b523a0b982?q=80&w=800&auto=format", year: "2004–2018", type: "Compact" },
+    { name: "Navara (D40/D23)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/2019_Nissan_Navara_Tekna_4WD_DCi_2.3_Front.jpg/1200px-2019_Nissan_Navara_Tekna_4WD_DCi_2.3_Front.jpg", year: "2005–2024", type: "Pickup Truck" },
+    { name: "X-Trail", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/2018_Nissan_X-Trail_Tekna_DCi_1.6_Front.jpg/1200px-2018_Nissan_X-Trail_Tekna_DCi_1.6_Front.jpg", year: "2007–2024", type: "Compact SUV" },
+    { name: "Patrol", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/2019_Nissan_Patrol_Ti_Front.jpg/1200px-2019_Nissan_Patrol_Ti_Front.jpg", year: "2010–2024", type: "Full-Size SUV" },
+    { name: "Note", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/2017_Nissan_Note_Acenta_Premium_1.2_Front.jpg/1200px-2017_Nissan_Note_Acenta_Premium_1.2_Front.jpg", year: "2012–2024", type: "Hatchback" },
+    { name: "Tiida", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/2018_Nissan_Tiida_Front.jpg/1200px-2018_Nissan_Tiida_Front.jpg", year: "2004–2018", type: "Compact" },
   ],
   "Mitsubishi": [
-    { name: "Pajero (V6/V8)", img: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?q=80&w=800&auto=format", year: "2000–2021", type: "Full-Size SUV" },
-    { name: "L200 Triton", img: "https://images.unsplash.com/photo-1533473359331-35acde7260c9?q=80&w=800&auto=format", year: "2006–2024", type: "Pickup Truck" },
-    { name: "Outlander", img: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?q=80&w=800&auto=format", year: "2012–2024", type: "Compact SUV" },
-    { name: "Eclipse Cross", img: "https://images.unsplash.com/photo-1617469767053-d3b523a0b982?q=80&w=800&auto=format", year: "2017–2024", type: "Compact SUV" },
+    { name: "Pajero (V6/V8)", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/2019_Mitsubishi_Pajero_Sport_Exceed_Front.jpg/1200px-2019_Mitsubishi_Pajero_Sport_Exceed_Front.jpg", year: "2000–2021", type: "Full-Size SUV" },
+    { name: "L200 Triton", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/2019_Mitsubishi_L200_Barbarian_4WD_2.4_Front.jpg/1200px-2019_Mitsubishi_L200_Barbarian_4WD_2.4_Front.jpg", year: "2006–2024", type: "Pickup Truck" },
+    { name: "Outlander", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/2019_Mitsubishi_Outlander_PHEV_Juro_2.4_Front.jpg/1200px-2019_Mitsubishi_Outlander_PHEV_Juro_2.4_Front.jpg", year: "2012–2024", type: "Compact SUV" },
+    { name: "Eclipse Cross", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/2018_Mitsubishi_Eclipse_Cross_4WD_1.5_Front.jpg/1200px-2018_Mitsubishi_Eclipse_Cross_4WD_1.5_Front.jpg", year: "2017–2024", type: "Compact SUV" },
   ],
 };
 
@@ -143,67 +143,67 @@ const CATEGORIES_WITH_SUBCATEGORIES: Record<string, { subcategories: string[]; i
   "Braking Systems": {
     subcategories: ["Brake Pads", "Brake Discs", "Brake Fluid", "Brake Calipers", "Brake Hoses"],
     icon: "🛑",
-    image: "https://m.media-amazon.com/images/I/71jZ3oBSqNL._AC_SL1500_.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Automobile_brake_pad.jpg/1200px-Automobile_brake_pad.jpg",
     description: "Pads, discs, calipers & more"
   },
   "Engine Components": {
     subcategories: ["Air Filters", "Oil Filters", "Spark Plugs", "Engine Belts", "Fuel Injectors"],
     icon: "⚙️",
-    image: "https://m.media-amazon.com/images/I/71Yw5TCcPLL._AC_SL1500_.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Car_engine_parts.jpg/1200px-Car_engine_parts.jpg",
     description: "Filters, plugs, belts & injectors"
   },
   "Transmission & Gear": {
     subcategories: ["Transmission Fluid", "Clutch Kits", "Gaskets", "Seals", "Gearbox"],
     icon: "🔧",
-    image: "https://m.media-amazon.com/images/I/71dNfzJXvVL._AC_SL1500_.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Car_gearbox.jpg/1200px-Car_gearbox.jpg",
     description: "Clutch kits, gearbox & fluids"
   },
   "Steering Systems": {
     subcategories: ["Steering Racks", "Tie Rod Ends", "Power Steering Pumps", "Steering Sensors", "Steering Linkage"],
     icon: "🎯",
-    image: "https://m.media-amazon.com/images/I/71kQw1LNPXL._AC_SL1500_.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Car_chassis_parts.jpg/1200px-Car_chassis_parts.jpg",
     description: "Racks, pumps & linkage"
   },
   "Suspension & Chassis": {
     subcategories: ["Shock Absorbers", "Springs", "Struts", "Control Arms", "Suspension Bushings"],
     icon: "🚗",
-    image: "https://m.media-amazon.com/images/I/81YXWqhQV8L._AC_SL1500_.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Car_shock_absorber.jpg/1200px-Car_shock_absorber.jpg",
     description: "Shocks, springs & control arms"
   },
   "Electrical & Sensors": {
     subcategories: ["Alternators", "Batteries", "Starters", "Oxygen Sensors", "ECU Modules"],
     icon: "⚡",
-    image: "https://m.media-amazon.com/images/I/71nPPOWQVpL._AC_SL1500_.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Car_alternator.jpg/1200px-Car_alternator.jpg",
     description: "Alternators, sensors & ECUs"
   },
   "Alloys & Rims": {
     subcategories: ["Alloy Wheels", "Wheel Caps", "Lug Nuts", "Wheel Spacers"],
     icon: "🔵",
-    image: "https://m.media-amazon.com/images/I/81-qJ5XNPVL._AC_SL1500_.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Alloy_wheel.jpg/1200px-Alloy_wheel.jpg",
     description: "Alloys & wheel accessories"
   },
   "Lubricants & Fluids": {
     subcategories: ["Engine Oil", "Transmission Fluid", "Coolant", "Brake Fluid", "Power Steering Fluid"],
     icon: "🛢️",
-    image: "https://m.media-amazon.com/images/I/71Yw5TCcPLL._AC_SL1500_.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Car_engine_oil_filter.jpg/1200px-Car_engine_oil_filter.jpg",
     description: "Oils, coolants & fluids"
   },
   "Body Kits & Styling": {
     subcategories: ["Front Bumpers", "Rear Bumpers", "Side Skirts", "Spoilers", "Headlights"],
     icon: "🎨",
-    image: "https://m.media-amazon.com/images/I/71kQw1LNPXL._AC_SL1500_.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/2017_Honda_Civic_VTEC_Turbo_SR_1.0_Front.jpg/1200px-2017_Honda_Civic_VTEC_Turbo_SR_1.0_Front.jpg",
     description: "Bumpers, headlights & styling"
   },
   "Glass & Windscreens": {
     subcategories: ["Windscreens", "Door Glass", "Rear Glass", "Glass Seals", "Wipers"],
     icon: "🪟",
-    image: "https://m.media-amazon.com/images/I/71kQw1LNPXL._AC_SL1500_.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Air_filter_car.jpg/1200px-Air_filter_car.jpg",
     description: "Windscreens, glass & wipers"
   },
   "Tyres": {
     subcategories: ["Bridgestone", "Michelin", "Continental", "Pirelli", "Goodyear", "Dunlop"],
     icon: "🛞",
-    image: "https://m.media-amazon.com/images/I/71Yw5TCcPLL._AC_SL1500_.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Car_tire_tread.jpg/1200px-Car_tire_tread.jpg",
     description: "Premium tyres from top brands"
   },
 };
@@ -463,6 +463,7 @@ export default function Products() {
                       src={model.img}
                       alt={model.name}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      loading="lazy"
                     />
                     <div className="absolute top-3 right-3">
                       <span className="bg-black/60 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase">{model.type}</span>
@@ -513,7 +514,7 @@ export default function Products() {
                   onClick={() => goTo({ brand: activeBrand, model: activeModel, category: cat })}
                   className="group relative rounded-2xl overflow-hidden aspect-[4/5] bg-gray-900 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1"
                 >
-                  <img src={data.image} alt={cat} className="w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-110 transition-all duration-700" />
+                  <img src={data.image} alt={cat} className="w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-110 transition-all duration-700" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
                   <div className="absolute bottom-0 left-0 right-0 p-4">
                     <div className="w-9 h-9 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center mb-2 group-hover:bg-[#E42933] transition-colors duration-300">
@@ -648,94 +649,68 @@ export default function Products() {
                     <option value="name">Name: A–Z</option>
                   </select>
                   <div className="flex gap-1 bg-gray-100 p-1 rounded-xl">
-                    <button onClick={() => setViewMode("grid")} className={`p-2 rounded-lg transition-all ${viewMode === "grid" ? "bg-white text-[#E42933] shadow-sm" : "text-gray-400 hover:text-gray-600"}`}>
-                      <Grid size={16} />
-                    </button>
-                    <button onClick={() => setViewMode("list")} className={`p-2 rounded-lg transition-all ${viewMode === "list" ? "bg-white text-[#E42933] shadow-sm" : "text-gray-400 hover:text-gray-600"}`}>
-                      <List size={16} />
-                    </button>
+                    <button onClick={() => setViewMode("grid")} className={`p-2 rounded-lg transition-all ${viewMode === "grid" ? "bg-white text-[#E42933] shadow-sm" : "text-gray-400 hover:text-gray-600"}`}><LayoutGrid size={18} /></button>
+                    <button onClick={() => setViewMode("list")} className={`p-2 rounded-lg transition-all ${viewMode === "list" ? "bg-white text-[#E42933] shadow-sm" : "text-gray-400 hover:text-gray-600"}`}><ListIcon size={18} /></button>
                   </div>
                 </div>
               </div>
 
               {loadingProducts ? (
-                <div className="flex flex-col items-center justify-center py-24">
-                  <div className="w-12 h-12 border-4 border-gray-100 border-t-[#E42933] rounded-full animate-spin mb-4"></div>
-                  <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Loading Parts...</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {[...Array(6)].map((_, i) => (
+                    <div key={i} className="bg-white rounded-3xl border-2 border-gray-100 p-4 animate-pulse">
+                      <div className="aspect-square bg-gray-100 rounded-2xl mb-4"></div>
+                      <div className="h-4 bg-gray-100 rounded w-3/4 mb-2"></div>
+                      <div className="h-4 bg-gray-100 rounded w-1/2"></div>
+                    </div>
+                  ))}
                 </div>
-              ) : pageItems.length > 0 ? (
-                <>
-                  <div className={viewMode === "grid" ? "grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-5" : "space-y-4"}>
-                    {pageItems.map((product) => (
-                      <div key={product.id}
-                        className={`bg-white rounded-3xl border-2 border-gray-100 overflow-hidden hover:shadow-2xl hover:border-[#E42933]/20 transition-all duration-500 group ${viewMode === "list" ? "flex h-44" : ""}`}>
-                        <div className={`relative bg-gray-50 overflow-hidden ${viewMode === "list" ? "w-44 flex-shrink-0" : "aspect-square"}`}>
-                          <img
-                            src={product.images?.[0]}
-                            alt={product.name}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=400";
-                            }}
-                          />
-                          {product.comparePrice && product.price < product.comparePrice && (
-                            <span className="absolute top-3 left-3 bg-[#E42933] text-white text-[10px] font-black px-2 py-1 rounded-full uppercase tracking-tighter">
-                              Save {Math.round((1 - product.price / product.comparePrice) * 100)}%
-                            </span>
-                          )}
+              ) : sortedProducts.length === 0 ? (
+                <div className="bg-white rounded-3xl border-2 border-gray-100 p-12 text-center">
+                  <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <Search size={32} className="text-gray-300" />
+                  </div>
+                  <h3 className="text-xl font-black text-gray-900 uppercase tracking-tighter mb-2">No Parts Found</h3>
+                  <p className="text-gray-500 mb-8 max-w-md mx-auto">We couldn't find any parts matching your current selection or filters. Try adjusting your criteria.</p>
+                  <button onClick={clearAll} className="px-8 py-3 bg-[#E42933] text-white rounded-xl font-black uppercase tracking-widest hover:bg-[#C21E26] transition-all">Clear All Filters</button>
+                </div>
+              ) : (
+                <div className={viewMode === "grid" ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" : "space-y-4"}>
+                  {pageItems.map(product => (
+                    <div key={product.id} className={`group bg-white rounded-3xl border-2 border-gray-100 p-4 hover:border-[#E42933] hover:shadow-2xl transition-all duration-500 ${viewMode === "list" ? "flex gap-6" : ""}`}>
+                      <div className={`relative overflow-hidden rounded-2xl bg-gray-50 ${viewMode === "list" ? "w-48 h-48 flex-shrink-0" : "aspect-square mb-4"}`}>
+                        <img src={product.images?.[0]} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" />
+                        {product.comparePrice && (
+                          <div className="absolute top-3 left-3 bg-[#E42933] text-white text-[10px] font-black px-2 py-1 rounded-full uppercase tracking-widest">Sale</div>
+                        )}
+                      </div>
+                      <div className="flex-1 flex flex-col">
+                        <div className="mb-1 flex items-center gap-2">
+                          <span className="text-[10px] font-black text-[#E42933] uppercase tracking-widest bg-[#E42933]/5 px-2 py-0.5 rounded-full">{product.brand}</span>
+                          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{product.sku}</span>
                         </div>
-                        <div className="p-4 flex-1 flex flex-col">
-                          <p className="text-[10px] font-black text-[#E42933] uppercase tracking-widest mb-1.5">{product.brand} • {product.model}</p>
-                          <h3 className="text-sm font-black text-gray-900 mb-2 line-clamp-2 uppercase tracking-tight group-hover:text-[#E42933] transition-colors leading-tight">{product.name}</h3>
-                          {product.partNumber && (
-                            <p className="text-[10px] text-gray-400 font-mono mb-2">Part #: {product.partNumber}</p>
-                          )}
-                          <div className="mt-auto flex items-center justify-between">
-                            <div>
-                              <p className="text-lg font-black text-gray-900">KES {product.price.toLocaleString()}</p>
-                              {product.comparePrice && <p className="text-xs text-gray-400 line-through font-bold">KES {product.comparePrice.toLocaleString()}</p>}
-                            </div>
-                            <button
-                              onClick={() => handleAddToCart(product)}
-                              disabled={product.stock === 0}
-                              className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${addedToCart === product.id ? "bg-green-500 text-white" : product.stock === 0 ? "bg-gray-100 text-gray-300 cursor-not-allowed" : "bg-gray-900 text-white hover:bg-[#E42933] shadow-lg shadow-gray-200 hover:shadow-[#E42933]/30"}`}
-                            >
-                              {addedToCart === product.id ? <Check size={16} /> : <ShoppingCart size={16} />}
-                            </button>
+                        <h3 className="font-black text-gray-900 group-hover:text-[#E42933] transition-colors uppercase tracking-tight leading-tight mb-2 line-clamp-2">{product.name}</h3>
+                        <div className="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between">
+                          <div>
+                            <p className="text-lg font-black text-gray-900 tracking-tighter">KES {product.price.toLocaleString()}</p>
+                            {product.comparePrice && <p className="text-xs text-gray-400 line-through">KES {product.comparePrice.toLocaleString()}</p>}
                           </div>
+                          <button onClick={() => handleAddToCart(product)} className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all ${addedToCart === product.id ? "bg-green-500 text-white" : "bg-gray-900 text-white hover:bg-[#E42933]"}`}>
+                            {addedToCart === product.id ? <Shield size={20} /> : <ShoppingCart size={20} />}
+                          </button>
                         </div>
                       </div>
-                    ))}
-                  </div>
-
-                  {/* Pagination */}
-                  {totalPages > 1 && (
-                    <div className="flex items-center justify-center gap-2 mt-10">
-                      <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                        className="px-4 py-2 bg-white border-2 border-gray-100 rounded-xl text-sm font-bold text-gray-900 hover:border-[#E42933] hover:text-[#E42933] disabled:opacity-40 transition-all">
-                        Previous
-                      </button>
-                      {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => i + 1).map(p => (
-                        <button key={p} onClick={() => setPage(p)}
-                          className={`w-10 h-10 rounded-xl text-sm font-bold transition-all ${page === p ? "bg-[#E42933] text-white" : "bg-white border-2 border-gray-100 text-gray-900 hover:border-[#E42933] hover:text-[#E42933]"}`}>
-                          {p}
-                        </button>
-                      ))}
-                      <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                        className="px-4 py-2 bg-white border-2 border-gray-100 rounded-xl text-sm font-bold text-gray-900 hover:border-[#E42933] hover:text-[#E42933] disabled:opacity-40 transition-all">
-                        Next
-                      </button>
                     </div>
-                  )}
-                </>
-              ) : (
-                <div className="text-center py-24 bg-white rounded-3xl border-2 border-dashed border-gray-200">
-                  <Package size={64} className="text-gray-200 mx-auto mb-4" />
-                  <p className="text-gray-900 font-black uppercase tracking-tighter text-xl">No Parts Found</p>
-                  <p className="text-gray-500 text-sm mt-2">Try adjusting your filters or search terms</p>
-                  <button onClick={clearAll} className="mt-6 px-8 py-3 bg-[#E42933] text-white font-black rounded-xl uppercase tracking-widest text-xs hover:bg-gray-900 transition-colors">
-                    Start Over
-                  </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="mt-12 flex justify-center gap-2">
+                  {[...Array(totalPages)].map((_, i) => (
+                    <button key={i} onClick={() => setPage(i + 1)} className={`w-11 h-11 rounded-xl font-black transition-all ${page === i + 1 ? "bg-[#E42933] text-white" : "bg-white border-2 border-gray-100 text-gray-400 hover:border-[#E42933] hover:text-[#E42933]"}`}>{i + 1}</button>
+                  ))}
                 </div>
               )}
             </div>

@@ -1,26 +1,27 @@
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
-import { ArrowRight, ShieldCheck, Truck, Clock, Award, ChevronRight, Star, Zap, Tag, TrendingUp, Package } from "lucide-react";
+import { ArrowRight, ShieldCheck, Truck, Clock, Award, ChevronRight, Star, Zap, Tag, TrendingUp, Package, ShoppingCart } from "lucide-react";
 import { Navbar, Footer } from "@/components/NavbarNew";
+import { useCart } from "@/contexts/CartContext";
 
 const FEATURED_CATEGORIES = [
-  { name: "Braking Systems", img: "https://m.media-amazon.com/images/I/71jZ3oBSqNL._AC_SL1500_.jpg", count: "240+ Parts", icon: "🛑" },
-  { name: "Engine Components", img: "https://m.media-amazon.com/images/I/71Yw5TCcPLL._AC_SL1500_.jpg", count: "580+ Parts", icon: "⚙️" },
-  { name: "Suspension & Chassis", img: "https://m.media-amazon.com/images/I/81YXWqhQV8L._AC_SL1500_.jpg", count: "310+ Parts", icon: "🚗" },
-  { name: "Electrical & Sensors", img: "https://m.media-amazon.com/images/I/71nPPOWQVpL._AC_SL1500_.jpg", count: "190+ Parts", icon: "⚡" },
-  { name: "Transmission & Gear", img: "https://m.media-amazon.com/images/I/71dNfzJXvVL._AC_SL1500_.jpg", count: "120+ Parts", icon: "🔧" },
-  { name: "Alloys & Rims", img: "https://m.media-amazon.com/images/I/81-qJ5XNPVL._AC_SL1500_.jpg", count: "80+ Parts", icon: "🔵" },
+  { name: "Braking Systems", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Automobile_brake_pad.jpg/1200px-Automobile_brake_pad.jpg", count: "240+ Parts", icon: "🛑" },
+  { name: "Engine Components", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Car_engine_parts.jpg/1200px-Car_engine_parts.jpg", count: "580+ Parts", icon: "⚙️" },
+  { name: "Suspension & Chassis", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Car_shock_absorber.jpg/1200px-Car_shock_absorber.jpg", count: "310+ Parts", icon: "🚗" },
+  { name: "Electrical & Sensors", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Car_alternator.jpg/1200px-Car_alternator.jpg", count: "190+ Parts", icon: "⚡" },
+  { name: "Transmission & Gear", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Car_gearbox.jpg/1200px-Car_gearbox.jpg", count: "120+ Parts", icon: "🔧" },
+  { name: "Alloys & Rims", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Alloy_wheel.jpg/1200px-Alloy_wheel.jpg", count: "80+ Parts", icon: "🔵" },
 ];
 
 const CAR_BRANDS = [
-  { name: "Toyota", logo: "/assets/images/brands/toyota.png" },
-  { name: "BMW", logo: "/assets/images/brands/bmw.png" },
-  { name: "Mercedes-Benz", logo: "/assets/images/brands/mercedesbenz.png" },
-  { name: "Honda", logo: "/assets/images/brands/honda.png" },
-  { name: "Ford", logo: "/assets/images/brands/ford.png" },
-  { name: "Hyundai", logo: "/assets/images/brands/hyundai.png" },
-  { name: "Suzuki", logo: "/assets/images/brands/suzuki.png" },
-  { name: "Lexus", logo: "/assets/images/brands/lexus.png" },
+  { name: "Toyota", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Toyota_carlogo.svg/1200px-Toyota_carlogo.svg.png" },
+  { name: "BMW", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/BMW.svg/1200px-BMW.svg.png" },
+  { name: "Mercedes-Benz", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Mercedes-Benz_logo%2C_2010.svg/1200px-Mercedes-Benz_logo%2C_2010.svg.png" },
+  { name: "Honda", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Honda_Logo.svg/1200px-Honda_Logo.svg.png" },
+  { name: "Ford", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Ford_logo.svg/1200px-Ford_logo.svg.png" },
+  { name: "Hyundai", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Hyundai_Motor_Company_logo.svg/1200px-Hyundai_Motor_Company_logo.svg.png" },
+  { name: "Suzuki", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Suzuki_logo_2.svg/1200px-Suzuki_logo_2.svg.png" },
+  { name: "Lexus", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Lexus_division_logo.svg/1200px-Lexus_division_logo.svg.png" },
 ];
 
 const TRUST_BADGES = [
@@ -30,6 +31,53 @@ const TRUST_BADGES = [
   { icon: Award, title: "Certified Dealer", desc: "Authorized parts dealer" },
 ];
 
+function ProductCard({ product }: { product: any }) {
+  const { addItem } = useCart();
+  const [added, setAdded] = useState(false);
+
+  const handleAddToCart = () => {
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.images?.[0] || "",
+      quantity: 1,
+      brand: product.brand || "",
+      model: product.model || "",
+      category: product.category || "",
+      sku: product.sku,
+    });
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2000);
+  };
+
+  return (
+    <div className="group bg-white rounded-2xl border-2 border-gray-100 p-4 hover:border-[#E42933] hover:shadow-xl transition-all duration-300">
+      <div className="relative aspect-square overflow-hidden rounded-xl bg-gray-50 mb-4">
+        <img 
+          src={product.images?.[0]} 
+          alt={product.name} 
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+          loading="lazy" 
+        />
+      </div>
+      <div className="mb-2">
+        <span className="text-[10px] font-black text-[#E42933] uppercase tracking-widest bg-[#E42933]/5 px-2 py-0.5 rounded-full">{product.brand}</span>
+      </div>
+      <h3 className="font-black text-gray-900 text-sm mb-3 line-clamp-2 uppercase tracking-tight h-10">{product.name}</h3>
+      <div className="flex items-center justify-between mt-auto">
+        <p className="text-lg font-black text-gray-900 tracking-tighter">KES {product.price.toLocaleString()}</p>
+        <button 
+          onClick={handleAddToCart}
+          className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all ${added ? "bg-green-500 text-white" : "bg-gray-900 text-white hover:bg-[#E42933]"}`}
+        >
+          {added ? <ShieldCheck size={18} /> : <ShoppingCart size={18} />}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
   const [storeSettings, setStoreSettings] = useState<any>(null);
@@ -38,11 +86,8 @@ export default function Home() {
   useEffect(() => {
     fetch("/api/products?status=active").then(r => r.json()).then(data => {
       if (Array.isArray(data)) {
-        // Get unique products from different categories (max 8)
         const categoryMap = new Map<string, any>();
         const featured: any[] = [];
-        
-        // Shuffle and prioritize products from different categories
         const shuffled = [...data].sort(() => Math.random() - 0.5);
         
         for (const product of shuffled) {
@@ -52,7 +97,6 @@ export default function Home() {
             featured.push(product);
           }
         }
-        
         setFeaturedProducts(featured);
       }
     }).catch(() => {});
@@ -166,7 +210,7 @@ export default function Home() {
                   href={`/products?category=${encodeURIComponent(cat.name)}`}
                   className="group relative rounded-xl overflow-hidden aspect-square bg-gray-100 hover:shadow-lg transition-all"
                 >
-                  <img src={cat.img} alt={cat.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onError={(e) => { (e.target as HTMLImageElement).style.opacity = "0.5"; }} />
+                  <img src={cat.img} alt={cat.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                   <div className="absolute bottom-0 left-0 right-0 p-3">
                     <span className="text-xl mb-1 block">{cat.icon}</span>
@@ -231,7 +275,7 @@ export default function Home() {
               <div className="relative">
                 <div className="rounded-2xl overflow-hidden aspect-square">
                   <img
-                    src="https://www.mercedes-benz.co.ke/passengercars/models/saloon/s-class/overview/_jcr_content/root/responsivegrid/tabs/tabitem/simple_teaser/simple_teaser_item/image.component.dam_ts.1691584824584.jpg/mercedes-benz-s-class-w223-saloon-exterior-960x540-08-2021.jpg"
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Car_engine_parts.jpg/1200px-Car_engine_parts.jpg"
                     alt="Workshop"
                     className="w-full h-full object-cover"
                   />
@@ -273,75 +317,6 @@ export default function Home() {
       </main>
 
       <Footer />
-
-      {/* WhatsApp Floating Button */}
-      <a
-        href="https://wa.me/254700000000"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all hover:scale-110"
-        title="Chat on WhatsApp"
-      >
-        <svg viewBox="0 0 24 24" fill="currentColor" className="w-7 h-7">
-          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-        </svg>
-      </a>
     </div>
-  );
-}
-
-function ProductCard({ product }: { product: any }) {
-  const discount = product.comparePrice ? Math.round((1 - product.price / product.comparePrice) * 100) : 0;
-  const isLowStock = product.stock <= product.lowStockThreshold && product.stock > 0;
-  const isOutOfStock = product.stock === 0;
-
-  return (
-    <Link href={`/products?search=${encodeURIComponent(product.name)}`}
-      className="group bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg hover:border-[#E42933]/30 transition-all">
-      <div className="relative aspect-square bg-gray-50 overflow-hidden">
-        <img
-          src={product.images?.[0] || "https://m.media-amazon.com/images/I/71jZ3oBSqNL._AC_SL1500_.jpg"}
-          alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          onError={(e) => { (e.target as HTMLImageElement).src = "https://m.media-amazon.com/images/I/71jZ3oBSqNL._AC_SL1500_.jpg"; }}
-        />
-        {discount > 0 && (
-          <span className="absolute top-2 left-2 bg-[#E42933] text-white text-[10px] font-bold px-2 py-0.5 rounded">
-            -{discount}%
-          </span>
-        )}
-        {isOutOfStock && (
-          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-            <span className="bg-white text-gray-800 text-xs font-bold px-3 py-1 rounded-full">Out of Stock</span>
-          </div>
-        )}
-        {isLowStock && !isOutOfStock && (
-          <span className="absolute top-2 right-2 bg-orange-500 text-white text-[10px] font-bold px-2 py-0.5 rounded">
-            Low Stock
-          </span>
-        )}
-      </div>
-      <div className="p-3">
-        <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wider mb-1">{product.brand}</p>
-        <p className="text-sm font-semibold text-gray-900 leading-tight line-clamp-2 mb-2 group-hover:text-[#E42933] transition-colors">
-          {product.name}
-        </p>
-        <div className="flex items-center gap-1 mb-2">
-          {[1,2,3,4,5].map(s => <Star key={s} size={10} className="fill-yellow-400 text-yellow-400" />)}
-          <span className="text-[10px] text-gray-400 ml-1">(24)</span>
-        </div>
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-base font-black text-[#E42933]">KES {product.price.toLocaleString()}</p>
-            {product.comparePrice && (
-              <p className="text-xs text-gray-400 line-through">KES {product.comparePrice.toLocaleString()}</p>
-            )}
-          </div>
-          <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${product.condition === "New" ? "bg-green-100 text-green-700" : "bg-blue-100 text-blue-700"}`}>
-            {product.condition}
-          </span>
-        </div>
-      </div>
-    </Link>
   );
 }
