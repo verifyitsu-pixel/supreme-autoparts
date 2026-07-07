@@ -177,10 +177,10 @@ const CATEGORIES_WITH_SUBCATEGORIES: Record<string, { subcategories: string[]; i
     description: "Alternators, sensors & ECUs"
   },
   "Alloys & Rims": {
-    subcategories: ["Alloy Wheels", "Tire Sets", "Wheel Caps", "Lug Nuts", "Wheel Spacers"],
+    subcategories: ["Alloy Wheels", "Wheel Caps", "Lug Nuts", "Wheel Spacers"],
     icon: "🔵",
     image: "https://images.unsplash.com/photo-1486006920555-c77dcf18193c?q=80&w=800",
-    description: "Alloys, tyres & accessories"
+    description: "Alloys & wheel accessories"
   },
   "Lubricants & Fluids": {
     subcategories: ["Engine Oil", "Transmission Fluid", "Coolant", "Brake Fluid", "Power Steering Fluid"],
@@ -199,6 +199,12 @@ const CATEGORIES_WITH_SUBCATEGORIES: Record<string, { subcategories: string[]; i
     icon: "🪟",
     image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=800",
     description: "Windscreens, glass & wipers"
+  },
+  "Tyres": {
+    subcategories: ["Bridgestone", "Michelin", "Continental", "Pirelli", "Goodyear", "Dunlop"],
+    icon: "🛞",
+    image: "https://m.media-amazon.com/images/I/71Yw5TCcPLL._AC_SL1500_.jpg",
+    description: "Premium tyres from top brands"
   },
 };
 

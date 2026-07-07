@@ -171,6 +171,7 @@ interface StoredSettings {
     instagram?: string;
     twitter?: string;
     youtube?: string;
+    whatsapp?: string;
   };
 }
 
@@ -210,17 +211,18 @@ const DEFAULT_SETTINGS: StoredSettings = {
   shippingFee: 500,
   freeShippingThreshold: 10000,
   whatsappNumber: "+254700000000",
-  heroTitle: "Precision Engineering. Verified Parts.",
-  heroSubtitle: "Procuring genuine OEM components for luxury and performance vehicles since 1987. Nationwide delivery across Kenya.",
-  heroImage: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=2000",
-  announcementBar: "🚚 Free shipping on orders over KES 10,000 | Call us: +254 700 000 000",
+  heroTitle: "Precision Engineering. Real Parts.",
+  heroSubtitle: "Genuine OEM components for all vehicle makes and models. Fast nationwide delivery across Kenya.",
+  heroImage: "https://images.unsplash.com/photo-1552820728-8ac41f1ce891?q=80&w=2000",
+  announcementBar: "🚚 Free shipping on orders over KES 10,000 | 🛞 New: Premium Tyres from Bridgestone, Michelin, Continental | +254 700 000 000",
   announcementBarEnabled: true,
   maintenanceMode: false,
-  metaTitle: "Supreme Autoparts - Kenya's #1 Auto Parts Store",
-  metaDescription: "Genuine OEM auto parts for Toyota, BMW, Mercedes, Honda and more. Fast delivery across Kenya.",
+  metaTitle: "Supreme Autoparts - Kenya's #1 Auto Parts Store | Genuine OEM Parts & Tyres",
+  metaDescription: "Genuine OEM auto parts and premium tyres for Toyota, BMW, Mercedes, Honda, Nissan and more. Real product photos, real pricing, fast delivery across Kenya.",
   socialLinks: {
     facebook: "https://facebook.com/supremeautoparts",
     instagram: "https://instagram.com/supremeautoparts",
+    whatsapp: "https://wa.me/254700000000",
   }
 };
 

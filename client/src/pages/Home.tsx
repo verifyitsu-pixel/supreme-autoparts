@@ -37,7 +37,24 @@ export default function Home() {
 
   useEffect(() => {
     fetch("/api/products?status=active").then(r => r.json()).then(data => {
-      if (Array.isArray(data)) setFeaturedProducts(data.slice(0, 8));
+      if (Array.isArray(data)) {
+        // Get unique products from different categories (max 8)
+        const categoryMap = new Map<string, any>();
+        const featured: any[] = [];
+        
+        // Shuffle and prioritize products from different categories
+        const shuffled = [...data].sort(() => Math.random() - 0.5);
+        
+        for (const product of shuffled) {
+          const category = product.category || 'Unknown';
+          if (!categoryMap.has(category) && featured.length < 8) {
+            categoryMap.set(category, true);
+            featured.push(product);
+          }
+        }
+        
+        setFeaturedProducts(featured);
+      }
     }).catch(() => {});
     fetch("/api/settings/public").then(r => r.json()).then(setStoreSettings).catch(() => {});
   }, []);
@@ -124,7 +141,7 @@ export default function Home() {
                     src={brand.logo}
                     alt={brand.name}
                     className="h-8 md:h-10 w-auto object-contain grayscale group-hover:grayscale-0 transition-all"
-                    onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                    onError={(e) => { (e.target as HTMLImageElement).style.opacity = "0.3"; }}
                   />
                   <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-wider text-gray-500 group-hover:text-[#E42933] text-center leading-tight">{brand.name}</span>
                 </Link>
@@ -149,7 +166,7 @@ export default function Home() {
                   href={`/products?category=${encodeURIComponent(cat.name)}`}
                   className="group relative rounded-xl overflow-hidden aspect-square bg-gray-100 hover:shadow-lg transition-all"
                 >
-                  <img src={cat.img} alt={cat.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <img src={cat.img} alt={cat.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onError={(e) => { (e.target as HTMLImageElement).style.opacity = "0.5"; }} />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                   <div className="absolute bottom-0 left-0 right-0 p-3">
                     <span className="text-xl mb-1 block">{cat.icon}</span>
@@ -214,7 +231,7 @@ export default function Home() {
               <div className="relative">
                 <div className="rounded-2xl overflow-hidden aspect-square">
                   <img
-                    src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?q=80&w=1000"
+                    src="https://images.unsplash.com/photo-1552820728-8ac41f1ce891?q=80&w=1000"
                     alt="Workshop"
                     className="w-full h-full object-cover"
                   />
@@ -283,10 +300,10 @@ function ProductCard({ product }: { product: any }) {
       className="group bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg hover:border-[#E42933]/30 transition-all">
       <div className="relative aspect-square bg-gray-50 overflow-hidden">
         <img
-          src={product.images?.[0] || "/assets/images/products/toyota-brake-pads.jpg"}
+          src={product.images?.[0] || "https://m.media-amazon.com/images/I/71jZ3oBSqNL._AC_SL1500_.jpg"}
           alt={product.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          onError={(e) => { (e.target as HTMLImageElement).src = "/assets/images/products/toyota-brake-pads.jpg"; }}
+          onError={(e) => { (e.target as HTMLImageElement).src = "https://m.media-amazon.com/images/I/71jZ3oBSqNL._AC_SL1500_.jpg"; }}
         />
         {discount > 0 && (
           <span className="absolute top-2 left-2 bg-[#E42933] text-white text-[10px] font-bold px-2 py-0.5 rounded">
