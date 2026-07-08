@@ -15,21 +15,21 @@ const FEATURED_CATEGORIES = [
 
 const CAR_BRANDS = [
   { id: "toyota", name: "Toyota", logo: "/assets/images/brands/toyota.png" },
-  { id: "nissan", name: "Nissan", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Nissan_logo.svg/200px-Nissan_logo.svg.png" },
-  { id: "mazda", name: "Mazda", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Mazda_logo.svg/200px-Mazda_logo.svg.png" },
+  { id: "nissan", name: "Nissan", logo: "/assets/images/brands/nissan.svg" },
+  { id: "mazda", name: "Mazda", logo: "/assets/images/brands/mazda.svg" },
   { id: "honda", name: "Honda", logo: "/assets/images/brands/honda.png" },
-  { id: "subaru", name: "Subaru", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Subaru_logo.svg/200px-Subaru_logo.svg.png" },
+  { id: "subaru", name: "Subaru", logo: "/assets/images/brands/subaru.svg" },
   { id: "mitsubishi", name: "Mitsubishi", logo: "/assets/images/brands/mitsubishi.png" },
   { id: "suzuki", name: "Suzuki", logo: "/assets/images/brands/suzuki.png" },
   { id: "bmw", name: "BMW", logo: "/assets/images/brands/bmw.png" },
   { id: "mercedes-benz", name: "Mercedes-Benz", logo: "/assets/images/brands/mercedesbenz.png" },
-  { id: "volkswagen", name: "Volkswagen", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Volkswagen_logo_2019.svg/200px-Volkswagen_logo_2019.svg.png" },
+  { id: "volkswagen", name: "Volkswagen", logo: "/assets/images/brands/volkswagen.svg" },
   { id: "ford", name: "Ford", logo: "/assets/images/brands/ford.png" },
   { id: "hyundai", name: "Hyundai", logo: "/assets/images/brands/hyundai.png" },
-  { id: "isuzu", name: "Isuzu", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Isuzu_logo.svg/200px-Isuzu_logo.svg.png" },
+  { id: "isuzu", name: "Isuzu", logo: "/assets/images/brands/isuzu.svg" },
   { id: "lexus", name: "Lexus", logo: "/assets/images/brands/lexus.png" },
-  { id: "kia", name: "Kia", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Kia-logo.svg/200px-Kia-logo.svg.png" },
-  { id: "land-rover", name: "Land Rover", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Land_Rover_logo.svg/200px-Land_Rover_logo.svg.png" },
+  { id: "kia", name: "Kia", logo: "/assets/images/brands/kia.svg" },
+  { id: "land-rover", name: "Land Rover", logo: "/assets/images/brands/landrover.svg" },
 ];
 
 const TRUST_BADGES = [
@@ -122,7 +122,7 @@ export default function Home() {
         <section className="relative min-h-[60vh] md:min-h-[75vh] flex items-center bg-black overflow-hidden">
           <div className="absolute inset-0 z-0">
             <img
-              src="https://images.toyota-europe.com/eu/hilux/0/exterior/front-view.jpg"
+              src="/assets/images/models/toyota-hilux.jpg"
               className="w-full h-full object-cover opacity-50"
               alt="Luxury Car"
             />
@@ -282,7 +282,7 @@ export default function Home() {
               <div className="relative">
                 <div className="rounded-2xl overflow-hidden aspect-square">
                   <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Car_engine_parts.jpg/1200px-Car_engine_parts.jpg"
+                    src="/assets/images/products/brake-disc-brembo.jpg"
                     alt="Workshop"
                     className="w-full h-full object-cover"
                   />

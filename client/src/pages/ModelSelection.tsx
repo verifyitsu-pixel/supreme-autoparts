@@ -138,7 +138,7 @@ export default function ModelSelection() {
                       loading="lazy"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src =
-                          "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=400&auto=format";
+                          "/assets/images/models/honda-civic.jpg";
                       }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />

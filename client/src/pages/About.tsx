@@ -30,7 +30,7 @@ export default function About() {
               <div className="relative">
                 <div className="absolute -inset-4 border-2 border-[oklch(0.45_0.22_27)] opacity-20 rounded-sm" />
                 <img 
-                  src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800&q=80" 
+                  src="/assets/images/models/toyota-hilux.jpg" 
                   alt="Supreme Autoparts Operations" 
                   className="relative z-10 w-full rounded-sm shadow-2xl"
                 />

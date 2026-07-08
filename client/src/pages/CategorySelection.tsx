@@ -143,7 +143,7 @@ export default function CategorySelection() {
                     loading="lazy"
                     onError={(e) => {
                       (e.target as HTMLImageElement).src =
-                        "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?q=80&w=400&auto=format";
+                        "/assets/images/models/toyota-hilux.jpg";
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />

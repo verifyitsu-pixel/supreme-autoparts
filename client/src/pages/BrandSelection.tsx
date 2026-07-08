@@ -40,7 +40,7 @@ export default function BrandSelection() {
           }}
         >
           <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1600&auto=format')] bg-cover bg-center opacity-10" />
+            <div className="absolute inset-0 bg-[url('/assets/images/models/honda-civic.jpg')] bg-cover bg-center opacity-10" />
           </div>
           <div className="relative z-10 text-center px-4 max-w-3xl mx-auto">
             {/* Breadcrumb */}
@@ -176,7 +176,7 @@ function BrandCard({ brand, href }: { brand: (typeof CAR_BRANDS)[0]; href: strin
           loading="lazy"
           onError={(e) => {
             (e.target as HTMLImageElement).src =
-              "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=400&auto=format";
+              "/assets/images/models/honda-civic.jpg";
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />

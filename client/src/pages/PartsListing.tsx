@@ -501,7 +501,7 @@ function ProductCard({
           loading="lazy"
           onError={(e) => {
             (e.target as HTMLImageElement).src =
-              "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?q=80&w=400&auto=format";
+              "/assets/images/models/toyota-hilux.jpg";
           }}
         />
         {discount > 0 && (

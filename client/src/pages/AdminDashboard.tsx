@@ -1741,7 +1741,7 @@ function InventorySection() {
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-xl bg-gray-100 overflow-hidden flex-shrink-0">
                         <img src={p.images?.[0]} alt={p.name} className="w-full h-full object-cover"
-                          onError={(e) => { (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=200"; }} />
+                          onError={(e) => { (e.target as HTMLImageElement).src = "/assets/images/models/hyundai-tucson.jpg"; }} />
                       </div>
                       <p className="text-sm font-semibold text-gray-900 max-w-48 truncate">{p.name}</p>
                     </div>

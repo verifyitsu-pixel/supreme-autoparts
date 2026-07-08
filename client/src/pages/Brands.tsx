@@ -31,21 +31,21 @@ const BRANDS = [
 // Car brands – all major Kenyan market brands
 const CAR_BRANDS = [
   { id: "toyota", name: "Toyota", src: "/assets/images/brands/toyota.png" },
-  { id: "nissan", name: "Nissan", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Nissan_logo.svg/200px-Nissan_logo.svg.png" },
-  { id: "mazda", name: "Mazda", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Mazda_logo.svg/200px-Mazda_logo.svg.png" },
+  { id: "nissan", name: "Nissan", src: "/assets/images/brands/nissan.svg" },
+  { id: "mazda", name: "Mazda", src: "/assets/images/brands/mazda.svg" },
   { id: "honda", name: "Honda", src: "/assets/images/brands/honda.png" },
-  { id: "subaru", name: "Subaru", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Subaru_logo.svg/200px-Subaru_logo.svg.png" },
+  { id: "subaru", name: "Subaru", src: "/assets/images/brands/subaru.svg" },
   { id: "mitsubishi", name: "Mitsubishi", src: "/assets/images/brands/mitsubishi.png" },
   { id: "suzuki", name: "Suzuki", src: "/assets/images/brands/suzuki.png" },
   { id: "bmw", name: "BMW", src: "/assets/images/brands/bmw.png" },
   { id: "mercedes-benz", name: "Mercedes-Benz", src: "/assets/images/brands/mercedesbenz.png" },
-  { id: "volkswagen", name: "Volkswagen", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Volkswagen_logo_2019.svg/200px-Volkswagen_logo_2019.svg.png" },
+  { id: "volkswagen", name: "Volkswagen", src: "/assets/images/brands/volkswagen.svg" },
   { id: "ford", name: "Ford", src: "/assets/images/brands/ford.png" },
   { id: "hyundai", name: "Hyundai", src: "/assets/images/brands/hyundai.png" },
-  { id: "isuzu", name: "Isuzu", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Isuzu_logo.svg/200px-Isuzu_logo.svg.png" },
+  { id: "isuzu", name: "Isuzu", src: "/assets/images/brands/isuzu.svg" },
   { id: "lexus", name: "Lexus", src: "/assets/images/brands/lexus.png" },
-  { id: "kia", name: "Kia", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Kia-logo.svg/200px-Kia-logo.svg.png" },
-  { id: "land-rover", name: "Land Rover", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Land_Rover_logo.svg/200px-Land_Rover_logo.svg.png" },
+  { id: "kia", name: "Kia", src: "/assets/images/brands/kia.svg" },
+  { id: "land-rover", name: "Land Rover", src: "/assets/images/brands/landrover.svg" },
 ];
 
 export default function Brands() {
@@ -58,7 +58,7 @@ export default function Brands() {
           className="relative flex items-center justify-center"
           style={{
             minHeight: 280,
-            background: "linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=1600&q=80') center/cover no-repeat",
+            background: "linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('/assets/images/models/toyota-hilux.jpg') center/cover no-repeat",
           }}
         >
           <div className="text-center text-white z-10">
