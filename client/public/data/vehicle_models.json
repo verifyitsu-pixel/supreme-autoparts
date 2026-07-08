@@ -1,0 +1,264 @@
+{
+  "vehicleModels": {
+    "Toyota": [
+      {
+        "name": "Hilux (Vigo/Revo)",
+        "img": "/assets/images/models/toyota-hilux.jpg"
+      },
+      {
+        "name": "Fielder",
+        "img": "/assets/images/models/toyota-fielder.jpg"
+      },
+      {
+        "name": "Vitz",
+        "img": "/assets/images/models/suzuki-swift.jpg"
+      },
+      {
+        "name": "Corolla",
+        "img": "/assets/images/models/toyota-fielder.jpg"
+      },
+      {
+        "name": "Prado (J120/J150)",
+        "img": "/assets/images/models/toyota-prado.jpg"
+      },
+      {
+        "name": "Land Cruiser (V8/300)",
+        "img": "/assets/images/models/toyota-hilux.jpg"
+      },
+      {
+        "name": "Harrier",
+        "img": "/assets/images/models/toyota-prado.jpg"
+      },
+      {
+        "name": "Hiace",
+        "img": "/assets/images/models/toyota-hilux.jpg"
+      },
+      {
+        "name": "RAV4",
+        "img": "/assets/images/models/toyota-hilux.jpg"
+      },
+      {
+        "name": "Camry",
+        "img": "/assets/images/models/toyota-hilux.jpg"
+      }
+    ],
+    "BMW": [
+      {
+        "name": "3 Series (E90/F30/G20)",
+        "img": "/assets/images/models/bmw-3series.jpg"
+      },
+      {
+        "name": "5 Series (F10/G30)",
+        "img": "/assets/images/models/bmw-3series.jpg"
+      },
+      {
+        "name": "7 Series (F01/G11)",
+        "img": "/assets/images/models/bmw-3series.jpg"
+      },
+      {
+        "name": "X3 (F25/G01)",
+        "img": "/assets/images/models/bmw-3series-2.jpg"
+      },
+      {
+        "name": "X5 (E70/F15/G05)",
+        "img": "/assets/images/models/bmw-3series.jpg"
+      },
+      {
+        "name": "X6 (F16/G06)",
+        "img": "/assets/images/models/bmw-3series.jpg"
+      }
+    ],
+    "Mercedes-Benz": [
+      {
+        "name": "C-Class (W204/W205/W206)",
+        "img": "/assets/images/models/mercedes-cclass.jpg"
+      },
+      {
+        "name": "S550 (W221/W222)",
+        "img": "/assets/images/models/mercedes-cclass-2.jpg"
+      },
+      {
+        "name": "E-Class (W212/W213)",
+        "img": "/assets/images/models/mercedes-cclass.jpg"
+      },
+      {
+        "name": "GLC-Class",
+        "img": "/assets/images/models/hyundai-tucson.jpg"
+      },
+      {
+        "name": "GLE-Class",
+        "img": "/assets/images/models/toyota-prado.jpg"
+      }
+    ],
+    "Honda": [
+      {
+        "name": "Civic (FD/FB/FC)",
+        "img": "/assets/images/models/honda-civic.jpg"
+      },
+      {
+        "name": "CR-V",
+        "img": "/assets/images/models/hyundai-tucson.jpg"
+      },
+      {
+        "name": "Accord",
+        "img": "/assets/images/models/honda-civic-2.jpg"
+      },
+      {
+        "name": "HR-V",
+        "img": "/assets/images/models/honda-civic.jpg"
+      },
+      {
+        "name": "Fit/Jazz",
+        "img": "/assets/images/models/suzuki-swift.jpg"
+      }
+    ],
+    "Ford": [
+      {
+        "name": "Ranger (T6/T7/T8)",
+        "img": "/assets/images/models/ford-ranger.jpg"
+      },
+      {
+        "name": "Everest",
+        "img": "/assets/images/models/ford-ranger-2.jpg"
+      },
+      {
+        "name": "Focus",
+        "img": "/assets/images/models/honda-civic.jpg"
+      },
+      {
+        "name": "Explorer",
+        "img": "/assets/images/models/toyota-prado.jpg"
+      }
+    ],
+    "Hyundai": [
+      {
+        "name": "Tucson",
+        "img": "/assets/images/models/hyundai-tucson.jpg"
+      },
+      {
+        "name": "Santa Fe",
+        "img": "/assets/images/models/hyundai-tucson-2.jpg"
+      },
+      {
+        "name": "Elantra",
+        "img": "/assets/images/models/honda-civic.jpg"
+      },
+      {
+        "name": "i10",
+        "img": "/assets/images/models/suzuki-swift.jpg"
+      },
+      {
+        "name": "i20",
+        "img": "/assets/images/models/suzuki-swift-2.jpg"
+      }
+    ],
+    "Suzuki": [
+      {
+        "name": "Swift",
+        "img": "/assets/images/models/suzuki-swift.jpg"
+      },
+      {
+        "name": "Vitara",
+        "img": "/assets/images/models/suzuki-swift-2.jpg"
+      },
+      {
+        "name": "Jimny",
+        "img": "/assets/images/models/suzuki-swift.jpg"
+      },
+      {
+        "name": "Alto",
+        "img": "/assets/images/models/suzuki-swift-2.jpg"
+      },
+      {
+        "name": "Ertiga",
+        "img": "/assets/images/models/toyota-fielder.jpg"
+      }
+    ],
+    "Lexus": [
+      {
+        "name": "RX350",
+        "img": "/assets/images/models/hyundai-tucson-2.jpg"
+      },
+      {
+        "name": "LX570",
+        "img": "/assets/images/models/toyota-prado.jpg"
+      },
+      {
+        "name": "IS250",
+        "img": "/assets/images/models/mercedes-cclass.jpg"
+      },
+      {
+        "name": "GX460",
+        "img": "/assets/images/models/toyota-prado-2.jpg"
+      },
+      {
+        "name": "ES300h",
+        "img": "/assets/images/models/honda-civic-2.jpg"
+      }
+    ],
+    "Nissan": [
+      {
+        "name": "Navara (D40/D23)",
+        "img": "/assets/images/models/nissan-navara.jpg"
+      },
+      {
+        "name": "X-Trail",
+        "img": "/assets/images/models/hyundai-tucson.jpg"
+      },
+      {
+        "name": "Patrol",
+        "img": "/assets/images/models/toyota-prado.jpg"
+      },
+      {
+        "name": "Note",
+        "img": "/assets/images/models/suzuki-swift.jpg"
+      },
+      {
+        "name": "Tiida",
+        "img": "/assets/images/models/honda-civic.jpg"
+      }
+    ],
+    "Mitsubishi": [
+      {
+        "name": "Pajero (V6/V8)",
+        "img": "/assets/images/models/mitsubishi-pajero.jpg"
+      },
+      {
+        "name": "L200 Triton",
+        "img": "/assets/images/models/nissan-navara-2.jpg"
+      },
+      {
+        "name": "Outlander",
+        "img": "/assets/images/models/hyundai-tucson-2.jpg"
+      },
+      {
+        "name": "Eclipse Cross",
+        "img": "/assets/images/models/hyundai-tucson.jpg"
+      }
+    ]
+  },
+  "brandLogos": {
+    "Toyota": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Toyota_carlogo.svg/1200px-Toyota_carlogo.svg.png",
+    "BMW": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/BMW.svg/1200px-BMW.svg.png",
+    "Mercedes-Benz": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Mercedes-Logo.svg/1200px-Mercedes-Logo.svg.png",
+    "Honda": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Honda_Logo.svg/1200px-Honda_Logo.svg.png",
+    "Ford": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Ford_logo_flat.svg/1200px-Ford_logo_flat.svg.png",
+    "Hyundai": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Hyundai_Motor_Company_logo.svg/1200px-Hyundai_Motor_Company_logo.svg.png",
+    "Suzuki": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Suzuki_logo_2.svg/1200px-Suzuki_logo_2.svg.png",
+    "Lexus": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Lexus_division_emblem.svg/1200px-Lexus_division_emblem.svg.png",
+    "Nissan": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Nissan_2020_logo.svg/1200px-Nissan_2020_logo.svg.png",
+    "Mitsubishi": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Mitsubishi_logo.svg/1200px-Mitsubishi_logo.svg.png"
+  },
+  "categoryImages": {
+    "Braking Systems": "/assets/images/categories/braking-systems.jpg",
+    "Engine Components": "/assets/images/categories/engine-components.jpg",
+    "Transmission & Gear": "/assets/images/categories/transmission-gear.jpg",
+    "Steering Systems": "/assets/images/categories/suspension-chassis.jpg",
+    "Suspension & Chassis": "/assets/images/categories/suspension-chassis.jpg",
+    "Electrical & Sensors": "/assets/images/categories/electrical-sensors.jpg",
+    "Alloys & Rims": "/assets/images/categories/alloys-rims.jpg",
+    "Lubricants & Fluids": "/assets/images/categories/lubricants-fluids.jpg",
+    "Body Kits & Styling": "/assets/images/categories/body-kits.jpg",
+    "Glass & Windscreens": "/assets/images/products/headlight-hilux-old.jpg"
+  }
+}
