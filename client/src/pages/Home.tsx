@@ -5,12 +5,12 @@ import { Navbar, Footer } from "@/components/NavbarNew";
 import { useCart } from "@/contexts/CartContext";
 
 const FEATURED_CATEGORIES = [
-  { name: "Braking Systems", img: "/assets/images/categories/braking.png", count: "240+ Parts", icon: "🛑" },
-  { name: "Engine Components", img: "/assets/images/categories/engine.png", count: "580+ Parts", icon: "⚙️" },
-  { name: "Suspension & Chassis", img: "/assets/images/categories/suspension.png", count: "310+ Parts", icon: "🚗" },
-  { name: "Electrical & Sensors", img: "/assets/images/categories/electrical.png", count: "190+ Parts", icon: "⚡" },
-  { name: "Transmission & Gear", img: "/assets/images/categories/transmission.png", count: "120+ Parts", icon: "🔧" },
-  { name: "Alloys & Rims", img: "/assets/images/categories/alloys.png", count: "80+ Parts", icon: "🔵" },
+  { name: "Braking Systems", img: "/assets/images/categories/braking.jpg", count: "240+ Parts", icon: "🛑" },
+  { name: "Engine Components", img: "/assets/images/categories/engine.jpg", count: "580+ Parts", icon: "⚙️" },
+  { name: "Suspension & Chassis", img: "/assets/images/categories/suspension.jpg", count: "310+ Parts", icon: "🚗" },
+  { name: "Electrical & Sensors", img: "/assets/images/categories/electrical.jpg", count: "190+ Parts", icon: "⚡" },
+  { name: "Transmission & Gear", img: "/assets/images/categories/transmission.jpg", count: "120+ Parts", icon: "🔧" },
+  { name: "Alloys & Rims", img: "/assets/images/categories/alloys.jpg", count: "80+ Parts", icon: "🔵" },
 ];
 
 const CAR_BRANDS = [

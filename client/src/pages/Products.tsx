@@ -130,37 +130,37 @@ const VEHICLE_MODELS: Record<string, { name: string; img: string; year: string; 
 
 // ─── CATEGORIES WITH REAL PART IMAGES ─────────────────────────────────────────
 const CATEGORIES_WITH_SUBCATEGORIES: Record<string, { subcategories: string[]; icon: string; image: string; description: string }> = {
-  "Braking Systems": { subcategories: ["Brake Pads", "Brake Discs", "Brake Fluid", "Brake Calipers", "Brake Hoses"], icon: "🛑", image: "/assets/images/categories/braking.png",
+  "Braking Systems": { subcategories: ["Brake Pads", "Brake Discs", "Brake Fluid", "Brake Calipers", "Brake Hoses"], icon: "🛑", image: "/assets/images/categories/braking.jpg",
     description: "Pads, discs, calipers & more"
   },
-  "Engine Components": { subcategories: ["Air Filters", "Oil Filters", "Spark Plugs", "Engine Belts", "Fuel Injectors"], icon: "⚙️", image: "/assets/images/categories/engine.png",
+  "Engine Components": { subcategories: ["Air Filters", "Oil Filters", "Spark Plugs", "Engine Belts", "Fuel Injectors"], icon: "⚙️", image: "/assets/images/categories/engine.jpg",
     description: "Filters, plugs, belts & injectors"
   },
-  "Transmission & Gear": { subcategories: ["Transmission Fluid", "Clutch Kits", "Gaskets", "Seals", "Gearbox"], icon: "🔧", image: "/assets/images/categories/transmission.png",
+  "Transmission & Gear": { subcategories: ["Transmission Fluid", "Clutch Kits", "Gaskets", "Seals", "Gearbox"], icon: "🔧", image: "/assets/images/categories/transmission.jpg",
     description: "Clutch kits, gearbox & fluids"
   },
-  "Steering Systems": { subcategories: ["Steering Racks", "Tie Rod Ends", "Power Steering Pumps", "Steering Sensors", "Steering Linkage"], icon: "🎯", image: "/assets/images/categories/steering.png",
+  "Steering Systems": { subcategories: ["Steering Racks", "Tie Rod Ends", "Power Steering Pumps", "Steering Sensors", "Steering Linkage"], icon: "🎯", image: "/assets/images/categories/steering.jpg",
     description: "Racks, pumps & linkage"
   },
-  "Suspension & Chassis": { subcategories: ["Shock Absorbers", "Springs", "Struts", "Control Arms", "Suspension Bushings"], icon: "🚗", image: "/assets/images/categories/suspension.png",
+  "Suspension & Chassis": { subcategories: ["Shock Absorbers", "Springs", "Struts", "Control Arms", "Suspension Bushings"], icon: "🚗", image: "/assets/images/categories/suspension.jpg",
     description: "Shocks, springs & control arms"
   },
-  "Electrical & Sensors": { subcategories: ["Alternators", "Batteries", "Starters", "Oxygen Sensors", "ECU Modules"], icon: "⚡", image: "/assets/images/categories/electrical.png",
+  "Electrical & Sensors": { subcategories: ["Alternators", "Batteries", "Starters", "Oxygen Sensors", "ECU Modules"], icon: "⚡", image: "/assets/images/categories/electrical.jpg",
     description: "Alternators, sensors & ECUs"
   },
-  "Alloys & Rims": { subcategories: ["Alloy Wheels", "Wheel Caps", "Lug Nuts", "Wheel Spacers"], icon: "🔵", image: "/assets/images/categories/alloys.png",
+  "Alloys & Rims": { subcategories: ["Alloy Wheels", "Wheel Caps", "Lug Nuts", "Wheel Spacers"], icon: "🔵", image: "/assets/images/categories/alloys.jpg",
     description: "Alloys & wheel accessories"
   },
-  "Lubricants & Fluids": { subcategories: ["Engine Oil", "Transmission Fluid", "Coolant", "Brake Fluid", "Power Steering Fluid"], icon: "🛢️", image: "/assets/images/categories/lubricants.png",
+  "Lubricants & Fluids": { subcategories: ["Engine Oil", "Transmission Fluid", "Coolant", "Brake Fluid", "Power Steering Fluid"], icon: "🛢️", image: "/assets/images/categories/lubricants.jpg",
     description: "Oils, coolants & fluids"
   },
-  "Body Kits & Styling": { subcategories: ["Front Bumpers", "Rear Bumpers", "Side Skirts", "Spoilers", "Headlights"], icon: "🎨", image: "/assets/images/categories/bodykits.png",
+  "Body Kits & Styling": { subcategories: ["Front Bumpers", "Rear Bumpers", "Side Skirts", "Spoilers", "Headlights"], icon: "🎨", image: "/assets/images/categories/bodykits.jpg",
     description: "Bumpers, headlights & styling"
   },
-  "Glass & Windscreens": { subcategories: ["Windscreens", "Door Glass", "Rear Glass", "Glass Seals", "Wipers"], icon: "🪟", image: "/assets/images/categories/glass.png",
+  "Glass & Windscreens": { subcategories: ["Windscreens", "Door Glass", "Rear Glass", "Glass Seals", "Wipers"], icon: "🪟", image: "/assets/images/categories/glass.jpg",
     description: "Windscreens, glass & wipers"
   },
-  "Tyres": { subcategories: ["Bridgestone", "Michelin", "Continental", "Pirelli", "Goodyear", "Dunlop"], icon: "🛞", image: "/assets/images/categories/tyres.png",
+  "Tyres": { subcategories: ["Bridgestone", "Michelin", "Continental", "Pirelli", "Goodyear", "Dunlop"], icon: "🛞", image: "/assets/images/categories/tyres.jpg",
     description: "Premium tyres from top brands"
   },
 };
