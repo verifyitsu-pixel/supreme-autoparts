@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import { registerPaymentRoutes, StoredTransaction, PaymentLog } from "./payments/index.js";
 import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -150,6 +151,11 @@ interface StoredAdmin {
 
 interface StoredSettings {
   storeName: string;
+  paymentProviders?: {
+    pesapal: { enabled: boolean; env: "sandbox" | "live" };
+    paypal: { enabled: boolean; env: "sandbox" | "live" };
+    stripe: { enabled: boolean; env: "test" | "live" };
+  };
   storeEmail: string;
   storePhone: string;
   storeAddress: string;
@@ -200,6 +206,12 @@ let adminTokens: Map<string, string> = new Map(
 let discounts: Map<string, any> = new Map(
   Object.entries(readStore<Record<string, any>>("discounts.json", {}))
 );
+let transactions: Map<string, StoredTransaction> = new Map(
+  Object.entries(readStore<Record<string, StoredTransaction>>("transactions.json", {}))
+);
+let paymentLogs: Map<string, PaymentLog> = new Map(
+  Object.entries(readStore<Record<string, PaymentLog>>("payment_logs.json", {}))
+);
 
 const DEFAULT_SETTINGS: StoredSettings = {
   storeName: "Supreme Autoparts",
@@ -237,6 +249,8 @@ function saveAdmins() { writeStore("admins.json", Object.fromEntries(admins)); }
 function saveAdminTokens() { writeStore("admin_tokens.json", Object.fromEntries(adminTokens)); }
 function saveSettings() { writeStore("settings.json", settings); }
 function saveDiscounts() { writeStore("discounts.json", Object.fromEntries(discounts)); }
+function saveTransactions() { writeStore("transactions.json", Object.fromEntries(transactions)); }
+function savePaymentLogs() { writeStore("payment_logs.json", Object.fromEntries(paymentLogs)); }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 function generateToken() { return crypto.randomBytes(32).toString("hex"); }
@@ -337,12 +351,61 @@ const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } });
 async function startServer() {
   const app = express();
   const server = createServer(app);
+
+  // ─── Raw body capture for Stripe/PayPal webhooks ─────────────────────────
+  app.use((req: any, res, next) => {
+    if (req.path.startsWith("/api/payments/webhook/")) {
+      let data: Buffer[] = [];
+      req.on("data", (chunk: Buffer) => data.push(chunk));
+      req.on("end", () => {
+        req.rawBody = Buffer.concat(data);
+        try { req.body = JSON.parse(req.rawBody.toString()); } catch { req.body = {}; }
+        next();
+      });
+    } else {
+      next();
+    }
+  });
+
   app.use(express.json({ limit: "10mb" }));
   app.use(express.urlencoded({ extended: true }));
 
   // Seed data
   seedDefaultAdmin();
   seedSampleProducts();
+
+  // ─── Register Payment Routes ──────────────────────────────────────────────
+  registerPaymentRoutes(app, {
+    transactions,
+    paymentLogs,
+    orders,
+    settings,
+    saveTransactions,
+    savePaymentLogs,
+    saveOrders,
+    saveSettings,
+    adminAuthMiddleware: (req: any, res: Response, next: Function) => {
+      const authHeader = req.headers.authorization;
+      if (!authHeader?.startsWith("Bearer ")) return res.status(401).json({ error: "Unauthorized" });
+      const token = authHeader.slice(7);
+      const adminId = adminTokens.get(token);
+      if (!adminId) return res.status(401).json({ error: "Invalid or expired admin token" });
+      const admin = admins.get(adminId);
+      if (!admin) return res.status(401).json({ error: "Admin not found" });
+      req.adminId = adminId;
+      req.admin = admin;
+      next();
+    },
+    authMiddleware: (req: any, res: Response, next: Function) => {
+      const authHeader = req.headers.authorization;
+      if (!authHeader?.startsWith("Bearer ")) return res.status(401).json({ error: "Unauthorized" });
+      const token = authHeader.slice(7);
+      const userId = tokens.get(token);
+      if (!userId) return res.status(401).json({ error: "Invalid or expired token" });
+      req.userId = userId;
+      next();
+    },
+  });
 
   // ─── Auth Middleware ────────────────────────────────────────────────────────
   const authMiddleware = (req: any, res: Response, next: Function) => {

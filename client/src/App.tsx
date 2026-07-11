@@ -25,6 +25,10 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import CheckoutNew from "./pages/CheckoutNew";
 import AdminDashboard from "./pages/AdminDashboard";
+import PaymentSuccess from "./pages/PaymentSuccess";
+import PaymentFailed from "./pages/PaymentFailed";
+import PaymentPending from "./pages/PaymentPending";
+import PaymentCancelled from "./pages/PaymentCancelled";
 // New Shop Flow Pages
 import BrandSelection from "./pages/BrandSelection";
 import ModelSelection from "./pages/ModelSelection";
@@ -54,6 +58,10 @@ function Router() {
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/reset-password" component={ResetPassword} />
       <Route path="/checkout" component={CheckoutNew} />
+      <Route path="/payment/success" component={PaymentSuccess} />
+      <Route path="/payment/failed" component={PaymentFailed} />
+      <Route path="/payment/pending" component={PaymentPending} />
+      <Route path="/payment/cancelled" component={PaymentCancelled} />
       <Route path="/terms-and-conditions" component={Terms} />
       <Route path="/refund-policy" component={RefundPolicy} />
       <Route path="/privacy-policy" component={PrivacyPolicy} />

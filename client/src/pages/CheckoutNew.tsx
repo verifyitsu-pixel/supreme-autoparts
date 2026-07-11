@@ -7,7 +7,7 @@ import { COUNTRIES, getCountryData, COUNTRY_NAMES } from "@/data/countryRegions"
 import {
   Lock, Truck, Shield, ArrowRight, Loader2, CheckCircle,
   MapPin, Phone, Mail, MessageCircle, Download, ChevronDown,
-  Package, CreditCard, Banknote, Smartphone,
+  Package, CreditCard, Banknote, Smartphone, AlertCircle, ExternalLink,
 } from "lucide-react";
 
 interface ShippingAddress {
@@ -20,8 +20,12 @@ interface ShippingAddress {
   country: string;
 }
 
-interface PaymentMethod {
-  type: "mpesa" | "bank" | "card";
+interface PaymentProvider {
+  id: "pesapal" | "paypal" | "stripe" | "whatsapp";
+  name: string;
+  description: string;
+  icon: React.ReactNode;
+  badge?: string;
 }
 
 interface SavedOrder {
@@ -37,6 +41,12 @@ interface SavedOrder {
   paymentMethod: string;
 }
 
+interface ProviderStatus {
+  pesapal: { enabled: boolean; configured: boolean };
+  paypal: { enabled: boolean; configured: boolean };
+  stripe: { enabled: boolean; configured: boolean };
+}
+
 export default function CheckoutNew() {
   const { items, total, clearCart } = useCart();
   const { user, getToken } = useAuth();
@@ -44,6 +54,9 @@ export default function CheckoutNew() {
   const [step, setStep] = useState<"shipping" | "review" | "payment" | "confirmation">("shipping");
   const [isProcessing, setIsProcessing] = useState(false);
   const [savedOrder, setSavedOrder] = useState<SavedOrder | null>(null);
+  const [providerStatus, setProviderStatus] = useState<ProviderStatus | null>(null);
+  const [selectedProvider, setSelectedProvider] = useState<"pesapal" | "paypal" | "stripe" | "whatsapp">("whatsapp");
+  const [paymentError, setPaymentError] = useState<string | null>(null);
   const orderNumberRef = useRef<string>("");
 
   const [shippingAddress, setShippingAddress] = useState<ShippingAddress>({
@@ -56,26 +69,66 @@ export default function CheckoutNew() {
     country: "Kenya",
   });
 
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>({ type: "mpesa" });
   const [policiesAccepted, setPoliciesAccepted] = useState(false);
-
   const WHATSAPP_NUMBER = "+254714498451";
 
-  // Get county/region options based on selected country
   const countryData = getCountryData(shippingAddress.country);
   const regionLabel = countryData?.regionLabel || "County / Region";
   const regionOptions = countryData?.regions || [];
 
-  // Reset county when country changes
   const handleCountryChange = (country: string) => {
     setShippingAddress(prev => ({ ...prev, country, county: "" }));
   };
 
-  // Subtotals
   const subtotal = total;
   const tax = Math.round(subtotal * 0.16);
   const shipping = 0;
   const orderTotal = subtotal + tax + shipping;
+
+  // Fetch enabled payment providers
+  useEffect(() => {
+    fetch("/api/payments/providers")
+      .then(r => r.json())
+      .then((data: ProviderStatus) => {
+        setProviderStatus(data);
+        // Auto-select first enabled provider
+        if (data.pesapal?.enabled && data.pesapal?.configured) setSelectedProvider("pesapal");
+        else if (data.paypal?.enabled && data.paypal?.configured) setSelectedProvider("paypal");
+        else if (data.stripe?.enabled && data.stripe?.configured) setSelectedProvider("stripe");
+        else setSelectedProvider("whatsapp");
+      })
+      .catch(() => setProviderStatus(null));
+  }, []);
+
+  const availableProviders: PaymentProvider[] = [
+    ...(providerStatus?.pesapal?.enabled && providerStatus?.pesapal?.configured ? [{
+      id: "pesapal" as const,
+      name: "Pesapal",
+      description: "Pay via M-Pesa, Airtel Money, Visa, Mastercard",
+      icon: <span className="text-2xl">🇰🇪</span>,
+      badge: "Popular in Kenya",
+    }] : []),
+    ...(providerStatus?.paypal?.enabled && providerStatus?.paypal?.configured ? [{
+      id: "paypal" as const,
+      name: "PayPal",
+      description: "Pay with PayPal balance, card, or bank account",
+      icon: <span className="text-2xl font-bold text-[#003087]">P</span>,
+      badge: "International",
+    }] : []),
+    ...(providerStatus?.stripe?.enabled && providerStatus?.stripe?.configured ? [{
+      id: "stripe" as const,
+      name: "Credit / Debit Card",
+      description: "Visa, Mastercard, Amex — powered by Stripe",
+      icon: <CreditCard className="text-[#635BFF]" size={24} />,
+      badge: "Secure",
+    }] : []),
+    {
+      id: "whatsapp" as const,
+      name: "WhatsApp / Manual",
+      description: "Send order via WhatsApp — we'll confirm and invoice you",
+      icon: <MessageCircle className="text-green-600" size={24} />,
+    },
+  ];
 
   if (items.length === 0 && step !== "confirmation") {
     return (
@@ -105,6 +158,7 @@ export default function CheckoutNew() {
   const handlePaymentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsProcessing(true);
+    setPaymentError(null);
 
     try {
       // 1. Save order to server
@@ -112,7 +166,7 @@ export default function CheckoutNew() {
         items: items.map(i => ({ name: i.name, quantity: i.quantity, price: i.price })),
         subtotal, tax, shipping, total: orderTotal,
         shippingAddress,
-        paymentMethod: paymentMethod.type,
+        paymentMethod: selectedProvider,
       };
 
       let order: SavedOrder | null = null;
@@ -126,14 +180,13 @@ export default function CheckoutNew() {
         if (res.ok) order = await res.json();
       }
 
-      // Use server order number or generate fallback
       const orderNum = order?.orderNumber || `SA-${Date.now().toString(36).toUpperCase()}`;
       orderNumberRef.current = orderNum;
       setSavedOrder(order);
 
-      // 2. Send WhatsApp message
-      const paymentLabel = paymentMethod.type === "mpesa" ? "M-Pesa" : paymentMethod.type === "bank" ? "Bank Transfer" : "Card";
-      const orderDetails = `
+      // 2. Handle WhatsApp fallback
+      if (selectedProvider === "whatsapp") {
+        const orderDetails = `
 *Supreme Autoparts Order — ${orderNum}*
 
 *Order Date:* ${new Date().toLocaleDateString("en-KE", { year: "numeric", month: "long", day: "numeric" })}
@@ -156,18 +209,47 @@ ${shippingAddress.county}, ${shippingAddress.country} ${shippingAddress.postalCo
 Email: ${shippingAddress.email}
 Phone: ${shippingAddress.phone}
 
-*Payment Method:* ${paymentLabel}
-
 Please confirm this order and provide payment instructions.
-      `.trim();
+        `.trim();
 
-      window.open(`https://wa.me/254714498451?text=${encodeURIComponent(orderDetails)}`, "_blank");
+        window.open(`https://wa.me/254714498451?text=${encodeURIComponent(orderDetails)}`, "_blank");
+        await new Promise(r => setTimeout(r, 800));
+        setStep("confirmation");
+        clearCart();
+        return;
+      }
 
-      await new Promise(r => setTimeout(r, 800));
-      setStep("confirmation");
-      clearCart();
+      // 3. Initiate real payment
+      if (!order?.id || !token) {
+        setPaymentError("You must be logged in to use online payment. Please log in or use WhatsApp checkout.");
+        return;
+      }
+
+      const payRes = await fetch("/api/payments/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ orderId: order.id, provider: selectedProvider }),
+      });
+
+      const payData = await payRes.json();
+
+      if (!payRes.ok) {
+        setPaymentError(payData.error || "Payment initialization failed. Please try again.");
+        return;
+      }
+
+      if (payData.checkoutUrl) {
+        // Clear cart before redirect (will be restored if payment fails)
+        clearCart();
+        // Redirect to payment provider
+        window.location.href = payData.checkoutUrl;
+        return;
+      }
+
+      setPaymentError("Payment provider did not return a checkout URL. Please try again.");
     } catch (err) {
       console.error("Checkout error:", err);
+      setPaymentError("An unexpected error occurred. Please try again or use WhatsApp checkout.");
     } finally {
       setIsProcessing(false);
     }
@@ -317,8 +399,8 @@ Please confirm this order and provide payment instructions.
                       <label className="block text-sm font-semibold text-gray-700 mb-2">{regionLabel} *</label>
                       <div className="relative">
                         <select value={shippingAddress.county} onChange={e => setShippingAddress({...shippingAddress, county: e.target.value})}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E42933] text-sm appearance-none bg-white pr-10" required>
-                          <option value="">Select {regionLabel}...</option>
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E42933] text-sm appearance-none bg-white pr-10">
+                          <option value="">Select {regionLabel}</option>
                           {regionOptions.map(r => <option key={r} value={r}>{r}</option>)}
                         </select>
                         <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={18} />
@@ -326,168 +408,171 @@ Please confirm this order and provide payment instructions.
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">Postal / ZIP Code</label>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Postal Code</label>
                       <input type="text" value={shippingAddress.postalCode}
                         onChange={e => setShippingAddress({...shippingAddress, postalCode: e.target.value})}
-                        placeholder="e.g. 00100"
+                        placeholder="00100"
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E42933] text-sm" />
                     </div>
                   </div>
 
-                  <div className="flex gap-4 pt-4 border-t border-gray-100">
-                    <button type="button" onClick={() => setLocation("/cart")} className="flex-1 px-6 py-3 border border-gray-300 rounded-lg font-semibold hover:bg-gray-50 text-sm">
-                      ← Back to Cart
-                    </button>
-                    <button type="submit" className="flex-1 px-6 py-3 bg-[#E42933] text-white rounded-lg font-semibold hover:bg-[#d41f28] flex items-center justify-center gap-2 text-sm">
-                      Review Order <ArrowRight size={16} />
-                    </button>
-                  </div>
+                  <button type="submit" className="w-full py-4 bg-[#E42933] text-white rounded-xl font-black text-base hover:bg-[#d41f28] transition-colors flex items-center justify-center gap-2">
+                    Continue to Review <ArrowRight size={18} />
+                  </button>
                 </form>
               )}
 
-              {/* ── REVIEW ── */}
+              {/* ── ORDER REVIEW ── */}
               {step === "review" && (
-                <div className="space-y-5">
-                  <div className="bg-white rounded-xl shadow-sm p-6">
-                    <h2 className="text-xl font-black text-gray-900 mb-5">Order Review</h2>
+                <div className="bg-white rounded-xl shadow-sm p-6 space-y-5">
+                  <h2 className="text-xl font-black text-gray-900 flex items-center gap-2">
+                    <Package className="text-[#E42933]" size={22} /> Order Review
+                  </h2>
 
-                    {/* Items */}
-                    <div className="space-y-3 mb-5">
-                      {items.map((item, i) => (
-                        <div key={i} className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
-                          <div className="flex items-center gap-3">
-                            {item.image && <img src={item.image} alt={item.name} className="w-12 h-12 object-cover rounded-lg bg-gray-100" />}
-                            <div>
-                              <p className="font-semibold text-gray-900 text-sm">{item.name}</p>
-                              <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
-                            </div>
-                          </div>
-                          <p className="font-black text-gray-900 text-sm">KES {(item.price * item.quantity).toLocaleString()}</p>
+                  <div className="space-y-3">
+                    {items.map((item, idx) => (
+                      <div key={idx} className="flex items-center gap-4 py-3 border-b border-gray-100 last:border-0">
+                        {item.image && <img src={item.image} alt={item.name} className="w-14 h-14 object-cover rounded-lg border border-gray-200" />}
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-gray-900 truncate">{item.name}</p>
+                          <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
                         </div>
-                      ))}
-                    </div>
-
-                    {/* Totals */}
-                    <div className="space-y-2 pt-3 border-t border-gray-200">
-                      <div className="flex justify-between text-sm text-gray-600"><span>Subtotal</span><span>KES {subtotal.toLocaleString()}</span></div>
-                      <div className="flex justify-between text-sm text-gray-600"><span>Tax (16% VAT)</span><span>KES {tax.toLocaleString()}</span></div>
-                      <div className="flex justify-between text-sm text-gray-600"><span>Shipping</span><span className="text-green-600 font-semibold">FREE</span></div>
-                      <div className="flex justify-between text-base font-black text-gray-900 pt-2 border-t border-gray-200">
-                        <span>Total</span><span>KES {orderTotal.toLocaleString()}</span>
+                        <p className="text-sm font-black text-gray-900">KES {(item.price * item.quantity).toLocaleString()}</p>
                       </div>
-                    </div>
+                    ))}
                   </div>
 
-                  {/* Shipping Summary */}
-                  <div className="bg-white rounded-xl shadow-sm p-6">
-                    <h3 className="font-black text-gray-900 mb-3 flex items-center gap-2"><MapPin size={18} className="text-[#E42933]" /> Delivery Address</h3>
-                    <div className="text-sm text-gray-700 space-y-1">
-                      <p className="font-semibold">{shippingAddress.fullName}</p>
-                      <p>{shippingAddress.address}</p>
-                      <p>{shippingAddress.county}, {shippingAddress.country} {shippingAddress.postalCode}</p>
-                      <p className="text-gray-500">{shippingAddress.phone} · {shippingAddress.email}</p>
-                    </div>
-                    <button onClick={() => setStep("shipping")} className="mt-3 text-sm text-[#E42933] font-semibold hover:underline">Edit Address</button>
+                  <div className="bg-gray-50 rounded-lg p-4 space-y-2">
+                    <h3 className="text-sm font-black text-gray-700 mb-3 flex items-center gap-2"><MapPin size={16} className="text-[#E42933]" /> Delivery To</h3>
+                    <p className="text-sm text-gray-700">{shippingAddress.fullName}</p>
+                    <p className="text-sm text-gray-600">{shippingAddress.address}</p>
+                    <p className="text-sm text-gray-600">{shippingAddress.county}, {shippingAddress.country}</p>
+                    <p className="text-sm text-gray-600">{shippingAddress.phone} · {shippingAddress.email}</p>
                   </div>
 
-                  {/* Policy Acceptance */}
-                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
-                    <h3 className="font-black text-gray-900 mb-4 flex items-center gap-2"><Shield size={18} className="text-blue-600" /> Terms & Policies</h3>
-                    <div className="space-y-4 mb-4 text-sm text-gray-700">
-                      <div>
-                        <p className="font-semibold text-gray-900 mb-2">📋 Refund Policy</p>
-                        <p className="text-gray-600">We offer a 14-day refund policy on all products. Items must be in original condition with all packaging. Refunds are processed within 5-7 business days after inspection.</p>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-gray-900 mb-2">❌ Cancellation Policy</p>
-                        <p className="text-gray-600">Orders can be cancelled within 24 hours of placement. After 24 hours, items may have already been dispatched. For cancellations after dispatch, standard refund policy applies.</p>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-gray-900 mb-2">💬 Post-Order Communication</p>
-                        <p className="text-gray-600">Once your order is placed, our team will contact you via WhatsApp at <span className="font-semibold">{WHATSAPP_NUMBER}</span> to confirm product details and provide an invoice. This helps us ensure accuracy and quick delivery.</p>
-                      </div>
-                    </div>
-                    <label className="flex items-start gap-3 cursor-pointer">
-                      <input type="checkbox" checked={policiesAccepted} onChange={e => setPoliciesAccepted(e.target.checked)} className="mt-1 w-5 h-5 text-[#E42933] rounded focus:ring-2 focus:ring-[#E42933]" />
-                      <span className="text-sm text-gray-700">I have read and accept the <span className="font-semibold">Refund Policy</span>, <span className="font-semibold">Cancellation Policy</span>, and understand that I will be contacted via WhatsApp for order confirmation.</span>
-                    </label>
-                  </div>
-
-                  <div className="flex gap-4">
-                    <button onClick={() => setStep("shipping")} className="flex-1 px-6 py-3 border border-gray-300 rounded-lg font-semibold hover:bg-gray-50 text-sm">← Edit Shipping</button>
-                    <button onClick={(e) => { e.preventDefault(); if (!policiesAccepted) { alert("Please accept the policies to proceed."); return; } setStep("payment"); }} className="flex-1 px-6 py-3 bg-[#E42933] text-white rounded-lg font-semibold hover:bg-[#d41f28] flex items-center justify-center gap-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed" disabled={!policiesAccepted}>
-                      Proceed to Payment <ArrowRight size={16} />
+                  <div className="flex gap-3">
+                    <button onClick={() => setStep("shipping")} className="flex-1 py-3 border border-gray-300 rounded-lg font-semibold text-sm hover:bg-gray-50">
+                      Edit Address
+                    </button>
+                    <button onClick={() => setStep("payment")} className="flex-1 py-3 bg-[#E42933] text-white rounded-lg font-black text-sm hover:bg-[#d41f28] flex items-center justify-center gap-2">
+                      Choose Payment <ArrowRight size={16} />
                     </button>
                   </div>
                 </div>
               )}
 
-              {/* ── PAYMENT ── */}
+              {/* ── PAYMENT SELECTION ── */}
               {step === "payment" && (
-                <form onSubmit={handlePaymentSubmit} className="space-y-5">
-                  <div className="bg-white rounded-xl shadow-sm p-6">
-                    <h2 className="text-xl font-black text-gray-900 mb-5 flex items-center gap-2">
-                      <CreditCard className="text-[#E42933]" size={22} /> Payment Method
-                    </h2>
+                <form onSubmit={handlePaymentSubmit} className="bg-white rounded-xl shadow-sm p-6 space-y-5">
+                  <h2 className="text-xl font-black text-gray-900 flex items-center gap-2">
+                    <Lock className="text-[#E42933]" size={22} /> Payment Method
+                  </h2>
 
-                    <div className="space-y-3">
-                      {[
-                        { type: "mpesa", label: "M-Pesa", desc: "Pay via M-Pesa mobile money", icon: Smartphone },
-                        { type: "bank", label: "Bank Transfer", desc: "Direct bank transfer", icon: Banknote },
-                        { type: "card", label: "Debit / Credit Card", desc: "Visa, Mastercard", icon: CreditCard },
-                      ].map(pm => (
-                        <label key={pm.type} className={`flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all ${paymentMethod.type === pm.type ? "border-[#E42933] bg-red-50" : "border-gray-200 hover:border-gray-300"}`}>
-                          <input type="radio" name="payment" value={pm.type} checked={paymentMethod.type === pm.type as any}
-                            onChange={() => setPaymentMethod({ type: pm.type as any })} className="text-[#E42933]" />
-                          <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                            <pm.icon size={20} className="text-gray-600" />
-                          </div>
-                          <div>
-                            <p className="font-semibold text-gray-900 text-sm">{pm.label}</p>
-                            <p className="text-xs text-gray-500">{pm.desc}</p>
-                          </div>
-                        </label>
-                      ))}
+                  {paymentError && (
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
+                      <AlertCircle className="text-red-600 flex-shrink-0 mt-0.5" size={18} />
+                      <p className="text-sm text-red-700">{paymentError}</p>
                     </div>
+                  )}
 
-                    <div className="mt-5 p-4 bg-blue-50 border border-blue-200 rounded-xl">
-                      <div className="flex items-start gap-3">
-                        <MessageCircle className="text-blue-600 flex-shrink-0 mt-0.5" size={18} />
-                        <div className="text-sm text-blue-800">
-                          <p className="font-semibold mb-1">How it works</p>
-                          <p>After placing your order, you'll be redirected to WhatsApp where our team will send you exact payment instructions for your chosen method.</p>
+                  <div className="space-y-3">
+                    {availableProviders.map(provider => (
+                      <label key={provider.id} className={`flex items-center gap-4 p-4 border-2 rounded-xl cursor-pointer transition-all ${selectedProvider === provider.id ? "border-[#E42933] bg-red-50" : "border-gray-200 hover:border-gray-300"}`}>
+                        <input
+                          type="radio"
+                          name="paymentProvider"
+                          value={provider.id}
+                          checked={selectedProvider === provider.id}
+                          onChange={() => { setSelectedProvider(provider.id); setPaymentError(null); }}
+                          className="sr-only"
+                        />
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${selectedProvider === provider.id ? "border-[#E42933]" : "border-gray-300"}`}>
+                          {selectedProvider === provider.id && <div className="w-2.5 h-2.5 rounded-full bg-[#E42933]" />}
                         </div>
-                      </div>
+                        <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
+                          {provider.icon}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <p className="text-sm font-black text-gray-900">{provider.name}</p>
+                            {provider.badge && <span className="text-[10px] font-bold bg-[#E42933] text-white px-2 py-0.5 rounded-full">{provider.badge}</span>}
+                          </div>
+                          <p className="text-xs text-gray-500 mt-0.5">{provider.description}</p>
+                        </div>
+                      </label>
+                    ))}
+                  </div>
+
+                  {/* Security badges */}
+                  <div className="flex items-center gap-4 py-3 border-t border-gray-100">
+                    <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                      <Lock size={13} className="text-green-600" /> SSL Encrypted
+                    </div>
+                    <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                      <Shield size={13} className="text-green-600" /> Secure Checkout
+                    </div>
+                    <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                      <Truck size={13} className="text-green-600" /> Fast Delivery
                     </div>
                   </div>
 
-                  <div className="flex gap-4">
-                    <button type="button" onClick={() => setStep("review")} className="flex-1 px-6 py-3 border border-gray-300 rounded-lg font-semibold hover:bg-gray-50 text-sm">← Back</button>
-                    <button type="submit" disabled={isProcessing}
-                      className="flex-1 px-6 py-3 bg-[#E42933] text-white rounded-lg font-semibold hover:bg-[#d41f28] disabled:opacity-50 flex items-center justify-center gap-2 text-sm">
-                      {isProcessing ? <><Loader2 size={16} className="animate-spin" /> Placing Order...</> : <><Lock size={16} /> Place Order & Pay via WhatsApp</>}
+                  {/* Policies */}
+                  <label className="flex items-start gap-3 cursor-pointer">
+                    <input type="checkbox" checked={policiesAccepted} onChange={e => setPoliciesAccepted(e.target.checked)}
+                      className="mt-1 w-4 h-4 rounded border-gray-300 text-[#E42933] focus:ring-[#E42933]" required />
+                    <span className="text-xs text-gray-600">
+                      I agree to the <a href="/terms" className="text-[#E42933] hover:underline" target="_blank">Terms of Service</a> and <a href="/privacy" className="text-[#E42933] hover:underline" target="_blank">Privacy Policy</a>. I understand that my order will be processed and I will be contacted for confirmation.
+                    </span>
+                  </label>
+
+                  <div className="flex gap-3">
+                    <button type="button" onClick={() => setStep("review")} className="flex-1 py-3 border border-gray-300 rounded-lg font-semibold text-sm hover:bg-gray-50">
+                      Back
+                    </button>
+                    <button type="submit" disabled={isProcessing || !policiesAccepted} className="flex-1 py-4 bg-[#E42933] text-white rounded-xl font-black text-base hover:bg-[#d41f28] transition-colors flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
+                      {isProcessing ? (
+                        <><Loader2 className="animate-spin" size={18} /> Processing...</>
+                      ) : selectedProvider === "whatsapp" ? (
+                        <><MessageCircle size={18} /> Send via WhatsApp</>
+                      ) : (
+                        <><ExternalLink size={18} /> Pay Now — KES {orderTotal.toLocaleString()}</>
+                      )}
                     </button>
                   </div>
+
+                  {selectedProvider !== "whatsapp" && (
+                    <p className="text-xs text-center text-gray-400">
+                      You will be redirected to {availableProviders.find(p => p.id === selectedProvider)?.name} to complete your payment securely.
+                    </p>
+                  )}
                 </form>
               )}
             </div>
 
-            {/* Order Summary Sidebar */}
+            {/* ── ORDER SUMMARY SIDEBAR ── */}
             <div className="space-y-4">
               <div className="bg-white rounded-xl shadow-sm p-5 sticky top-24">
-                <h3 className="font-black text-gray-900 mb-4">Order Summary</h3>
-                <div className="space-y-3 mb-4">
-                  {items.map((item, i) => (
-                    <div key={i} className="flex justify-between text-sm">
-                      <span className="text-gray-700 truncate mr-2">{item.name} ×{item.quantity}</span>
+                <h3 className="text-base font-black text-gray-900 mb-4">Order Summary</h3>
+
+                <div className="space-y-2 mb-4 max-h-48 overflow-y-auto">
+                  {items.map((item, idx) => (
+                    <div key={idx} className="flex justify-between text-sm">
+                      <span className="text-gray-600 truncate pr-2">{item.name} ×{item.quantity}</span>
                       <span className="font-semibold text-gray-900 flex-shrink-0">KES {(item.price * item.quantity).toLocaleString()}</span>
                     </div>
                   ))}
                 </div>
-                <div className="space-y-2 pt-3 border-t border-gray-200">
-                  <div className="flex justify-between text-sm text-gray-600"><span>Subtotal</span><span>KES {subtotal.toLocaleString()}</span></div>
-                  <div className="flex justify-between text-sm text-gray-600"><span>Tax (16%)</span><span>KES {tax.toLocaleString()}</span></div>
-                  <div className="flex justify-between text-sm text-gray-600"><span>Shipping</span><span className="text-green-600 font-semibold">FREE</span></div>
+
+                <div className="border-t border-gray-100 pt-3 space-y-2">
+                  <div className="flex justify-between text-sm text-gray-600">
+                    <span>Subtotal</span><span>KES {subtotal.toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between text-sm text-gray-600">
+                    <span>Tax (16% VAT)</span><span>KES {tax.toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between text-sm text-green-600 font-semibold">
+                    <span>Shipping</span><span>FREE</span>
+                  </div>
                   <div className="flex justify-between text-base font-black text-gray-900 pt-2 border-t border-gray-200">
                     <span>Total</span><span>KES {orderTotal.toLocaleString()}</span>
                   </div>
@@ -495,13 +580,12 @@ Please confirm this order and provide payment instructions.
 
                 <div className="mt-4 space-y-2">
                   <div className="flex items-center gap-2 text-xs text-gray-500">
-                    <Shield size={14} className="text-green-600" /> Secure checkout
+                    <Shield size={13} className="text-green-600 flex-shrink-0" />
+                    <span>All transactions are encrypted and secure</span>
                   </div>
                   <div className="flex items-center gap-2 text-xs text-gray-500">
-                    <Truck size={14} className="text-blue-600" /> Free delivery in Nairobi
-                  </div>
-                  <div className="flex items-center gap-2 text-xs text-gray-500">
-                    <CheckCircle size={14} className="text-green-600" /> Genuine OEM parts
+                    <Truck size={13} className="text-blue-600 flex-shrink-0" />
+                    <span>Nationwide delivery across Kenya</span>
                   </div>
                 </div>
               </div>

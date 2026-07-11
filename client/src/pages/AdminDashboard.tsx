@@ -2008,6 +2008,378 @@ function RefundStatusBadge({ status }: { status: string }) {
   return <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold capitalize ${styles[status] || "bg-gray-100 text-gray-700"}`}>{status}</span>;
 }
 
+// ─── Payments Section ───────────────────────────────────────────────────────
+function PaymentsSection() {
+  const { getToken } = useAdmin();
+  const [activeTab, setActiveTab] = useState<"config" | "transactions" | "logs">("config");
+  const [paySettings, setPaySettings] = useState<any>(null);
+  const [transactions, setTransactions] = useState<any[]>([]);
+  const [logs, setLogs] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [registeringIPN, setRegisteringIPN] = useState(false);
+  const [ipnResult, setIpnResult] = useState<string | null>(null);
+  const [saveMsg, setSaveMsg] = useState<string | null>(null);
+
+  const fetchAll = async () => {
+    setLoading(true);
+    try {
+      const token = getToken();
+      const headers = { Authorization: `Bearer ${token}` };
+      const [psRes, txRes, logRes] = await Promise.all([
+        fetch("/api/admin/payment-settings", { headers }),
+        fetch("/api/admin/transactions", { headers }),
+        fetch("/api/admin/payment-logs?limit=200", { headers }),
+      ]);
+      if (psRes.ok) setPaySettings(await psRes.json());
+      if (txRes.ok) setTransactions(await txRes.json());
+      if (logRes.ok) setLogs(await logRes.json());
+    } catch (e) { console.error(e); }
+    finally { setLoading(false); }
+  };
+
+  useEffect(() => { fetchAll(); }, []);
+
+  const handleToggle = async (provider: "pesapal" | "paypal" | "stripe", enabled: boolean) => {
+    if (!paySettings) return;
+    setSaving(true);
+    try {
+      const token = getToken();
+      const updated = { ...paySettings.providers, [provider]: { ...paySettings.providers[provider], enabled } };
+      const res = await fetch("/api/admin/payment-settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ providers: updated }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setPaySettings((prev: any) => ({ ...prev, providers: data.providers }));
+        setSaveMsg(`${provider} ${enabled ? "enabled" : "disabled"} successfully`);
+        setTimeout(() => setSaveMsg(null), 3000);
+      }
+    } catch (e) { console.error(e); }
+    finally { setSaving(false); }
+  };
+
+  const handleRegisterIPN = async () => {
+    setRegisteringIPN(true);
+    setIpnResult(null);
+    try {
+      const token = getToken();
+      const res = await fetch("/api/admin/pesapal/register-ipn", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (res.ok) setIpnResult(`✅ IPN Registered! ipn_id: ${data.ipnId}\nSet PESAPAL_IPN_ID=${data.ipnId} in Railway environment variables.`);
+      else setIpnResult(`❌ Error: ${data.error}`);
+    } catch (e: any) { setIpnResult(`❌ Error: ${e.message}`); }
+    finally { setRegisteringIPN(false); }
+  };
+
+  const statusBadge = (status: string) => {
+    const styles: Record<string, string> = {
+      completed: "bg-green-100 text-green-700",
+      pending: "bg-yellow-100 text-yellow-700",
+      failed: "bg-red-100 text-red-700",
+      cancelled: "bg-gray-100 text-gray-700",
+    };
+    return <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold capitalize ${styles[status] || "bg-gray-100 text-gray-700"}`}>{status}</span>;
+  };
+
+  const logBadge = (level: string) => {
+    const styles: Record<string, string> = {
+      info: "bg-blue-100 text-blue-700",
+      warn: "bg-yellow-100 text-yellow-700",
+      error: "bg-red-100 text-red-700",
+    };
+    return <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${styles[level] || "bg-gray-100 text-gray-700"}`}>{level}</span>;
+  };
+
+  if (loading) return <div className="flex items-center justify-center py-20"><div className="animate-spin w-8 h-8 border-4 border-[#E42933] border-t-transparent rounded-full" /></div>;
+
+  const providers = [
+    {
+      id: "pesapal" as const,
+      name: "Pesapal",
+      description: "M-Pesa, Airtel Money, Visa, Mastercard — Kenya & East Africa",
+      icon: "🇰🇪",
+      creds: paySettings?.credentials?.pesapal,
+      credFields: [
+        { key: "hasKey", label: "Consumer Key" },
+        { key: "hasSecret", label: "Consumer Secret" },
+        { key: "hasIpnId", label: "IPN ID" },
+      ],
+    },
+    {
+      id: "paypal" as const,
+      name: "PayPal",
+      description: "PayPal balance, credit/debit cards — International",
+      icon: "🅿",
+      creds: paySettings?.credentials?.paypal,
+      credFields: [
+        { key: "hasClientId", label: "Client ID" },
+        { key: "hasSecret", label: "Client Secret" },
+        { key: "hasWebhookId", label: "Webhook ID" },
+      ],
+    },
+    {
+      id: "stripe" as const,
+      name: "Stripe",
+      description: "Visa, Mastercard, Amex — Global card payments",
+      icon: "💳",
+      creds: paySettings?.credentials?.stripe,
+      credFields: [
+        { key: "hasSecretKey", label: "Secret Key" },
+        { key: "hasWebhookSecret", label: "Webhook Secret" },
+      ],
+    },
+  ];
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-xl font-black text-gray-900">Payment Management</h2>
+          <p className="text-sm text-gray-500 mt-1">Configure payment providers, view transactions and logs</p>
+        </div>
+        <button onClick={fetchAll} className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+          <RefreshCw size={14} /> Refresh
+        </button>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex gap-1 bg-gray-100 rounded-xl p-1">
+        {(["config", "transactions", "logs"] as const).map(tab => (
+          <button key={tab} onClick={() => setActiveTab(tab)}
+            className={`flex-1 py-2 px-4 rounded-lg text-sm font-semibold capitalize transition-all ${
+              activeTab === tab ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
+            }`}>
+            {tab === "config" ? "Configuration" : tab === "transactions" ? `Transactions (${transactions.length})` : `Logs (${logs.length})`}
+          </button>
+        ))}
+      </div>
+
+      {/* ── Configuration Tab ── */}
+      {activeTab === "config" && (
+        <div className="space-y-4">
+          {saveMsg && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-3 flex items-center gap-2">
+              <CheckCircle size={16} className="text-green-600" />
+              <p className="text-sm text-green-700 font-medium">{saveMsg}</p>
+            </div>
+          )}
+
+          {providers.map(provider => (
+            <div key={provider.id} className="bg-white rounded-xl border border-gray-200 p-5">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-xl">
+                    {provider.icon}
+                  </div>
+                  <div>
+                    <h3 className="font-black text-gray-900">{provider.name}</h3>
+                    <p className="text-xs text-gray-500">{provider.description}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className={`text-xs font-semibold px-2 py-1 rounded-full ${
+                    paySettings?.providers?.[provider.id]?.env === "live" || paySettings?.credentials?.[provider.id]?.env === "live"
+                      ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"
+                  }`}>
+                    {paySettings?.credentials?.[provider.id]?.env === "live" ? "🟢 Live" : "🟡 Sandbox/Test"}
+                  </span>
+                  <button
+                    onClick={() => handleToggle(provider.id, !paySettings?.providers?.[provider.id]?.enabled)}
+                    disabled={saving}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                      paySettings?.providers?.[provider.id]?.enabled ? "bg-[#E42933]" : "bg-gray-200"
+                    } disabled:opacity-50`}
+                  >
+                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                      paySettings?.providers?.[provider.id]?.enabled ? "translate-x-6" : "translate-x-1"
+                    }`} />
+                  </button>
+                  <span className="text-xs font-semibold text-gray-600">
+                    {paySettings?.providers?.[provider.id]?.enabled ? "Enabled" : "Disabled"}
+                  </span>
+                </div>
+              </div>
+
+              {/* Credential Status */}
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                {provider.credFields.map(field => (
+                  <div key={field.key} className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs ${
+                    provider.creds?.[field.key] ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"
+                  }`}>
+                    {provider.creds?.[field.key] ? <CheckCircle size={12} /> : <XCircle size={12} />}
+                    <span className="font-medium">{field.label}</span>
+                    <span>{provider.creds?.[field.key] ? "Set" : "Missing"}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Pesapal IPN Registration */}
+              {provider.id === "pesapal" && (
+                <div className="mt-4 pt-4 border-t border-gray-100">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-semibold text-gray-700">IPN Registration</p>
+                      <p className="text-xs text-gray-500">Register the IPN URL with Pesapal to receive payment notifications</p>
+                    </div>
+                    <button
+                      onClick={handleRegisterIPN}
+                      disabled={registeringIPN || !provider.creds?.hasKey || !provider.creds?.hasSecret}
+                      className="flex items-center gap-2 px-4 py-2 bg-[#E42933] text-white rounded-lg text-xs font-semibold hover:bg-[#d41f28] transition-colors disabled:opacity-50"
+                    >
+                      {registeringIPN ? <><div className="animate-spin w-3 h-3 border-2 border-white border-t-transparent rounded-full" /> Registering...</> : "Register IPN URL"}
+                    </button>
+                  </div>
+                  {ipnResult && (
+                    <div className="mt-3 bg-gray-50 rounded-lg p-3">
+                      <pre className="text-xs text-gray-700 whitespace-pre-wrap">{ipnResult}</pre>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          ))}
+
+          {/* Webhook URLs Reference */}
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-5">
+            <h3 className="font-black text-gray-900 mb-3 flex items-center gap-2"><Info size={16} className="text-blue-600" /> Webhook & Callback URLs</h3>
+            <p className="text-xs text-gray-600 mb-3">Register these URLs in your payment provider dashboards:</p>
+            <div className="space-y-2">
+              {[
+                { label: "Pesapal IPN (auto-registered)", url: "/api/payments/webhook/pesapal" },
+                { label: "Pesapal Callback", url: "/api/payments/callback/pesapal" },
+                { label: "PayPal Webhook", url: "/api/payments/webhook/paypal" },
+                { label: "PayPal Return URL", url: "/api/payments/callback/paypal" },
+                { label: "Stripe Webhook", url: "/api/payments/webhook/stripe" },
+                { label: "Stripe Success URL", url: "/api/payments/callback/stripe" },
+              ].map(item => (
+                <div key={item.url} className="flex items-center justify-between bg-white rounded-lg px-3 py-2">
+                  <span className="text-xs font-semibold text-gray-700">{item.label}</span>
+                  <code className="text-xs text-[#E42933] font-mono">{window.location.origin}{item.url}</code>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Transactions Tab ── */}
+      {activeTab === "transactions" && (
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="p-4 border-b border-gray-100">
+            <h3 className="font-black text-gray-900">Transaction History</h3>
+            <p className="text-xs text-gray-500 mt-1">{transactions.length} total transactions</p>
+          </div>
+          {transactions.length === 0 ? (
+            <div className="text-center py-12">
+              <CreditCard className="mx-auto text-gray-300 mb-3" size={40} />
+              <p className="text-gray-500 font-medium">No transactions yet</p>
+              <p className="text-sm text-gray-400">Transactions will appear here once customers complete payments</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    {["Order", "Provider", "Amount", "Currency", "Status", "Date", "Customer"].map(h => (
+                      <th key={h} className="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {transactions.map(tx => (
+                    <tr key={tx.id} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-4 py-3">
+                        <p className="text-sm font-black text-gray-900">{tx.orderNumber}</p>
+                        <p className="text-xs text-gray-400 font-mono">{tx.id.slice(0, 8)}...</p>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className="text-sm font-semibold capitalize text-gray-700">{tx.provider}</span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className="text-sm font-black text-gray-900">{tx.amount?.toLocaleString()}</span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className="text-xs font-semibold text-gray-500">{tx.currency}</span>
+                      </td>
+                      <td className="px-4 py-3">{statusBadge(tx.status)}</td>
+                      <td className="px-4 py-3">
+                        <span className="text-xs text-gray-500">{new Date(tx.createdAt).toLocaleDateString()}</span>
+                        <p className="text-[10px] text-gray-400">{new Date(tx.createdAt).toLocaleTimeString()}</p>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className="text-xs text-gray-600">{tx.customerEmail || "—"}</span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── Logs Tab ── */}
+      {activeTab === "logs" && (
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+            <div>
+              <h3 className="font-black text-gray-900">Payment Event Logs</h3>
+              <p className="text-xs text-gray-500 mt-1">Last {logs.length} events (newest first)</p>
+            </div>
+          </div>
+          {logs.length === 0 ? (
+            <div className="text-center py-12">
+              <Activity className="mx-auto text-gray-300 mb-3" size={40} />
+              <p className="text-gray-500 font-medium">No payment events logged yet</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    {["Time", "Provider", "Level", "Event", "Message"].map(h => (
+                      <th key={h} className="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {logs.map(log => (
+                    <tr key={log.id} className={`hover:bg-gray-50 transition-colors ${
+                      log.level === "error" ? "bg-red-50/30" : log.level === "warn" ? "bg-amber-50/30" : ""
+                    }`}>
+                      <td className="px-4 py-3">
+                        <p className="text-xs text-gray-500">{new Date(log.timestamp).toLocaleDateString()}</p>
+                        <p className="text-[10px] text-gray-400">{new Date(log.timestamp).toLocaleTimeString()}</p>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className="text-xs font-semibold capitalize text-gray-700">{log.provider}</span>
+                      </td>
+                      <td className="px-4 py-3">{logBadge(log.level)}</td>
+                      <td className="px-4 py-3">
+                        <span className="text-xs font-mono text-gray-600">{log.event}</span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <p className="text-xs text-gray-700 max-w-xs truncate" title={log.message}>{log.message}</p>
+                        {log.orderId && <p className="text-[10px] text-gray-400">Order: {log.orderId.slice(0, 8)}...</p>}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Main Admin Dashboard ─────────────────────────────────────────────────────
 export default function AdminDashboard() {
   const { admin, isAuthenticated, loading, logout } = useAdmin();
@@ -2034,6 +2406,7 @@ export default function AdminDashboard() {
     { id: "analytics", label: "Analytics", icon: BarChart3 },
     { id: "discounts", label: "Discounts", icon: Percent },
     { id: "refunds", label: "Refunds", icon: RotateCcw },
+    { id: "payments", label: "Payments", icon: CreditCard },
     { id: "settings", label: "Settings", icon: Settings },
   ];
 
@@ -2133,6 +2506,7 @@ export default function AdminDashboard() {
           {activeSection === "analytics" && <AnalyticsSection />}
           {activeSection === "discounts" && <DiscountsSection />}
           {activeSection === "refunds" && <RefundsSection />}
+          {activeSection === "payments" && <PaymentsSection />}
           {activeSection === "settings" && <SettingsSection />}
         </main>
       </div>
