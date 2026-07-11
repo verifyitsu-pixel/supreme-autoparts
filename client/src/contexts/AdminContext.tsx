@@ -1,10 +1,14 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
-interface AdminUser {
+export type AdminRole = "superadmin" | "admin" | "manager" | "staff";
+
+export interface AdminUser {
   id: string;
   email: string;
   name: string;
-  role: "superadmin" | "admin" | "staff";
+  role: AdminRole;
+  permissions?: string[];
+  avatar?: string;
 }
 
 interface AdminContextType {
@@ -14,8 +18,26 @@ interface AdminContextType {
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   error: string | null;
+  clearError: () => void;
   getToken: () => string | null;
+  hasPermission: (permission: string) => boolean;
+  canAccess: (section: string) => boolean;
 }
+
+// Role-based section access map
+const ROLE_ACCESS: Record<AdminRole, string[]> = {
+  superadmin: ["*"], // all sections
+  admin: [
+    "dashboard", "products", "orders", "customers", "inventory",
+    "payments", "analytics", "discounts", "refunds", "settings",
+    "cms", "media", "marketing", "shipping", "security",
+  ],
+  manager: [
+    "dashboard", "products", "orders", "customers", "inventory",
+    "analytics", "discounts", "refunds", "media",
+  ],
+  staff: ["dashboard", "products", "orders", "inventory"],
+};
 
 const AdminContext = createContext<AdminContextType | null>(null);
 
@@ -73,10 +95,38 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     setAdmin(null);
   };
 
+  const clearError = () => setError(null);
+
   const getToken = () => localStorage.getItem("admin_token");
 
+  const hasPermission = (permission: string): boolean => {
+    if (!admin) return false;
+    if (admin.role === "superadmin") return true;
+    if (admin.permissions?.includes(permission)) return true;
+    return false;
+  };
+
+  const canAccess = (section: string): boolean => {
+    if (!admin) return false;
+    const access = ROLE_ACCESS[admin.role] || [];
+    return access.includes("*") || access.includes(section);
+  };
+
   return (
-    <AdminContext.Provider value={{ admin, isAuthenticated: !!admin, loading, login, logout, error, getToken }}>
+    <AdminContext.Provider
+      value={{
+        admin,
+        isAuthenticated: !!admin,
+        loading,
+        login,
+        logout,
+        error,
+        clearError,
+        getToken,
+        hasPermission,
+        canAccess,
+      }}
+    >
       {children}
     </AdminContext.Provider>
   );

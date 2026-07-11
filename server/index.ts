@@ -1124,6 +1124,378 @@ async function startServer() {
     res.json(refund);
   });
 
+  // ─── ADMIN INVENTORY MANAGEMENT ────────────────────────────────────────────
+  app.get("/api/admin/inventory", adminAuthMiddleware, (req: any, res: Response) => {
+    const { search, category, status, page = "1", limit = "20" } = req.query;
+    let allProducts = Array.from(products.values());
+    if (search) { const s = String(search).toLowerCase(); allProducts = allProducts.filter(p => p.name.toLowerCase().includes(s) || p.sku.toLowerCase().includes(s)); }
+    if (category) allProducts = allProducts.filter(p => p.category === category);
+    if (status === "low") allProducts = allProducts.filter(p => p.stock > 0 && p.stock <= p.lowStockThreshold);
+    else if (status === "out") allProducts = allProducts.filter(p => p.stock === 0);
+    else if (status === "ok") allProducts = allProducts.filter(p => p.stock > p.lowStockThreshold);
+    allProducts.sort((a, b) => a.stock - b.stock);
+    const total = allProducts.length;
+    const p = parseInt(String(page)); const l = parseInt(String(limit));
+    const paginated = allProducts.slice((p - 1) * l, p * l);
+    res.json({ products: paginated, total, page: p, totalPages: Math.ceil(total / l) });
+  });
+
+  app.put("/api/admin/inventory/:id", adminAuthMiddleware, (req: any, res: Response) => {
+    const product = products.get(req.params.id);
+    if (!product) return res.status(404).json({ error: "Product not found" });
+    const { stock, lowStockThreshold, adjustment, reason } = req.body;
+    if (adjustment !== undefined) {
+      product.stock = Math.max(0, product.stock + Number(adjustment));
+    } else if (stock !== undefined) {
+      product.stock = Math.max(0, Number(stock));
+    }
+    if (lowStockThreshold !== undefined) product.lowStockThreshold = Number(lowStockThreshold);
+    product.updatedAt = new Date().toISOString();
+    products.set(product.id, product); saveProducts();
+    // Log adjustment
+    const logs = readStore<any[]>("inventory_logs.json", []);
+    logs.push({ id: crypto.randomUUID(), productId: product.id, productName: product.name, sku: product.sku, adjustment: adjustment || (stock - product.stock), newStock: product.stock, reason: reason || "Manual adjustment", adminId: req.adminId, createdAt: new Date().toISOString() });
+    writeStore("inventory_logs.json", logs.slice(-500));
+    res.json(product);
+  });
+
+  app.get("/api/admin/inventory/logs", adminAuthMiddleware, (req: any, res: Response) => {
+    const logs = readStore<any[]>("inventory_logs.json", []);
+    res.json(logs.reverse().slice(0, 100));
+  });
+
+  // ─── ADMIN ANALYTICS ──────────────────────────────────────────────────────────
+  app.get("/api/admin/analytics", adminAuthMiddleware, (req: any, res: Response) => {
+    const { period = "30" } = req.query;
+    const days = parseInt(String(period));
+    const now = new Date();
+    const cutoff = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
+    const allOrders = Array.from(orders.values());
+    const allProducts = Array.from(products.values());
+    const allUsers = Array.from(users.values());
+    const periodOrders = allOrders.filter(o => new Date(o.date) >= cutoff);
+    const paidOrders = periodOrders.filter(o => o.paymentStatus === "paid");
+    const totalRevenue = paidOrders.reduce((s, o) => s + o.total, 0);
+    const prevCutoff = new Date(cutoff.getTime() - days * 24 * 60 * 60 * 1000);
+    const prevOrders = allOrders.filter(o => new Date(o.date) >= prevCutoff && new Date(o.date) < cutoff);
+    const prevRevenue = prevOrders.filter(o => o.paymentStatus === "paid").reduce((s, o) => s + o.total, 0);
+    const revenueChange = prevRevenue > 0 ? ((totalRevenue - prevRevenue) / prevRevenue * 100).toFixed(1) : "0";
+    // Daily revenue for chart
+    const dailyRevenue = Array.from({ length: Math.min(days, 30) }, (_, i) => {
+      const d = new Date(now); d.setDate(d.getDate() - (Math.min(days, 30) - 1 - i));
+      const dayStr = d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+      const revenue = allOrders.filter(o => o.paymentStatus === "paid" && new Date(o.date).toDateString() === d.toDateString()).reduce((s, o) => s + o.total, 0);
+      const orderCount = allOrders.filter(o => new Date(o.date).toDateString() === d.toDateString()).length;
+      return { date: dayStr, revenue, orders: orderCount };
+    });
+    // Category breakdown
+    const categoryRevenue: Record<string, number> = {};
+    for (const order of paidOrders) {
+      for (const item of order.items) {
+        const product = allProducts.find(p => p.name === item.name);
+        const cat = product?.category || item.category || "Other";
+        categoryRevenue[cat] = (categoryRevenue[cat] || 0) + item.price * item.quantity;
+      }
+    }
+    const categoryBreakdown = Object.entries(categoryRevenue).map(([name, revenue]) => ({ name, revenue })).sort((a, b) => b.revenue - a.revenue).slice(0, 8);
+    // New customers
+    const newCustomers = allUsers.filter(u => new Date(u.createdAt) >= cutoff).length;
+    // Top products
+    const topProducts = allProducts.sort((a, b) => (b.sales || 0) - (a.sales || 0)).slice(0, 10).map(p => ({ id: p.id, name: p.name, sku: p.sku, sales: p.sales || 0, revenue: (p.sales || 0) * p.price, stock: p.stock }));
+    res.json({ totalRevenue, totalOrders: periodOrders.length, newCustomers, averageOrderValue: paidOrders.length > 0 ? Math.round(totalRevenue / paidOrders.length) : 0, revenueChange: parseFloat(revenueChange), dailyRevenue, categoryBreakdown, topProducts });
+  });
+
+  // ─── ADMIN SHIPPING ZONES ─────────────────────────────────────────────────────
+  app.get("/api/admin/shipping/zones", adminAuthMiddleware, (_req: any, res: Response) => {
+    const zones = readStore<any[]>("shipping_zones.json", [
+      { id: "zone-1", name: "Nairobi", regions: ["Nairobi"], rates: [{ id: "r1", name: "Standard", price: 300, minDays: 1, maxDays: 2 }, { id: "r2", name: "Express", price: 600, minDays: 0, maxDays: 1 }] },
+      { id: "zone-2", name: "Central Kenya", regions: ["Kiambu", "Murang'a", "Kirinyaga", "Nyeri", "Nyandarua"], rates: [{ id: "r3", name: "Standard", price: 500, minDays: 2, maxDays: 3 }] },
+      { id: "zone-3", name: "Rest of Kenya", regions: ["All other counties"], rates: [{ id: "r4", name: "Standard", price: 800, minDays: 3, maxDays: 5 }] },
+    ]);
+    res.json(zones);
+  });
+
+  app.post("/api/admin/shipping/zones", adminAuthMiddleware, (req: any, res: Response) => {
+    const zones = readStore<any[]>("shipping_zones.json", []);
+    const zone = { id: crypto.randomUUID(), ...req.body, rates: req.body.rates || [] };
+    zones.push(zone); writeStore("shipping_zones.json", zones);
+    res.status(201).json(zone);
+  });
+
+  app.put("/api/admin/shipping/zones/:id", adminAuthMiddleware, (req: any, res: Response) => {
+    const zones = readStore<any[]>("shipping_zones.json", []);
+    const idx = zones.findIndex(z => z.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ error: "Zone not found" });
+    zones[idx] = { ...zones[idx], ...req.body };
+    writeStore("shipping_zones.json", zones);
+    res.json(zones[idx]);
+  });
+
+  app.delete("/api/admin/shipping/zones/:id", adminAuthMiddleware, (req: any, res: Response) => {
+    const zones = readStore<any[]>("shipping_zones.json", []);
+    writeStore("shipping_zones.json", zones.filter(z => z.id !== req.params.id));
+    res.json({ success: true });
+  });
+
+  // ─── ADMIN GLOBAL SEARCH ──────────────────────────────────────────────────────
+  app.get("/api/admin/search", adminAuthMiddleware, (req: any, res: Response) => {
+    const q = String(req.query.q || "").toLowerCase().trim();
+    if (!q || q.length < 2) return res.json({ results: [] });
+    const results: any[] = [];
+    // Products
+    Array.from(products.values()).filter(p => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q)).slice(0, 5).forEach(p => {
+      results.push({ type: "product", id: p.id, title: p.name, subtitle: `${p.sku} · KES ${p.price.toLocaleString()}`, url: `/admin/products/${p.id}/edit` });
+    });
+    // Orders
+    Array.from(orders.values()).filter(o => o.orderNumber.toLowerCase().includes(q) || (o.customerName || "").toLowerCase().includes(q) || (o.customerEmail || "").toLowerCase().includes(q)).slice(0, 5).forEach(o => {
+      results.push({ type: "order", id: o.id, title: o.orderNumber, subtitle: `${o.customerName || o.customerEmail} · KES ${o.total.toLocaleString()}`, url: `/admin/orders/${o.id}` });
+    });
+    // Customers
+    Array.from(users.values()).filter(u => u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q) || (u.phone || "").includes(q)).slice(0, 5).forEach(u => {
+      results.push({ type: "customer", id: u.id, title: u.name, subtitle: u.email, url: `/admin/customers/${u.id}` });
+    });
+    res.json({ results: results.slice(0, 12) });
+  });
+
+  // ─── ADMIN NOTIFICATIONS ──────────────────────────────────────────────────────
+  app.get("/api/admin/notifications", adminAuthMiddleware, (req: any, res: Response) => {
+    const { filter } = req.query;
+    let notifs = readStore<any[]>("notifications.json", []);
+    // Auto-generate system notifications from real data
+    const lowStock = Array.from(products.values()).filter(p => p.stock > 0 && p.stock <= p.lowStockThreshold && p.status === "active");
+    const outOfStock = Array.from(products.values()).filter(p => p.stock === 0 && p.status === "active");
+    const pendingOrders = Array.from(orders.values()).filter(o => o.status === "pending").length;
+    const sysNotifs: any[] = [];
+    if (pendingOrders > 0) sysNotifs.push({ id: "sys-pending-orders", type: "order", message: `${pendingOrders} order${pendingOrders > 1 ? "s" : ""} waiting to be processed`, read: false, createdAt: new Date().toISOString(), link: "/admin/orders" });
+    outOfStock.slice(0, 3).forEach(p => sysNotifs.push({ id: `sys-oos-${p.id}`, type: "inventory", message: `${p.name} is out of stock`, read: false, createdAt: new Date().toISOString(), link: `/admin/inventory` }));
+    lowStock.slice(0, 3).forEach(p => sysNotifs.push({ id: `sys-low-${p.id}`, type: "inventory", message: `${p.name} is running low (${p.stock} left)`, read: false, createdAt: new Date().toISOString(), link: `/admin/inventory` }));
+    const allNotifs = [...sysNotifs, ...notifs].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    const filtered = filter === "unread" ? allNotifs.filter(n => !n.read) : allNotifs;
+    res.json(filtered);
+  });
+
+  app.post("/api/admin/notifications/:id/read", adminAuthMiddleware, (req: any, res: Response) => {
+    const notifs = readStore<any[]>("notifications.json", []);
+    const idx = notifs.findIndex(n => n.id === req.params.id);
+    if (idx !== -1) { notifs[idx].read = true; writeStore("notifications.json", notifs); }
+    res.json({ success: true });
+  });
+
+  app.post("/api/admin/notifications/mark-all-read", adminAuthMiddleware, (_req: any, res: Response) => {
+    const notifs = readStore<any[]>("notifications.json", []);
+    notifs.forEach(n => n.read = true);
+    writeStore("notifications.json", notifs);
+    res.json({ success: true });
+  });
+
+  app.delete("/api/admin/notifications/clear-all", adminAuthMiddleware, (_req: any, res: Response) => {
+    writeStore("notifications.json", []);
+    res.json({ success: true });
+  });
+
+  // ─── ADMIN MEDIA LIBRARY ──────────────────────────────────────────────────────
+  app.get("/api/admin/media", adminAuthMiddleware, (_req: any, res: Response) => {
+    const mediaFiles: any[] = [];
+    if (fs.existsSync(UPLOADS_DIR)) {
+      const files = fs.readdirSync(UPLOADS_DIR);
+      files.forEach(f => {
+        const filePath = path.join(UPLOADS_DIR, f);
+        const stat = fs.statSync(filePath);
+        const ext = path.extname(f).toLowerCase();
+        const isImage = [".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg"].includes(ext);
+        mediaFiles.push({ id: f, name: f, url: `/uploads/${f}`, size: stat.size, type: isImage ? "image" : "file", createdAt: stat.birthtime.toISOString() });
+      });
+    }
+    res.json(mediaFiles.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()));
+  });
+
+  app.delete("/api/admin/media/:filename", adminAuthMiddleware, (req: any, res: Response) => {
+    const filePath = path.join(UPLOADS_DIR, req.params.filename);
+    if (fs.existsSync(filePath)) { fs.unlinkSync(filePath); res.json({ success: true }); }
+    else res.status(404).json({ error: "File not found" });
+  });
+
+  // ─── ADMIN CMS ────────────────────────────────────────────────────────────────
+  app.get("/api/admin/cms/banners", adminAuthMiddleware, (_req: any, res: Response) => {
+    res.json(readStore<any[]>("cms_banners.json", []));
+  });
+
+  app.post("/api/admin/cms/banners", adminAuthMiddleware, (req: any, res: Response) => {
+    const banners = readStore<any[]>("cms_banners.json", []);
+    const banner = { id: crypto.randomUUID(), ...req.body, createdAt: new Date().toISOString() };
+    banners.push(banner); writeStore("cms_banners.json", banners);
+    res.status(201).json(banner);
+  });
+
+  app.put("/api/admin/cms/banners/:id", adminAuthMiddleware, (req: any, res: Response) => {
+    const banners = readStore<any[]>("cms_banners.json", []);
+    const idx = banners.findIndex(b => b.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ error: "Not found" });
+    banners[idx] = { ...banners[idx], ...req.body };
+    writeStore("cms_banners.json", banners);
+    res.json(banners[idx]);
+  });
+
+  app.delete("/api/admin/cms/banners/:id", adminAuthMiddleware, (req: any, res: Response) => {
+    const banners = readStore<any[]>("cms_banners.json", []);
+    writeStore("cms_banners.json", banners.filter(b => b.id !== req.params.id));
+    res.json({ success: true });
+  });
+
+  app.get("/api/admin/cms/pages", adminAuthMiddleware, (_req: any, res: Response) => {
+    res.json(readStore<any[]>("cms_pages.json", [
+      { id: "about", title: "About Us", slug: "about", content: "<p>About Supreme Autoparts</p>", status: "published", updatedAt: new Date().toISOString() },
+      { id: "contact", title: "Contact Us", slug: "contact", content: "<p>Contact us at info@supremeautoparts.co.ke</p>", status: "published", updatedAt: new Date().toISOString() },
+      { id: "faq", title: "FAQ", slug: "faq", content: "<p>Frequently Asked Questions</p>", status: "draft", updatedAt: new Date().toISOString() },
+    ]));
+  });
+
+  app.put("/api/admin/cms/pages/:id", adminAuthMiddleware, (req: any, res: Response) => {
+    const pages = readStore<any[]>("cms_pages.json", []);
+    const idx = pages.findIndex(p => p.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ error: "Not found" });
+    pages[idx] = { ...pages[idx], ...req.body, updatedAt: new Date().toISOString() };
+    writeStore("cms_pages.json", pages);
+    res.json(pages[idx]);
+  });
+
+  app.post("/api/admin/cms/pages", adminAuthMiddleware, (req: any, res: Response) => {
+    const pages = readStore<any[]>("cms_pages.json", []);
+    const page = { id: crypto.randomUUID(), ...req.body, status: req.body.status || "draft", updatedAt: new Date().toISOString() };
+    pages.push(page); writeStore("cms_pages.json", pages);
+    res.status(201).json(page);
+  });
+
+  // ─── ADMIN MARKETING ──────────────────────────────────────────────────────────
+  app.get("/api/admin/marketing/campaigns", adminAuthMiddleware, (_req: any, res: Response) => {
+    res.json(readStore<any[]>("campaigns.json", []));
+  });
+
+  app.post("/api/admin/marketing/campaigns", adminAuthMiddleware, (req: any, res: Response) => {
+    const campaigns = readStore<any[]>("campaigns.json", []);
+    const campaign = { id: crypto.randomUUID(), ...req.body, status: "draft", sentCount: 0, createdAt: new Date().toISOString() };
+    campaigns.push(campaign); writeStore("campaigns.json", campaigns);
+    res.status(201).json(campaign);
+  });
+
+  app.put("/api/admin/marketing/campaigns/:id", adminAuthMiddleware, (req: any, res: Response) => {
+    const campaigns = readStore<any[]>("campaigns.json", []);
+    const idx = campaigns.findIndex(c => c.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ error: "Not found" });
+    campaigns[idx] = { ...campaigns[idx], ...req.body };
+    writeStore("campaigns.json", campaigns);
+    res.json(campaigns[idx]);
+  });
+
+  app.delete("/api/admin/marketing/campaigns/:id", adminAuthMiddleware, (req: any, res: Response) => {
+    const campaigns = readStore<any[]>("campaigns.json", []);
+    writeStore("campaigns.json", campaigns.filter(c => c.id !== req.params.id));
+    res.json({ success: true });
+  });
+
+  // ─── ADMIN ROLES ──────────────────────────────────────────────────────────────
+  app.get("/api/admin/roles", adminAuthMiddleware, (_req: any, res: Response) => {
+    res.json(readStore<any[]>("roles.json", []));
+  });
+
+  app.post("/api/admin/roles", adminAuthMiddleware, (req: any, res: Response) => {
+    const roles = readStore<any[]>("roles.json", []);
+    const role = { id: crypto.randomUUID(), ...req.body, createdAt: new Date().toISOString() };
+    roles.push(role); writeStore("roles.json", roles);
+    res.status(201).json(role);
+  });
+
+  app.delete("/api/admin/roles/:id", adminAuthMiddleware, (req: any, res: Response) => {
+    const roles = readStore<any[]>("roles.json", []);
+    writeStore("roles.json", roles.filter(r => r.id !== req.params.id));
+    res.json({ success: true });
+  });
+
+  // ─── ADMIN USERS MANAGEMENT ───────────────────────────────────────────────────
+  app.get("/api/admin/users", adminAuthMiddleware, (_req: any, res: Response) => {
+    res.json(Array.from(admins.values()).map(a => ({ id: a.id, email: a.email, name: a.name, role: a.role, createdAt: a.createdAt, lastLogin: a.lastLogin })));
+  });
+
+  app.post("/api/admin/users", adminAuthMiddleware, (req: any, res: Response) => {
+    const { email, name, password, role } = req.body;
+    if (!email || !password) return res.status(400).json({ error: "Email and password required" });
+    const existing = Array.from(admins.values()).find(a => a.email.toLowerCase() === email.toLowerCase());
+    if (existing) return res.status(409).json({ error: "Admin with this email already exists" });
+    const id = crypto.randomUUID();
+    const admin: StoredAdmin = { id, email: email.toLowerCase(), name: name || email, password: hashPassword(password), role: role || "staff", createdAt: new Date().toISOString() };
+    admins.set(id, admin); saveAdmins();
+    res.status(201).json({ id: admin.id, email: admin.email, name: admin.name, role: admin.role });
+  });
+
+  app.delete("/api/admin/users/:id", adminAuthMiddleware, (req: any, res: Response) => {
+    const admin = admins.get(req.params.id);
+    if (!admin) return res.status(404).json({ error: "Admin not found" });
+    if (admin.role === "superadmin") return res.status(403).json({ error: "Cannot delete superadmin" });
+    admins.delete(req.params.id); saveAdmins();
+    res.json({ success: true });
+  });
+
+  // ─── ADMIN AUDIT LOGS ─────────────────────────────────────────────────────────
+  app.get("/api/admin/audit-logs", adminAuthMiddleware, (req: any, res: Response) => {
+    const { search, action, page = "1", limit = "25" } = req.query;
+    let logs = readStore<any[]>("audit_logs.json", []);
+    if (search) { const s = String(search).toLowerCase(); logs = logs.filter(l => (l.adminEmail || "").toLowerCase().includes(s) || (l.details || "").toLowerCase().includes(s) || (l.resourceType || "").toLowerCase().includes(s)); }
+    if (action) logs = logs.filter(l => l.action === action);
+    logs.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    const total = logs.length;
+    const p = parseInt(String(page)); const l = parseInt(String(limit));
+    const paginated = logs.slice((p - 1) * l, p * l);
+    res.json({ logs: paginated, total, page: p, totalPages: Math.ceil(total / l) });
+  });
+
+  // ─── ADMIN PAYMENTS (alias for transactions) ───────────────────────────────────
+  app.get("/api/admin/payments", adminAuthMiddleware, (req: any, res: Response) => {
+    const { search, status, page = "1", limit = "20" } = req.query;
+    let allTx = Array.from(transactions.values());
+    if (search) { const s = String(search).toLowerCase(); allTx = allTx.filter(t => (t.customerEmail || "").toLowerCase().includes(s) || (t.providerTransactionId || "").toLowerCase().includes(s) || (t.orderId || "").toLowerCase().includes(s)); }
+    if (status) allTx = allTx.filter(t => t.status === status);
+    allTx.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    const total = allTx.length;
+    const p = parseInt(String(page)); const l = parseInt(String(limit));
+    const paginated = allTx.slice((p - 1) * l, p * l);
+    const totalAmount = Array.from(transactions.values()).filter(t => t.status === "completed").reduce((s, t) => s + (t.amount || 0), 0);
+    res.json({ transactions: paginated, total, page: p, totalPages: Math.ceil(total / l), totalAmount });
+  });
+
+  // ─── ADMIN CATEGORIES ─────────────────────────────────────────────────────────
+  app.get("/api/admin/categories", adminAuthMiddleware, (_req: any, res: Response) => {
+    const cats = Array.from(products.values()).reduce((acc: Record<string, number>, p) => {
+      acc[p.category] = (acc[p.category] || 0) + 1;
+      return acc;
+    }, {});
+    const stored = readStore<any[]>("categories.json", []);
+    const defaultCats = Object.entries(cats).map(([name, count]) => ({ id: name.toLowerCase().replace(/\s+/g, "-"), name, productCount: count }));
+    const merged = stored.length > 0 ? stored.map(c => ({ ...c, productCount: cats[c.name] || 0 })) : defaultCats;
+    res.json(merged);
+  });
+
+  app.post("/api/admin/categories", adminAuthMiddleware, (req: any, res: Response) => {
+    const cats = readStore<any[]>("categories.json", []);
+    const cat = { id: crypto.randomUUID(), ...req.body, productCount: 0, createdAt: new Date().toISOString() };
+    cats.push(cat); writeStore("categories.json", cats);
+    res.status(201).json(cat);
+  });
+
+  app.put("/api/admin/categories/:id", adminAuthMiddleware, (req: any, res: Response) => {
+    const cats = readStore<any[]>("categories.json", []);
+    const idx = cats.findIndex(c => c.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ error: "Not found" });
+    cats[idx] = { ...cats[idx], ...req.body };
+    writeStore("categories.json", cats);
+    res.json(cats[idx]);
+  });
+
+  app.delete("/api/admin/categories/:id", adminAuthMiddleware, (req: any, res: Response) => {
+    const cats = readStore<any[]>("categories.json", []);
+    writeStore("categories.json", cats.filter(c => c.id !== req.params.id));
+    res.json({ success: true });
+  });
+
   // ─── Static Files ──────────────────────────────────────────────────────────
   const staticPath =
     process.env.NODE_ENV === "production"
