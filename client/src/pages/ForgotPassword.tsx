@@ -16,9 +16,13 @@ export default function ForgotPassword() {
     setError(null);
 
     try {
-      // TODO: Implement API call to send password reset email
-      console.log("Password reset requested for:", email);
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const res = await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to send reset email");
       setSubmitted(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to send reset email");

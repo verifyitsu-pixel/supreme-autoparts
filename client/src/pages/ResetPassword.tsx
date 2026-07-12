@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { Navbar, Footer } from "@/components/NavbarNew";
-import { Lock, Eye, EyeOff, ArrowRight, Loader2, CheckCircle } from "lucide-react";
+import { Lock, Eye, EyeOff, ArrowRight, Loader2, CheckCircle, AlertCircle } from "lucide-react";
 
 export default function ResetPassword() {
   const [, setLocation] = useLocation();
@@ -12,6 +12,14 @@ export default function ResetPassword() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [email, setEmail] = useState("");
+  const [code, setCode] = useState("");
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setEmail(params.get("email") || "");
+    setCode(params.get("code") || "");
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,12 +35,21 @@ export default function ResetPassword() {
       return;
     }
 
+    if (!email || !code) {
+      setError("Missing email or reset code. Please use the link from your email.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      // TODO: Implement API call to reset password with token
-      console.log("Password reset submitted");
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const res = await fetch("/api/auth/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, code, newPassword: password }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to reset password");
       setSubmitted(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to reset password");
@@ -40,6 +57,30 @@ export default function ResetPassword() {
       setIsSubmitting(false);
     }
   };
+
+  if (!email || !code) {
+    return (
+      <div className="min-h-screen flex flex-col bg-white">
+        <Navbar />
+        <main className="flex-1 pt-20 flex items-center justify-center">
+          <div className="text-center py-20 max-w-md px-6">
+            <AlertCircle className="mx-auto text-red-600 mb-4" size={64} />
+            <h1 className="text-3xl font-black text-gray-900 mb-2">Invalid Reset Link</h1>
+            <p className="text-gray-600 mb-8">
+              This password reset link is invalid or has expired. Please request a new one.
+            </p>
+            <button
+              onClick={() => setLocation("/forgot-password")}
+              className="px-8 py-3 bg-[#E42933] text-white rounded-lg font-semibold hover:bg-[#d41f28] transition-colors inline-flex items-center gap-2"
+            >
+              Request New Link <ArrowRight size={18} />
+            </button>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   if (submitted) {
     return (
@@ -78,7 +119,8 @@ export default function ResetPassword() {
           </div>
 
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
+              <AlertCircle className="text-red-600 flex-shrink-0 mt-0.5" size={20} />
               <p className="text-red-700 text-sm font-medium">{error}</p>
             </div>
           )}

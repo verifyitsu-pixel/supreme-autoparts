@@ -2,17 +2,19 @@ import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLocation, Link } from "wouter";
 import { Navbar, Footer } from "@/components/NavbarNew";
-import { Mail, Lock, User, ArrowRight, Loader2, Eye, EyeOff, AlertCircle, CheckCircle } from "lucide-react";
+import { Mail, Lock, User, ArrowRight, Loader2, Eye, EyeOff, AlertCircle, CheckCircle, Phone } from "lucide-react";
 
 export default function Register() {
-  const { register, loginWithGoogle, loginWithApple, isLoading, error } = useAuth();
+  const { register, loginWithGoogle, loginWithApple, loginWithFacebook, loginWithMicrosoft, isLoading, error } = useAuth();
   const [, setLocation] = useLocation();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
+    phone: "",
   });
+  const [agreeTerms, setAgreeTerms] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
@@ -48,8 +50,13 @@ export default function Register() {
       return;
     }
 
+    if (!agreeTerms) {
+      setLocalError("You must agree to the Terms and Privacy Policy");
+      return;
+    }
+
     try {
-      await register(formData.email, formData.password, formData.name);
+      await register({ email: formData.email, password: formData.password, name: formData.name, phone: formData.phone || undefined });
       setLocation("/dashboard");
     } catch (err) {
       setLocalError(err instanceof Error ? err.message : "Registration failed");
@@ -117,6 +124,23 @@ export default function Register() {
                   placeholder="John Doe"
                   className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-[#E42933] focus:ring-2 focus:ring-[#E42933]/20 transition-all text-base"
                   required
+                />
+              </div>
+            </div>
+
+            {/* Phone */}
+            <div>
+              <label className="block text-sm font-black text-gray-900 mb-2 uppercase tracking-wider">
+                Phone Number (Optional)
+              </label>
+              <div className="relative">
+                <Phone className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <input
+                  type="tel"
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  placeholder="+254 700 000 000"
+                  className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-[#E42933] focus:ring-2 focus:ring-[#E42933]/20 transition-all text-base"
                 />
               </div>
             </div>
@@ -211,6 +235,20 @@ export default function Register() {
               )}
             </div>
 
+            {/* Terms Checkbox */}
+            <div className="flex items-start gap-3">
+              <input
+                type="checkbox"
+                id="terms"
+                checked={agreeTerms}
+                onChange={(e) => setAgreeTerms(e.target.checked)}
+                className="mt-1 w-4 h-4 rounded border-gray-300 text-[#E42933] focus:ring-[#E42933]"
+              />
+              <label htmlFor="terms" className="text-sm text-gray-600">
+                I agree to the <Link href="/terms" className="text-[#E42933] font-semibold hover:underline">Terms of Service</Link> and <Link href="/privacy" className="text-[#E42933] font-semibold hover:underline">Privacy Policy</Link>
+              </label>
+            </div>
+
             {/* Sign Up Button */}
             <button
               type="submit"
@@ -282,6 +320,33 @@ export default function Register() {
                 <path d="M17.05 13.5c-.91 2.92-.46 5.25 1.31 6.82.24.2.48.39.72.56.9.64 1.71 1.22 1.17 2.55-.23.52-.74.86-1.35.86-.3 0-.61-.07-.92-.22-1.64-.77-2.58-2.3-2.98-4.63-.4 2.33-1.34 3.86-2.98 4.63-.31.15-.62.22-.92.22-.61 0-1.12-.34-1.35-.86-.54-1.33.27-1.91 1.17-2.55.24-.17.48-.36.72-.56 1.77-1.57 2.22-3.9 1.31-6.82-.91-2.92-3.4-5.05-6.32-5.05-2.92 0-5.41 2.13-6.32 5.05-.91 2.92-.46 5.25 1.31 6.82.24.2.48.39.72.56.9.64 1.71 1.22 1.17 2.55-.23.52-.74.86-1.35.86-.3 0-.61-.07-.92-.22-1.64-.77-2.58-2.3-2.98-4.63-.4 2.33-1.34 3.86-2.98 4.63-.31.15-.62.22-.92.22-.61 0-1.12-.34-1.35-.86-.54-1.33.27-1.91 1.17-2.55.24-.17.48-.36.72-.56 1.77-1.57 2.22-3.9 1.31-6.82C2.4 5.63 4.89 3.5 7.81 3.5c2.92 0 5.41 2.13 6.32 5.05z" />
               </svg>
               <span className="text-sm font-black uppercase tracking-wider">Apple</span>
+            </button>
+
+            {/* Facebook */}
+            <button
+              onClick={() => loginWithFacebook()}
+              disabled={isLoading}
+              className="w-full border-2 border-gray-200 bg-[#1877F2] py-3 rounded-lg font-semibold hover:bg-[#166fe5] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 text-white"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+              </svg>
+              <span className="text-sm font-black uppercase tracking-wider">Facebook</span>
+            </button>
+
+            {/* Microsoft */}
+            <button
+              onClick={() => loginWithMicrosoft()}
+              disabled={isLoading}
+              className="w-full border-2 border-gray-200 bg-white py-3 rounded-lg font-semibold hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 text-gray-700 hover:border-[#E42933]"
+            >
+              <svg className="w-5 h-5" viewBox="0 0 21 21">
+                <rect x="1" y="1" width="9" height="9" fill="#f25022" />
+                <rect x="11" y="1" width="9" height="9" fill="#7fba00" />
+                <rect x="1" y="11" width="9" height="9" fill="#00a4ef" />
+                <rect x="11" y="11" width="9" height="9" fill="#ffb900" />
+              </svg>
+              <span className="text-sm font-black uppercase tracking-wider">Microsoft</span>
             </button>
           </div>
 

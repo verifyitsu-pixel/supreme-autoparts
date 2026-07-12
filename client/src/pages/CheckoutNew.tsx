@@ -7,7 +7,7 @@ import { COUNTRIES, getCountryData, COUNTRY_NAMES } from "@/data/countryRegions"
 import {
   Lock, Truck, Shield, ArrowRight, Loader2, CheckCircle,
   MapPin, Phone, Mail, MessageCircle, Download, ChevronDown,
-  Package, CreditCard, Banknote, Smartphone, AlertCircle, ExternalLink,
+  Package, CreditCard, Banknote, Smartphone, AlertCircle, ExternalLink, Plus, Home as HomeIcon,
 } from "lucide-react";
 
 interface ShippingAddress {
@@ -71,6 +71,33 @@ export default function CheckoutNew() {
 
   const [policiesAccepted, setPoliciesAccepted] = useState(false);
   const WHATSAPP_NUMBER = "+254714498451";
+  const [savedAddresses, setSavedAddresses] = useState<any[]>([]);
+  const [showNewAddress, setShowNewAddress] = useState(true);
+
+  useEffect(() => {
+    if (user?.id) {
+      fetch("/api/addresses", { headers: { Authorization: `Bearer ${getToken()}` } })
+        .then(r => r.json())
+        .then(data => {
+          if (data?.length) {
+            setSavedAddresses(data);
+            const def = data.find((a: any) => a.isDefault);
+            if (def) {
+              setShippingAddress(prev => ({
+                ...prev,
+                fullName: def.fullName || prev.fullName,
+                phone: def.phone || prev.phone,
+                address: def.address || prev.address,
+                county: def.county || prev.county,
+                postalCode: def.postalCode || prev.postalCode,
+                country: def.country || prev.country,
+              }));
+            }
+          }
+        })
+        .catch(() => {});
+    }
+  }, [user?.id]);
 
   const countryData = getCountryData(shippingAddress.country);
   const regionLabel = countryData?.regionLabel || "County / Region";
@@ -178,6 +205,24 @@ export default function CheckoutNew() {
           body: JSON.stringify(orderPayload),
         });
         if (res.ok) order = await res.json();
+      }
+
+      // Save this address for future use if logged in and address not already saved
+      if (token && shippingAddress.address && !savedAddresses.find(a => a.address === shippingAddress.address && a.county === shippingAddress.county)) {
+        await fetch("/api/addresses", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+          body: JSON.stringify({
+            label: "Delivery Address",
+            fullName: shippingAddress.fullName,
+            phone: shippingAddress.phone,
+            address: shippingAddress.address,
+            county: shippingAddress.county,
+            postalCode: shippingAddress.postalCode,
+            country: shippingAddress.country,
+            isDefault: savedAddresses.length === 0,
+          }),
+        }).catch(() => {});
       }
 
       const orderNum = order?.orderNumber || `SA-${Date.now().toString(36).toUpperCase()}`;
@@ -351,7 +396,42 @@ Please confirm this order and provide payment instructions.
                     <MapPin className="text-[#E42933]" size={22} /> Shipping Address
                   </h2>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {/* Saved Addresses Selector */}
+                  {savedAddresses.length > 0 && (
+                    <div className="mb-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <h3 className="text-sm font-black text-gray-700 uppercase tracking-wider">Saved Addresses</h3>
+                        <button onClick={() => setShowNewAddress(!showNewAddress)} className="text-xs text-[#E42933] font-semibold hover:underline">
+                          {showNewAddress ? "Use New Address" : "Add New Address"}
+                        </button>
+                      </div>
+                      <div className="flex gap-2 overflow-x-auto pb-2">
+                        {savedAddresses.map(addr => (
+                          <button key={addr.id} onClick={() => {
+                            setShippingAddress(prev => ({
+                              ...prev, fullName: addr.fullName, phone: addr.phone, address: addr.address,
+                              county: addr.county, postalCode: addr.postalCode, country: addr.country || "Kenya",
+                            }));
+                          }}
+                            className={`flex-shrink-0 p-3 rounded-lg border-2 text-left min-w-[200px] transition-all ${addr.isDefault ? "border-[#E42933] bg-red-50" : "border-gray-200 hover:border-gray-300"}`}
+                          >
+                            <div className="flex items-center gap-2 mb-1">
+                              <HomeIcon size={14} className="text-gray-500" />
+                              <span className="text-xs font-bold text-gray-900">{addr.label || "Home"}</span>
+                              {addr.isDefault && <span className="text-[10px] bg-[#E42933] text-white px-1.5 py-0.5 rounded-full">Default</span>}
+                            </div>
+                            <p className="text-xs text-gray-600">{addr.fullName}</p>
+                            <p className="text-xs text-gray-500">{addr.address}</p>
+                            <p className="text-xs text-gray-500">{addr.county}, {addr.country}</p>
+                            <p className="text-xs text-gray-500">{addr.phone}</p>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {(showNewAddress || savedAddresses.length === 0) && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name *</label>
                       <input type="text" value={shippingAddress.fullName}
@@ -415,6 +495,7 @@ Please confirm this order and provide payment instructions.
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E42933] text-sm" />
                     </div>
                   </div>
+                  )}
 
                   <button type="submit" className="w-full py-4 bg-[#E42933] text-white rounded-xl font-black text-base hover:bg-[#d41f28] transition-colors flex items-center justify-center gap-2">
                     Continue to Review <ArrowRight size={18} />

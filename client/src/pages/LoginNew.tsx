@@ -5,7 +5,7 @@ import { Navbar, Footer } from "@/components/NavbarNew";
 import { Mail, Lock, ArrowRight, Loader2, Eye, EyeOff, AlertCircle } from "lucide-react";
 
 export default function Login() {
-  const { login, loginWithGoogle, loginWithApple, isLoading, error } = useAuth();
+  const { login, loginWithGoogle, loginWithApple, loginWithFacebook, loginWithMicrosoft, isLoading, error } = useAuth();
   const [, setLocation] = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -182,6 +182,33 @@ export default function Login() {
                 <path d="M17.05 13.5c-.91 2.92-.46 5.25 1.31 6.82.24.2.48.39.72.56.9.64 1.71 1.22 1.17 2.55-.23.52-.74.86-1.35.86-.3 0-.61-.07-.92-.22-1.64-.77-2.58-2.3-2.98-4.63-.4 2.33-1.34 3.86-2.98 4.63-.31.15-.62.22-.92.22-.61 0-1.12-.34-1.35-.86-.54-1.33.27-1.91 1.17-2.55.24-.17.48-.36.72-.56 1.77-1.57 2.22-3.9 1.31-6.82-.91-2.92-3.4-5.05-6.32-5.05-2.92 0-5.41 2.13-6.32 5.05-.91 2.92-.46 5.25 1.31 6.82.24.2.48.39.72.56.9.64 1.71 1.22 1.17 2.55-.23.52-.74.86-1.35.86-.3 0-.61-.07-.92-.22-1.64-.77-2.58-2.3-2.98-4.63-.4 2.33-1.34 3.86-2.98 4.63-.31.15-.62.22-.92.22-.61 0-1.12-.34-1.35-.86-.54-1.33.27-1.91 1.17-2.55.24-.17.48-.36.72-.56 1.77-1.57 2.22-3.9 1.31-6.82C2.4 5.63 4.89 3.5 7.81 3.5c2.92 0 5.41 2.13 6.32 5.05z" />
               </svg>
               <span className="text-sm font-black uppercase tracking-wider">Apple</span>
+            </button>
+
+            {/* Facebook */}
+            <button
+              onClick={() => loginWithFacebook()}
+              disabled={isLoading}
+              className="w-full border-2 border-gray-200 bg-[#1877F2] py-3 rounded-lg font-semibold hover:bg-[#166fe5] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 text-white"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+              </svg>
+              <span className="text-sm font-black uppercase tracking-wider">Facebook</span>
+            </button>
+
+            {/* Microsoft */}
+            <button
+              onClick={() => loginWithMicrosoft()}
+              disabled={isLoading}
+              className="w-full border-2 border-gray-200 bg-white py-3 rounded-lg font-semibold hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 text-gray-700 hover:border-[#E42933]"
+            >
+              <svg className="w-5 h-5" viewBox="0 0 21 21">
+                <rect x="1" y="1" width="9" height="9" fill="#f25022" />
+                <rect x="11" y="1" width="9" height="9" fill="#7fba00" />
+                <rect x="1" y="11" width="9" height="9" fill="#00a4ef" />
+                <rect x="11" y="11" width="9" height="9" fill="#ffb900" />
+              </svg>
+              <span className="text-sm font-black uppercase tracking-wider">Microsoft</span>
             </button>
           </div>
 

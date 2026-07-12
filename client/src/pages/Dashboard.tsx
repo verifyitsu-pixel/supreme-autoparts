@@ -7,7 +7,7 @@ import {
   MapPin, Settings, ChevronRight, Package, Clock, CheckCircle,
   AlertCircle, XCircle, Truck, Eye, Download, Plus, Edit2,
   Trash2, Star, Phone, Mail, Lock, Home, Save, X, ArrowLeft,
-  CreditCard, RefreshCw, Bell,
+  CreditCard, RefreshCw, Bell, Heart, MessageCircle,
 } from "lucide-react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -347,11 +347,36 @@ export default function Dashboard() {
     { id: "security", label: "Security", icon: Lock },
   ];
 
+  // Quick links to new pages
+  const quickLinks = [
+    { label: "Wishlist", icon: Heart, path: "/wishlist", color: "text-red-500 hover:bg-red-50" },
+    { label: "Notifications", icon: Bell, path: "/notifications", color: "text-blue-500 hover:bg-blue-50" },
+    { label: "Reviews", icon: Star, path: "/reviews", color: "text-yellow-500 hover:bg-yellow-50" },
+    { label: "Messages", icon: MessageCircle, path: "/messages", color: "text-purple-500 hover:bg-purple-50" },
+  ];
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Navbar />
       <main className="flex-1 pt-20">
         <div className="max-w-[1280px] mx-auto px-4 py-8">
+
+          {/* Quick Links */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+            {quickLinks.map(link => {
+              const Icon = link.icon;
+              return (
+                <button
+                  key={link.path}
+                  onClick={() => setLocation(link.path)}
+                  className={`flex items-center gap-3 p-3 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all ${link.color}`}
+                >
+                  <Icon size={20} />
+                  <span className="font-semibold text-sm text-gray-700">{link.label}</span>
+                </button>
+              );
+            })}
+          </div>
 
           {/* Profile Header */}
           <div className="bg-gradient-to-r from-[#1a1a1a] to-[#2d2d2d] rounded-2xl p-6 mb-6 text-white">

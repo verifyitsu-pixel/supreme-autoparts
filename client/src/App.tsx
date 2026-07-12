@@ -34,6 +34,10 @@ import BrandSelection from "./pages/BrandSelection";
 import ModelSelection from "./pages/ModelSelection";
 import CategorySelection from "./pages/CategorySelection";
 import PartsListing from "./pages/PartsListing";
+import Wishlist from "./pages/Wishlist";
+import Notifications from "./pages/Notifications";
+import Reviews from "./pages/Reviews";
+import Messages from "./pages/Messages";
 
 function Router() {
   return (
@@ -65,6 +69,10 @@ function Router() {
       <Route path="/terms-and-conditions" component={Terms} />
       <Route path="/refund-policy" component={RefundPolicy} />
       <Route path="/privacy-policy" component={PrivacyPolicy} />
+      <Route path="/wishlist" component={Wishlist} />
+      <Route path="/notifications" component={Notifications} />
+      <Route path="/reviews" component={Reviews} />
+      <Route path="/messages" component={Messages} />
       <Route path="/admin" component={AdminDashboard} />
       <Route path="/admin/:rest*" component={AdminDashboard} />
       <Route path="/404" component={NotFound} />

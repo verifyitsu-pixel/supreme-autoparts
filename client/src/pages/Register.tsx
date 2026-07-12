@@ -28,7 +28,7 @@ export default function Register() {
     }
 
     try {
-      await register(email, password, name);
+      await register({ email, password, name });
       setLocation("/dashboard");
     } catch (err) {
       setLocalError(err instanceof Error ? err.message : "Registration failed");
