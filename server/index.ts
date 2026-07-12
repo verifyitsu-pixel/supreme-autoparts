@@ -5,6 +5,7 @@ import { registerWishlistRoutes } from "./wishlist/index.js";
 import { registerNotificationRoutes } from "./notifications/index.js";
 import { registerReviewRoutes } from "./reviews/index.js";
 import { registerMessageRoutes } from "./messages/index.js";
+import { CAR_BRANDS, CAR_MODELS, PART_CATEGORIES } from "../client/src/data/carData.js";
 import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -523,6 +524,51 @@ async function startServer() {
   // Old auth routes removed — now handled by registerAuthRoutes module
 
   // ─── ADDRESS ROUTES ────────────────────────────────────────────────────────
+  // ─── Dynamic Sitemap Generation ──────────────────────────────────────────
+  app.get("/sitemap.xml", (req: Request, res: Response) => {
+    let sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+
+    const baseUrl = "https://supremeautoparts.co.ke";
+    const lastmod = new Date().toISOString().split("T")[0];
+
+    // Static pages (already in client/public/sitemap.xml, but re-adding for completeness)
+    const staticPages = [
+      "/",
+      "/products",
+      "/brands",
+      "/about",
+      "/contact",
+      "/terms-and-conditions",
+      "/refund-policy",
+      "/privacy-policy",
+      "/shop/brands",
+    ];
+
+    staticPages.forEach(page => {
+      sitemap += `  <url>\n    <loc>${baseUrl}${page}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>${page === "/" ? "1.0" : "0.8"}</priority>\n  </url>\n`;
+    });
+
+    // Dynamic Brand Pages
+    CAR_BRANDS.forEach(brand => {
+      sitemap += `  <url>\n    <loc>${baseUrl}/shop/brand/${brand.id}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.9</priority>\n  </url>\n`;
+
+      // Dynamic Model Pages for each brand
+      const models = CAR_MODELS[brand.id] || [];
+      models.forEach(model => {
+        sitemap += `  <url>\n    <loc>${baseUrl}/shop/brand/${brand.id}/model/${model.id}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.9</priority>\n  </url>\n`;
+
+        // Dynamic Category Pages for each model
+        PART_CATEGORIES.forEach(category => {
+          sitemap += `  <url>\n    <loc>${baseUrl}/shop/brand/${brand.id}/model/${model.id}/category/${category.id}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.7</priority>\n  </url>\n`;
+        });
+      });
+    });
+
+    sitemap += `</urlset>`;
+    res.header("Content-Type", "application/xml");
+    res.send(sitemap);
+  });
+
   app.get("/api/addresses", authMiddleware, (req: any, res: Response) => {
     const user = users.get(req.userId);
     res.json(user?.addresses || []);

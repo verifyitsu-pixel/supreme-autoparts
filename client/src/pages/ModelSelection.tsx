@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Helmet from "@/components/Helmet";
 import { Link, useParams, useSearch } from "wouter";
 import { Search, ChevronRight, ArrowRight, Car, Tag } from "lucide-react";
 import { Navbar, Footer } from "@/components/NavbarNew";
@@ -47,7 +48,22 @@ export default function ModelSelection() {
     );
   }
 
+  const pageTitle = `${brand.name} Models | Supreme Autoparts`;
+  const pageDescription = `Browse all ${brand.name} car models and find genuine OEM spare parts at Supreme Autoparts Kenya. Nationwide delivery.`;
+  const pageOgImage = brand.image; // Assuming brand object has an image property
+  const pageCanonicalUrl = `https://supremeautoparts.co.ke/shop/brand/${brandId}`;
+
   return (
+    <>
+      <Helmet
+        title={pageTitle}
+        description={pageDescription}
+        ogTitle={pageTitle}
+        ogDescription={pageDescription}
+        ogImage={pageOgImage}
+        ogUrl={pageCanonicalUrl}
+        canonicalUrl={pageCanonicalUrl}
+      />
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Navbar />
       <main className="flex-1">
@@ -209,5 +225,6 @@ export default function ModelSelection() {
       </main>
       <Footer />
     </div>
+    </>
   );
 }

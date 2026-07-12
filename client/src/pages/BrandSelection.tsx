@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Helmet from "@/components/Helmet";
 import { Link, useSearch } from "wouter";
 import { Search, ChevronRight, ArrowRight, Star, Tag } from "lucide-react";
 import { Navbar, Footer } from "@/components/NavbarNew";
@@ -27,7 +28,17 @@ export default function BrandSelection() {
     return `/shop/brand/${brandId}`;
   };
 
+  const pageTitle = categoryCtx ? `Find ${categoryCtx} Parts by Brand | Supreme Autoparts` : "Select Your Car Brand | Supreme Autoparts";
+  const pageDescription = categoryCtx ? `Choose your vehicle make to find the right ${categoryCtx.toLowerCase()} parts that fit your car perfectly.` : "Browse genuine OEM car parts by brand for Toyota, BMW, Mercedes-Benz, and more. Supreme Autoparts Kenya offers quality parts with nationwide delivery.";
+  const pageCanonicalUrl = "https://supremeautoparts.co.ke/shop/brands";
+
   return (
+    <>
+      <Helmet
+        title={pageTitle}
+        description={pageDescription}
+        canonicalUrl={pageCanonicalUrl}
+      />
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Navbar />
       <main className="flex-1">
@@ -158,6 +169,7 @@ export default function BrandSelection() {
       </main>
       <Footer />
     </div>
+    </>
   );
 }
 

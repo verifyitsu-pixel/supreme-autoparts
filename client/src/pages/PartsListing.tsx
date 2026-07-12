@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Helmet from "@/components/Helmet";
 import { Link, useParams, useSearch } from "wouter";
 import {
   ChevronRight,
@@ -171,7 +172,22 @@ export default function PartsListing() {
     );
   }
 
+  const pageTitle = `${brand.name} ${model.name} ${category.name} Parts | Supreme Autoparts`;
+  const pageDescription = `Find genuine OEM ${brand.name} ${model.name} ${category.name} parts at Supreme Autoparts Kenya. High-quality spare parts with nationwide delivery.`;
+  const pageOgImage = category.image; // Use category image as OG image
+  const pageCanonicalUrl = `https://supremeautoparts.co.ke/shop/brand/${brandId}/model/${modelId}/category/${categoryId}`;
+
   return (
+    <>
+      <Helmet
+        title={pageTitle}
+        description={pageDescription}
+        ogTitle={pageTitle}
+        ogDescription={pageDescription}
+        ogImage={pageOgImage}
+        ogUrl={pageCanonicalUrl}
+        canonicalUrl={pageCanonicalUrl}
+      />
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Navbar />
       <main className="flex-1">
@@ -456,6 +472,7 @@ export default function PartsListing() {
       </main>
       <Footer />
     </div>
+    </>
   );
 }
 
