@@ -22,7 +22,7 @@ export default function InventoryPage() {
 
   const queryParams = new URLSearchParams();
   if (search) queryParams.set("search", search);
-  if (filter !== "All") queryParams.set("filter", filter.toLowerCase().replace(" ", "_"));
+  if (filter !== "All") queryParams.set("status", filter.toLowerCase() === "in stock" ? "ok" : filter.toLowerCase() === "low stock" ? "low" : filter.toLowerCase() === "out of stock" ? "out" : "");
 
   const { data: products, loading, refetch } = useAdminFetch<any[]>(
     `/api/admin/inventory?${queryParams.toString()}`
@@ -40,7 +40,7 @@ export default function InventoryPage() {
       await adminFetch(`/api/admin/inventory/${productId}/adjust`, {
         method: "POST",
         body: JSON.stringify({
-          quantity: parseInt(adjustQty),
+          adjustment: parseInt(adjustQty),
           reason: adjustReason,
           note: adjustNote,
         }),

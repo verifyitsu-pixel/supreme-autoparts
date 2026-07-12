@@ -30,14 +30,14 @@ export default function PaymentsPage() {
   queryParams.set("page", String(page));
   queryParams.set("limit", String(limit));
   if (search) queryParams.set("search", search);
-  if (method !== "All") queryParams.set("method", method);
+  // backend does not filter by method;
   if (status !== "All") queryParams.set("status", status);
 
   const { data, loading, refetch } = useAdminFetch<PaymentsResponse>(
     `/api/admin/payments?${queryParams.toString()}`
   );
 
-  const payments = data?.payments || [];
+  const payments = data?.transactions || [];
   const totalPages = data?.totalPages || 1;
   const total = data?.total || 0;
   const totalAmount = data?.totalAmount || 0;
@@ -82,13 +82,13 @@ export default function PaymentsPage() {
         <div className="bg-white rounded-xl border border-gray-100 p-4">
           <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">M-Pesa</p>
           <p className="text-xl font-black text-green-700">
-            {payments.filter((p) => p.method === "mpesa").length}
+            {payments.filter((p) => (p.provider === "mpesa" || (p.method || "").toLowerCase().includes("mpesa"))).length}
           </p>
         </div>
         <div className="bg-white rounded-xl border border-gray-100 p-4">
           <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Card</p>
           <p className="text-xl font-black text-blue-700">
-            {payments.filter((p) => p.method === "card").length}
+            {payments.filter((p) => (p.provider === "card" || (p.method || "").toLowerCase().includes("card"))).length}
           </p>
         </div>
       </div>
@@ -124,9 +124,9 @@ export default function PaymentsPage() {
               className="text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-[#E42933] bg-white"
             >
               <option value="All">All Statuses</option>
-              <option value="paid">Paid</option>
-              <option value="unpaid">Unpaid</option>
-              <option value="refunded">Refunded</option>
+              <option value="completed">Completed</option>
+              <option value="pending">Pending</option>
+              <option value="failed">Failed</option>
             </select>
             <button
               onClick={refetch}

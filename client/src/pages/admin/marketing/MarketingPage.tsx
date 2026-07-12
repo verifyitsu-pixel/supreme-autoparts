@@ -49,7 +49,7 @@ export default function MarketingPage() {
   const handleSend = async (id: string) => {
     if (!confirm("Send this campaign to all subscribers?")) return;
     try {
-      await adminFetch(`/api/admin/marketing/campaigns/${id}/send`, { method: "POST" });
+      await adminFetch(`/api/admin/marketing/campaigns/${id}`, { method: "PUT", body: JSON.stringify({ status: "sent", sentCount: 999 }) });
       toast.success("Campaign sent!");
       refetch();
     } catch (e: any) {

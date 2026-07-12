@@ -19,7 +19,7 @@ export default function MediaLibrary() {
 
   const { data: media, loading, refetch } = useAdminFetch<any[]>("/api/admin/media");
   const allMedia = (media || []).filter(
-    (m) => !search || m.filename?.toLowerCase().includes(search.toLowerCase())
+    (m) => !search || m.name?.toLowerCase().includes(search.toLowerCase())
   );
 
   const handleUpload = async (files: FileList | null) => {
@@ -28,7 +28,7 @@ export default function MediaLibrary() {
     try {
       const formData = new FormData();
       Array.from(files).forEach((f) => formData.append("files", f));
-      const result = await adminUpload("/api/admin/media/upload", formData);
+      const result = await adminUpload("/api/admin/upload", formData);
       toast.success(`${result.files?.length || files.length} file(s) uploaded`);
       refetch();
     } catch (e: any) {
@@ -52,10 +52,7 @@ export default function MediaLibrary() {
   const handleBulkDelete = async () => {
     if (!confirm(`Delete ${selected.size} files?`)) return;
     try {
-      await adminFetch("/api/admin/media/bulk-delete", {
-        method: "DELETE",
-        body: JSON.stringify({ ids: Array.from(selected) }),
-      });
+      await Promise.all(Array.from(selected).map(id => adminFetch(`/api/admin/media/${id}`, { method: "DELETE" })));
       toast.success(`${selected.size} files deleted`);
       setSelected(new Set());
       refetch();

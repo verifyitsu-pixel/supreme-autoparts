@@ -25,7 +25,7 @@ export default function RefundsPage() {
 
   const queryParams = new URLSearchParams();
   if (status !== "All") queryParams.set("status", status);
-  if (search) queryParams.set("search", search);
+  if (search) queryParams.set("search", search) // frontend filter only;
 
   const { data: refunds, loading, refetch } = useAdminFetch<any[]>(
     `/api/admin/refunds?${queryParams.toString()}`
@@ -36,7 +36,7 @@ export default function RefundsPage() {
   const handleAction = async (id: string, action: "approve" | "reject") => {
     setProcessing(id);
     try {
-      await adminFetch(`/api/admin/refunds/${id}/${action}`, { method: "POST" });
+      await adminFetch(`/api/admin/refunds/${id}/status`, { method: "PUT", body: JSON.stringify({ status: action === "approve" ? "approved" : "rejected" }) });
       toast.success(`Refund ${action}d`);
       refetch();
     } catch (e: any) {

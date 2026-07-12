@@ -2,25 +2,17 @@ import { useState } from "react";
 import AdminLayout from "../AdminLayout";
 import { useAdminFetch } from "../lib/useAdminFetch";
 import { adminFetch, formatDate } from "../lib/api";
-import { Plus, FileText, Edit, Trash2, Eye, Save, X, Globe } from "lucide-react";
+import { Plus, FileText, Edit, Trash2, Save, X, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
-const DEFAULT_PAGES = [
-  { id: "1", title: "About Us", slug: "about", status: "published", updatedAt: new Date().toISOString() },
-  { id: "2", title: "Contact Us", slug: "contact", status: "published", updatedAt: new Date().toISOString() },
-  { id: "3", title: "Privacy Policy", slug: "privacy-policy", status: "published", updatedAt: new Date().toISOString() },
-  { id: "4", title: "Terms & Conditions", slug: "terms", status: "published", updatedAt: new Date().toISOString() },
-  { id: "5", title: "Shipping Policy", slug: "shipping-policy", status: "published", updatedAt: new Date().toISOString() },
-  { id: "6", title: "Return Policy", slug: "return-policy", status: "published", updatedAt: new Date().toISOString() },
-];
-
 export default function PagesManager() {
-  const [pages, setPages] = useState(DEFAULT_PAGES);
+  const { data: pages, loading, refetch } = useAdminFetch<any[]>("/api/admin/cms/pages");
   const [showCreate, setShowCreate] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [form, setForm] = useState({ title: "", slug: "", content: "", status: "draft" });
   const [saving, setSaving] = useState(false);
+  const [form, setForm] = useState({ title: "", slug: "", content: "", status: "draft" });
+
+  const allPages = pages || [];
 
   const handleCreate = async () => {
     if (!form.title) {
@@ -28,35 +20,66 @@ export default function PagesManager() {
       return;
     }
     const slug = form.slug || form.title.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
-    setPages((prev) => [...prev, {
-      id: Date.now().toString(),
-      title: form.title,
-      slug,
-      status: form.status,
-      updatedAt: new Date().toISOString(),
-    }]);
-    setShowCreate(false);
-    setForm({ title: "", slug: "", content: "", status: "draft" });
-    toast.success("Page created");
+    setSaving(true);
+    try {
+      await adminFetch("/api/admin/cms/pages", {
+        method: "POST",
+        body: JSON.stringify({ title: form.title, slug, content: form.content || "", status: form.status }),
+      });
+      toast.success("Page created");
+      setShowCreate(false);
+      setForm({ title: "", slug: "", content: "", status: "draft" });
+      refetch();
+    } catch (e: any) {
+      toast.error(e.message);
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (!confirm("Delete this page?")) return;
-    setPages((prev) => prev.filter((p) => p.id !== id));
-    toast.success("Page deleted");
+    try {
+      await adminFetch(`/api/admin/cms/pages/${id}`, { method: "DELETE" });
+      toast.success("Page deleted");
+      refetch();
+    } catch (e: any) {
+      toast.error(e.message);
+    }
+  };
+
+  const handleToggle = async (id: string, currentStatus: string) => {
+    try {
+      await adminFetch(`/api/admin/cms/pages/${id}`, {
+        method: "PUT",
+        body: JSON.stringify({ status: currentStatus === "published" ? "draft" : "published" }),
+      });
+      refetch();
+      toast.success("Page status updated");
+    } catch (e: any) {
+      toast.error(e.message);
+    }
   };
 
   return (
     <AdminLayout
       title="Pages"
-      subtitle={`${pages.length} pages`}
+      subtitle={`${allPages.length} pages`}
       actions={
-        <button
-          onClick={() => setShowCreate(true)}
-          className="flex items-center gap-2 bg-[#E42933] hover:bg-[#c41f28] text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors uppercase tracking-wide"
-        >
-          <Plus size={13} /> New Page
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={refetch}
+            className="flex items-center gap-2 text-xs font-bold text-gray-600 border border-gray-200 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            <RefreshCw size={13} /> Refresh
+          </button>
+          <button
+            onClick={() => setShowCreate(true)}
+            className="flex items-center gap-2 bg-[#E42933] hover:bg-[#c41f28] text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors uppercase tracking-wide"
+          >
+            <Plus size={13} /> New Page
+          </button>
+        </div>
       }
     >
       {/* Create Modal */}
@@ -79,23 +102,13 @@ export default function PagesManager() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">URL Slug</label>
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Slug</label>
                 <input
                   type="text"
                   value={form.slug}
                   onChange={(e) => setForm({ ...form, slug: e.target.value })}
                   placeholder="auto-generated from title"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm font-mono focus:outline-none focus:border-[#E42933]"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Content</label>
-                <textarea
-                  value={form.content}
-                  onChange={(e) => setForm({ ...form, content: e.target.value })}
-                  rows={5}
-                  placeholder="Page content (supports HTML)..."
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#E42933] resize-none font-mono"
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#E42933] font-mono"
                 />
               </div>
               <div>
@@ -109,80 +122,99 @@ export default function PagesManager() {
                   <option value="published">Published</option>
                 </select>
               </div>
+              <div>
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Content (HTML)</label>
+                <textarea
+                  value={form.content}
+                  onChange={(e) => setForm({ ...form, content: e.target.value })}
+                  placeholder="<p>Your page content here</p>"
+                  rows={6}
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#E42933] font-mono"
+                />
+              </div>
             </div>
             <div className="flex gap-2 mt-5">
-              <button onClick={() => setShowCreate(false)} className="flex-1 border border-gray-200 text-gray-600 font-bold py-2.5 rounded-xl text-sm hover:bg-gray-50">Cancel</button>
-              <button onClick={handleCreate} className="flex-1 bg-[#E42933] text-white font-bold py-2.5 rounded-xl text-sm hover:bg-[#c41f28]">Create Page</button>
+              <button onClick={() => setShowCreate(false)} className="flex-1 border border-gray-200 text-gray-600 font-bold py-2.5 rounded-xl text-sm hover:bg-gray-50 transition-colors">Cancel</button>
+              <button onClick={handleCreate} disabled={saving} className="flex-1 bg-[#E42933] text-white font-bold py-2.5 rounded-xl text-sm hover:bg-[#c41f28] transition-colors disabled:opacity-70 flex items-center justify-center gap-2">
+                {saving ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Save size={14} />}
+                Create Page
+              </button>
             </div>
           </div>
         </div>
       )}
 
+      {/* Pages Table */}
       <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-gray-100 bg-gray-50/50">
-              <th className="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Title</th>
-              <th className="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider hidden md:table-cell">Slug</th>
-              <th className="px-4 py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
-              <th className="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider hidden lg:table-cell">Updated</th>
-              <th className="px-4 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-50">
-            {pages.map((page) => (
-              <tr key={page.id} className="hover:bg-gray-50/50 transition-colors">
-                <td className="px-4 py-3">
-                  <div className="flex items-center gap-2">
-                    <FileText size={14} className="text-gray-400 shrink-0" />
-                    <span className="text-sm font-semibold text-gray-900">{page.title}</span>
-                  </div>
-                </td>
-                <td className="px-4 py-3 hidden md:table-cell">
-                  <span className="text-xs font-mono text-gray-500">/{page.slug}</span>
-                </td>
-                <td className="px-4 py-3 text-center">
-                  <span className={cn(
-                    "text-[10px] font-bold px-2 py-1 rounded-full uppercase",
-                    page.status === "published" ? "bg-green-50 text-green-700" : "bg-yellow-50 text-yellow-700"
-                  )}>
-                    {page.status}
-                  </span>
-                </td>
-                <td className="px-4 py-3 hidden lg:table-cell">
-                  <span className="text-xs text-gray-500">{formatDate(page.updatedAt)}</span>
-                </td>
-                <td className="px-4 py-3 text-right">
-                  <div className="flex items-center justify-end gap-1">
-                    <a
-                      href={`/${page.slug}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                      title="View page"
-                    >
-                      <Globe size={14} />
-                    </a>
-                    <button
-                      onClick={() => toast.info("Page editor coming soon")}
-                      className="p-1.5 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
-                      title="Edit"
-                    >
-                      <Edit size={14} />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(page.id)}
-                      className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                      title="Delete"
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                  </div>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-gray-100 bg-gray-50/50">
+                <th className="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Page</th>
+                <th className="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider hidden md:table-cell">Slug</th>
+                <th className="px-4 py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-4 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider hidden sm:table-cell">Updated</th>
+                <th className="px-4 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-gray-50">
+              {loading
+                ? Array.from({ length: 6 }).map((_, i) => (
+                    <tr key={i} className="animate-pulse">
+                      <td className="px-4 py-3"><div className="h-3 bg-gray-200 rounded w-32" /></td>
+                      <td className="px-4 py-3 hidden md:table-cell"><div className="h-3 bg-gray-100 rounded w-24" /></td>
+                      <td className="px-4 py-3"><div className="h-5 bg-gray-100 rounded-full w-12 mx-auto" /></td>
+                      <td className="px-4 py-3 hidden sm:table-cell"><div className="h-3 bg-gray-100 rounded w-20 ml-auto" /></td>
+                      <td className="px-4 py-3"><div className="h-6 bg-gray-100 rounded w-16 ml-auto" /></td>
+                    </tr>
+                  ))
+                : allPages.map((page) => (
+                    <tr key={page.id} className="hover:bg-gray-50/50 transition-colors">
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-2">
+                          <FileText size={14} className="text-gray-400 shrink-0" />
+                          <span className="text-sm font-semibold text-gray-900">{page.title}</span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 hidden md:table-cell">
+                        <span className="text-xs font-mono text-gray-500">{page.slug}</span>
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        <button
+                          onClick={() => handleToggle(page.id, page.status)}
+                          className={cn(
+                            "text-[10px] font-bold px-2.5 py-1 rounded-full uppercase transition-colors",
+                            page.status === "published"
+                              ? "bg-green-50 text-green-700 hover:bg-green-100"
+                              : "bg-yellow-50 text-yellow-700 hover:bg-yellow-100"
+                          )}
+                        >
+                          {page.status}
+                        </button>
+                      </td>
+                      <td className="px-4 py-3 text-right hidden sm:table-cell">
+                        <span className="text-xs text-gray-400">{formatDate(page.updatedAt || new Date().toISOString())}</span>
+                      </td>
+                      <td className="px-4 py-3 text-right">
+                        <button
+                          onClick={() => handleDelete(page.id)}
+                          className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+            </tbody>
+          </table>
+        </div>
+
+        {!loading && allPages.length === 0 && (
+          <div className="text-center py-16">
+            <FileText size={40} className="text-gray-300 mx-auto mb-3" />
+            <p className="text-sm font-semibold text-gray-500">No pages yet</p>
+          </div>
+        )}
       </div>
     </AdminLayout>
   );

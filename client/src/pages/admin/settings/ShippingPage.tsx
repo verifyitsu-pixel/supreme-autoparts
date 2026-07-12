@@ -19,7 +19,7 @@ export default function ShippingPage() {
   const [form, setForm] = useState({
     name: "",
     counties: [] as string[],
-    rate: "",
+    rates: [{ name: "Standard", price: "", minDays: 1, maxDays: 3 }],
     freeShippingThreshold: "",
     estimatedDays: "",
     isActive: true,
@@ -29,7 +29,7 @@ export default function ShippingPage() {
   const allZones = zones || [];
 
   const handleCreate = async () => {
-    if (!form.name || !form.rate) {
+    if (!form.name || !form.rates[0].prices[0].price) {
       toast.error("Zone name and rate are required");
       return;
     }
@@ -39,14 +39,14 @@ export default function ShippingPage() {
         method: "POST",
         body: JSON.stringify({
           ...form,
-          rate: parseFloat(form.rate),
+          rate: parseFloat(form.rates[0].prices[0].price),
           freeShippingThreshold: form.freeShippingThreshold ? parseFloat(form.freeShippingThreshold) : undefined,
           estimatedDays: form.estimatedDays || "3-5",
         }),
       });
       toast.success("Shipping zone created");
       setShowAdd(false);
-      setForm({ name: "", counties: [], rate: "", freeShippingThreshold: "", estimatedDays: "", isActive: true });
+      setForm({ name: "", counties: [], rates: [{ name: "Standard", price: "", minDays: 1, maxDays: 3 }], freeShippingThreshold: "", estimatedDays: "", isActive: true });
       refetch();
     } catch (e: any) {
       toast.error(e.message);
@@ -114,8 +114,8 @@ export default function ShippingPage() {
                   <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Rate (KES) *</label>
                   <input
                     type="number"
-                    value={form.rate}
-                    onChange={(e) => setForm({ ...form, rate: e.target.value })}
+                    value={form.rates[0].prices[0].price}
+                    onChange={(e) => setForm({ ...form, rates: [{ ...form.rates[0], price: e.target.value }] })}
                     placeholder="300"
                     min="0"
                     className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#E42933]"
@@ -153,7 +153,7 @@ export default function ShippingPage() {
                       onClick={() => toggleCounty(county)}
                       className={cn(
                         "px-2.5 py-1 text-xs font-semibold rounded-full transition-colors",
-                        form.counties.includes(county)
+                        form.regions.includes(county)
                           ? "bg-[#E42933] text-white"
                           : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                       )}
@@ -217,7 +217,7 @@ export default function ShippingPage() {
                 </div>
 
                 <div className="bg-gray-50 rounded-lg p-3 mb-3">
-                  <p className="text-xl font-black text-gray-900">{formatCurrency(zone.rate)}</p>
+                  <p className="text-xl font-black text-gray-900">{formatCurrency(zone.rates[0].prices[0].price)}</p>
                   <p className="text-xs text-gray-500">per delivery</p>
                   {zone.freeShippingThreshold && (
                     <p className="text-xs text-green-600 font-semibold mt-1">
@@ -231,16 +231,16 @@ export default function ShippingPage() {
                   {zone.estimatedDays || "3-5 business days"}
                 </div>
 
-                {zone.counties?.length > 0 && (
+                {zone.regions?.length > 0 && (
                   <div className="flex flex-wrap gap-1">
-                    {zone.counties.slice(0, 4).map((c: string) => (
+                    {zone.regions.slice(0, 4).map((c: string) => (
                       <span key={c} className="text-[10px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded-full">
                         {c}
                       </span>
                     ))}
-                    {zone.counties.length > 4 && (
+                    {zone.regions.length > 4 && (
                       <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-full">
-                        +{zone.counties.length - 4} more
+                        +{zone.regions.length - 4} more
                       </span>
                     )}
                   </div>

@@ -31,7 +31,7 @@ export default function CmsPage() {
   });
 
   const { data: banners, loading: bannersLoading, refetch: refetchBanners } = useAdminFetch<any[]>("/api/admin/cms/banners");
-  const { data: announcements, loading: announcementsLoading, refetch: refetchAnnouncements } = useAdminFetch<any[]>("/api/admin/cms/announcements");
+  const { data: announcements, loading: announcementsLoading, refetch: refetchAnnouncements } = useAdminFetch<any[]>("/api/admin/cms/pages");
 
   const handleCreateBanner = async () => {
     if (!bannerForm.title || !bannerForm.imageUrl) {
@@ -62,7 +62,7 @@ export default function CmsPage() {
     }
     setSaving(true);
     try {
-      await adminFetch("/api/admin/cms/announcements", {
+      await adminFetch("/api/admin/cms/pages", {
         method: "POST",
         body: JSON.stringify(announcementForm),
       });
@@ -91,7 +91,7 @@ export default function CmsPage() {
   const handleDeleteAnnouncement = async (id: string) => {
     if (!confirm("Delete this announcement?")) return;
     try {
-      await adminFetch(`/api/admin/cms/announcements/${id}`, { method: "DELETE" });
+      await adminFetch(`/api/admin/cms/pages/${id}`, { method: "DELETE" });
       toast.success("Announcement deleted");
       refetchAnnouncements();
     } catch (e: any) {

@@ -62,7 +62,7 @@ export default function ProductList() {
   const handleBulkStatus = async (newStatus: string) => {
     if (!selected.size) return;
     try {
-      await adminFetch("/api/admin/products/bulk-status", {
+      await adminFetch("/api/admin/products/bulk/status", {
         method: "PUT",
         body: JSON.stringify({ ids: Array.from(selected), status: newStatus }),
       });

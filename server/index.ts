@@ -1164,7 +1164,207 @@ async function startServer() {
     res.json(logs.reverse().slice(0, 100));
   });
 
-  // ─── ADMIN ANALYTICS ──────────────────────────────────────────────────────────
+  
+  // ─── ADMIN INVENTORY EXPORT ──────────────────────────────────────────────────
+  app.get("/api/admin/inventory/export/csv", adminAuthMiddleware, (req: any, res: Response) => {
+    const allProducts = Array.from(products.values());
+    const csv = [
+      ["Name", "SKU", "Category", "Price", "Cost", "Stock", "Low Stock Threshold", "Status"].join(","),
+      ...allProducts.map(p => [
+        `"${p.name}"`,
+        `"${p.sku}"`,
+        `"${p.category}"`,
+        p.price,
+        p.cost || 0,
+        p.stock,
+        p.lowStockThreshold,
+        `"${p.status}"`
+      ].join(","))
+    ].join("\n");
+    res.setHeader("Content-Type", "text/csv");
+    res.setHeader("Content-Disposition", "attachment; filename=inventory.csv");
+    res.send(csv);
+  });
+
+  // ─── ADMIN PRODUCT DUPLICATE ─────────────────────────────────────────────────
+  app.post("/api/admin/products/:id/duplicate", adminAuthMiddleware, (req: any, res: Response) => {
+    const source = products.get(req.params.id);
+    if (!source) return res.status(404).json({ error: "Product not found" });
+    const id = crypto.randomUUID();
+    const duplicate: StoredProduct = {
+      ...source,
+      id,
+      sku: source.sku + "-COPY",
+      name: source.name + " (Copy)",
+      status: "draft",
+      stock: 0,
+      sales: 0,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    products.set(id, duplicate);
+    saveProducts();
+    res.status(201).json(duplicate);
+  });
+
+  // ─── ADMIN PRODUCT EXPORT ────────────────────────────────────────────────────
+  app.get("/api/admin/products/export/csv", adminAuthMiddleware, (req: any, res: Response) => {
+    const allProducts = Array.from(products.values());
+    const csv = [
+      ["Name", "SKU", "Category", "Brand", "Price", "Cost", "Stock", "Status"].join(","),
+      ...allProducts.map(p => [
+        `"${p.name}"`,
+        `"${p.sku}"`,
+        `"${p.category}"`,
+        `"${p.brand || ""}"`,
+        p.price,
+        p.cost || 0,
+        p.stock,
+        `"${p.status}"`
+      ].join(","))
+    ].join("\n");
+    res.setHeader("Content-Type", "text/csv");
+    res.setHeader("Content-Disposition", "attachment; filename=products.csv");
+    res.send(csv);
+  });
+
+  // ─── ADMIN MEDIA UPLOAD ──────────────────────────────────────────────────────
+  app.post("/api/admin/media/upload", adminAuthMiddleware, upload.array("files", 20), (req: any, res: Response) => {
+    const files = req.files as Express.Multer.File[];
+    if (!files?.length) return res.status(400).json({ error: "No files uploaded" });
+    const result = files.map(f => ({ id: f.filename, name: f.originalname, filename: f.originalname, url: `/uploads/${f.filename}`, size: f.size, type: f.mimetype }));
+    res.json({ files: result });
+  });
+
+  // ─── ADMIN MEDIA BULK DELETE ─────────────────────────────────────────────────
+  app.delete("/api/admin/media/bulk-delete", adminAuthMiddleware, (req: any, res: Response) => {
+    const { ids } = req.body;
+    if (!ids?.length) return res.status(400).json({ error: "No IDs provided" });
+    ids.forEach((id: string) => {
+      const filePath = path.join(UPLOADS_DIR, id);
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+    });
+    res.json({ success: true, deleted: ids.length });
+  });
+
+  // ─── ADMIN CMS ANNOUNCEMENTS ─────────────────────────────────────────────────
+  app.get("/api/admin/cms/announcements", adminAuthMiddleware, (_req: any, res: Response) => {
+    res.json(readStore<any[]>("cms_announcements.json", []));
+  });
+
+  app.post("/api/admin/cms/announcements", adminAuthMiddleware, (req: any, res: Response) => {
+    const announcements = readStore<any[]>("cms_announcements.json", []);
+    const announcement = { id: crypto.randomUUID(), ...req.body, createdAt: new Date().toISOString() };
+    announcements.push(announcement); writeStore("cms_announcements.json", announcements);
+    res.status(201).json(announcement);
+  });
+
+  app.put("/api/admin/cms/announcements/:id", adminAuthMiddleware, (req: any, res: Response) => {
+    const announcements = readStore<any[]>("cms_announcements.json", []);
+    const idx = announcements.findIndex(a => a.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ error: "Not found" });
+    announcements[idx] = { ...announcements[idx], ...req.body };
+    writeStore("cms_announcements.json", announcements);
+    res.json(announcements[idx]);
+  });
+
+  app.delete("/api/admin/cms/announcements/:id", adminAuthMiddleware, (req: any, res: Response) => {
+    const announcements = readStore<any[]>("cms_announcements.json", []);
+    writeStore("cms_announcements.json", announcements.filter(a => a.id !== req.params.id));
+    res.json({ success: true });
+  });
+
+  // ─── ADMIN CMS DELETE PAGE ───────────────────────────────────────────────────
+  app.delete("/api/admin/cms/pages/:id", adminAuthMiddleware, (req: any, res: Response) => {
+    const pages = readStore<any[]>("cms_pages.json", []);
+    writeStore("cms_pages.json", pages.filter(p => p.id !== req.params.id));
+    res.json({ success: true });
+  });
+
+  // ─── ADMIN MARKETING SEND ────────────────────────────────────────────────────
+  app.post("/api/admin/marketing/campaigns/:id/send", adminAuthMiddleware, (req: any, res: Response) => {
+    const campaigns = readStore<any[]>("campaigns.json", []);
+    const idx = campaigns.findIndex(c => c.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ error: "Campaign not found" });
+    campaigns[idx] = { ...campaigns[idx], status: "sent", sentAt: new Date().toISOString(), sentCount: Array.from(users.values()).filter(u => u.email).length };
+    writeStore("campaigns.json", campaigns);
+    res.json(campaigns[idx]);
+  });
+
+  // ─── ADMIN PAYMENTS EXPORT ───────────────────────────────────────────────────
+  app.get("/api/admin/payments/export/csv", adminAuthMiddleware, (req: any, res: Response) => {
+    const allTx = Array.from(transactions.values());
+    const csv = [
+      ["ID", "Date", "Customer", "Email", "Amount", "Method", "Status", "Reference"].join(","),
+      ...allTx.map(t => [
+        t.id?.slice(0, 12) || "",
+        new Date(t.createdAt).toLocaleDateString(),
+        t.customerName || "",
+        t.customerEmail || "",
+        t.amount || 0,
+        t.provider || t.method || "",
+        t.status || "",
+        t.providerTransactionId || ""
+      ].map(v => `"${v}"`).join(","))
+    ].join("\n");
+    res.setHeader("Content-Type", "text/csv");
+    res.setHeader("Content-Disposition", "attachment; filename=payments.csv");
+    res.send(csv);
+  });
+
+  // ─── ADMIN SETTINGS NOTIFICATIONS ────────────────────────────────────────────
+  app.get("/api/admin/settings/notifications", adminAuthMiddleware, (_req: any, res: Response) => {
+    const defaults = { emailEnabled: true, emailAddress: settings.storeEmail || "", orderNotifications: true, inventoryAlerts: true, lowStockThreshold: 5, marketingEmails: false };
+    res.json(defaults);
+  });
+
+  app.put("/api/admin/settings/notifications", adminAuthMiddleware, (req: any, res: Response) => {
+    res.json({ success: true, ...req.body });
+  });
+
+  // ─── ADMIN SETTINGS SEO ──────────────────────────────────────────────────────
+  app.get("/api/admin/settings/seo", adminAuthMiddleware, (_req: any, res: Response) => {
+    const defaults = { metaTitle: settings.storeName + " - Premium Auto Parts", metaDescription: "Shop premium auto parts, tyres, brakes, and more at Supreme Autoparts Kenya.", ogImage: "", canonicalUrl: "https://supremeautoparts.co.ke" };
+    res.json(defaults);
+  });
+
+  app.put("/api/admin/settings/seo", adminAuthMiddleware, (req: any, res: Response) => {
+    res.json({ success: true, ...req.body });
+  });
+
+  // ─── ADMIN ANALYTICS EXPORT ──────────────────────────────────────────────────
+  app.get("/api/admin/analytics/export", adminAuthMiddleware, (req: any, res: Response) => {
+    // Reuse analytics logic inline
+    const period = String(req.query.period || "30");
+    const days = parseInt(period);
+    const now = new Date();
+    const cutoff = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
+    const allOrders = Array.from(orders.values());
+    const periodOrders = allOrders.filter(o => new Date(o.date) >= cutoff);
+    const paidOrders = periodOrders.filter(o => o.paymentStatus === "paid");
+    const totalRevenue = paidOrders.reduce((s, o) => s + o.total, 0);
+    const totalOrders = periodOrders.length;
+    const allUsers = Array.from(users.values());
+    const newCustomers = allUsers.filter(u => new Date(u.createdAt) >= cutoff).length;
+    const averageOrderValue = paidOrders.length > 0 ? Math.round(totalRevenue / paidOrders.length) : 0;
+    const prevCutoff = new Date(cutoff.getTime() - days * 24 * 60 * 60 * 1000);
+    const prevOrders = allOrders.filter(o => new Date(o.date) >= prevCutoff && new Date(o.date) < cutoff);
+    const prevRevenue = prevOrders.filter(o => o.paymentStatus === "paid").reduce((s, o) => s + o.total, 0);
+    const revenueChange = prevRevenue > 0 ? ((totalRevenue - prevRevenue) / prevRevenue * 100).toFixed(1) : "0";
+    const csv = [
+      ["Metric", "Value"].join(","),
+      [`Total Revenue`, totalRevenue],
+      [`Total Orders`, totalOrders],
+      [`New Customers`, newCustomers],
+      [`Average Order Value`, averageOrderValue],
+      [`Revenue Change (%)`, revenueChange],
+    ].join("\n");
+    res.setHeader("Content-Type", "text/csv");
+    res.setHeader("Content-Disposition", "attachment; filename=analytics.csv");
+    res.send(csv);
+  });
+
+// ─── ADMIN ANALYTICS ──────────────────────────────────────────────────────────
   app.get("/api/admin/analytics", adminAuthMiddleware, (req: any, res: Response) => {
     const { period = "30" } = req.query;
     const days = parseInt(String(period));

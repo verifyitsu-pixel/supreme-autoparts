@@ -22,10 +22,10 @@ export default function DiscountsPage() {
     code: "",
     type: "percentage",
     value: "",
-    minOrderAmount: "",
+    minOrder: "",
     maxUses: "",
     expiresAt: "",
-    isActive: true,
+    active: true,
     description: "",
   });
 
@@ -53,13 +53,13 @@ export default function DiscountsPage() {
         body: JSON.stringify({
           ...form,
           value: parseFloat(form.value),
-          minOrderAmount: form.minOrderAmount ? parseFloat(form.minOrderAmount) : undefined,
+          minOrder: form.minOrder ? parseFloat(form.minOrderAmount) : undefined,
           maxUses: form.maxUses ? parseInt(form.maxUses) : undefined,
         }),
       });
       toast.success("Discount code created");
       setShowCreate(false);
-      setForm({ code: "", type: "percentage", value: "", minOrderAmount: "", maxUses: "", expiresAt: "", isActive: true, description: "" });
+      setForm({ code: "", type: "percentage", value: "", minOrder: "", maxUses: "", expiresAt: "", active: true, description: "" });
       refetch();
     } catch (e: any) {
       toast.error(e.message);
@@ -83,7 +83,7 @@ export default function DiscountsPage() {
     try {
       await adminFetch(`/api/admin/discounts/${id}`, {
         method: "PUT",
-        body: JSON.stringify({ isActive: !isActive }),
+        body: JSON.stringify({ active: !active }),
       });
       toast.success(isActive ? "Discount deactivated" : "Discount activated");
       refetch();
@@ -272,7 +272,7 @@ export default function DiscountsPage() {
                   key={discount.id}
                   className={cn(
                     "bg-white rounded-xl border p-5",
-                    isExpired ? "border-gray-200 opacity-60" : discount.isActive ? "border-green-100" : "border-gray-200"
+                    isExpired ? "border-gray-200 opacity-60" : discount.active ? "border-green-100" : "border-gray-200"
                   )}
                 >
                   <div className="flex items-start justify-between mb-3">
@@ -295,15 +295,15 @@ export default function DiscountsPage() {
                     </div>
                     <div className="flex items-center gap-1">
                       <button
-                        onClick={() => handleToggle(discount.id, discount.isActive)}
+                        onClick={() => handleToggle(discount.id, discount.active)}
                         className={cn(
                           "text-[10px] font-bold px-2 py-1 rounded-full uppercase transition-colors",
-                          discount.isActive && !isExpired
+                          discount.active && !isExpired
                             ? "bg-green-50 text-green-700 hover:bg-green-100"
                             : "bg-gray-100 text-gray-500 hover:bg-gray-200"
                         )}
                       >
-                        {isExpired ? "Expired" : discount.isActive ? "Active" : "Inactive"}
+                        {isExpired ? "Expired" : discount.active ? "Active" : "Inactive"}
                       </button>
                       <button
                         onClick={() => handleDelete(discount.id)}
@@ -322,9 +322,9 @@ export default function DiscountsPage() {
                         ? "FREE SHIPPING"
                         : `KES ${discount.value?.toLocaleString()} OFF`}
                     </p>
-                    {discount.minOrderAmount > 0 && (
+                    {discount.minOrder && discount.minOrder > 0 && (
                       <p className="text-xs text-gray-500 mt-0.5">
-                        Min order: {formatCurrency(discount.minOrderAmount)}
+                        Min order: {formatCurrency(discount.minOrder)}
                       </p>
                     )}
                   </div>
