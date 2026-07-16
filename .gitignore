@@ -2,6 +2,7 @@ node_modules
 .pnpm-store
 .next
 *.tsbuildinfo
+qa-*.png
 .env*
 !.env.example
 npm-debug.log*
