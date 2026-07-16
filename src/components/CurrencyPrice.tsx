@@ -1,2 +1,2 @@
-'use client';import {useEffect,useState} from 'react';
-export function CurrencyPrice({usd}:{usd:number}){const [price,setPrice]=useState<{currency:string;amount:number}|null>(null);useEffect(()=>{fetch(`/api/currency?usd=${usd}`).then(r=>r.json()).then(setPrice).catch(()=>setPrice({currency:'USD',amount:usd}))},[usd]);if(!price)return <strong>USD {usd.toFixed(2)}</strong>;return <div><strong>{new Intl.NumberFormat(undefined,{style:'currency',currency:price.currency}).format(price.amount)}</strong>{price.currency!=='USD'&&<small style={{display:'block',color:'#667085'}}>Charged as USD {usd.toFixed(2)} at checkout</small>}</div>}
+'use client';
+export function CurrencyPrice({usd}:{usd:number}){return <div><strong>{new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(usd)}</strong><small style={{display:'block',color:'#667085'}}>Prices and checkout are in USD.</small></div>}
