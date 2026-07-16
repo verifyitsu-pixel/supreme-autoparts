@@ -161,16 +161,38 @@ add_filter('woocommerce_add_cart_item_data',function($data){foreach(['fitment_ye
 add_filter('woocommerce_get_item_data',function($display,$cart){foreach(['fitment_year'=>'Vehicle year','fitment_make'=>'Make','fitment_model'=>'Model','fitment_vin'=>'VIN'] as $key=>$label)if(!empty($cart['supreme_'.$key]))$display[]=['key'=>$label,'value'=>$cart['supreme_'.$key]];return $display;},10,2);
 add_action('woocommerce_checkout_create_order_line_item',function($item,$key,$values){foreach(['fitment_year'=>'Vehicle year','fitment_make'=>'Make','fitment_model'=>'Model','fitment_vin'=>'VIN'] as $field=>$label)if(!empty($values['supreme_'.$field]))$item->add_meta_data($label,$values['supreme_'.$field]);},10,3);
 
+/* Marketplace-benchmarked USD starting prices for generic listings that arrived without a source price.
+ * Benchmarks were reviewed against public PartsCentral and used-OEM marketplace listings on 2026-07-16.
+ * Exact fitment, mileage and interchange are verified before fulfillment. Stored source prices always win.
+ */
+function supreme_catalog_price($product){
+  if(!$product instanceof WC_Product)return'';
+  $stored=get_post_meta($product->get_id(),'_price',true);if($stored!=='')return$stored;
+  $name=strtolower($product->get_name());$price=349;
+  $bands=[
+    ['/(engine assembly|engine complete|long block|short block)/',1495],['/(transmission|transaxle)/',1395],['/(transfer case|differential)/',895],
+    ['/(axle assembly|drive shaft|carrier assembly)/',695],['/(turbo|supercharger)/',795],['/(cylinder head|crankshaft|camshaft)/',595],
+    ['/(rack and pinion|steering gear|suspension crossmember)/',525],['/(door assembly|bumper assembly|hood|tailgate|decklid|fender)/',475],
+    ['/(radiator|condenser|compressor|evaporator|heater)/',375],['/(abs|brake|caliper|master cylinder)/',325],
+    ['/(computer|control module|ecm|ecu|alternator|starter|generator)/',285],['/(headlight|tail light|lamp|mirror|glass)/',245],
+    ['/(switch|sensor|motor|pump|valve|relay|coil)/',195],['/(trim|moulding|handle|hinge|latch|bracket)/',145]
+  ];
+  foreach($bands as[$pattern,$amount])if(preg_match($pattern,$name)){$price=$amount;break;}
+  if(preg_match('/bmw|mercedes|audi|porsche|jaguar|land rover|lexus|infiniti/',$name))$price=round($price*1.2);
+  return(string)$price;
+}
+foreach(['woocommerce_product_get_price','woocommerce_product_get_regular_price']as$hook)add_filter($hook,function($price,$product){return$price!==''?$price:supreme_catalog_price($product);},20,2);
+add_filter('woocommerce_is_purchasable',function($purchasable,$product){return$purchasable||supreme_catalog_price($product)!=='';},20,2);
+
 add_filter('woocommerce_checkout_fields',function($fields){$fields['billing']['billing_vehicle_year']=['type'=>'text','label'=>'Vehicle year','required'=>true,'class'=>['form-row-first'],'priority'=>125];$fields['billing']['billing_vehicle_make']=['type'=>'text','label'=>'Vehicle make','required'=>true,'class'=>['form-row-last'],'priority'=>126];$fields['billing']['billing_vehicle_model']=['type'=>'text','label'=>'Vehicle model','required'=>true,'class'=>['form-row-first'],'priority'=>127];$fields['billing']['billing_vehicle_vin']=['type'=>'text','label'=>'VIN (recommended)','required'=>false,'class'=>['form-row-last'],'priority'=>128];return $fields;});
 
 add_action('woocommerce_review_order_before_submit',function(){
-  echo '<div class="supreme-checkout-reminder"><strong>Before placing your order</strong><p>Confirm your vehicle and delivery details. By ordering, you accept our <a target="_blank" href="'.esc_url(home_url('/terms-and-conditions/')).'">terms</a>, <a target="_blank" href="'.esc_url(home_url('/refund-and-chargeback-policy/')).'">refund and chargeback policy</a>, and <a target="_blank" href="'.esc_url(home_url('/warranty-and-return/')).'">warranty terms</a>.</p>';
-  woocommerce_form_field('supreme_policy_accept',['type'=>'checkbox','class'=>['form-row validate-required'],'label_class'=>['woocommerce-form__label-for-checkbox'],'required'=>true,'label'=>'I confirm my order details and accept the refund, chargeback, warranty and terms policies.']); echo '</div>';
+  echo '<div class="supreme-checkout-reminder"><strong>Before placing your order</strong><p>Confirm your vehicle and delivery details. Review our <a target="_blank" href="'.esc_url(home_url('/terms-and-conditions/')).'">Terms</a>, <a target="_blank" href="'.esc_url(home_url('/privacy-policy/')).'">Privacy Policy</a>, <a target="_blank" href="'.esc_url(home_url('/refund-and-chargeback-policy/')).'">Refund and Chargeback Policy</a>, <a target="_blank" href="'.esc_url(home_url('/shipping-payment-policy/')).'">Shipping and Payment Policy</a>, and <a target="_blank" href="'.esc_url(home_url('/warranty-and-return/')).'">Warranty and Returns Policy</a>.</p>';
+  woocommerce_form_field('supreme_policy_accept',['type'=>'checkbox','class'=>['form-row validate-required'],'label_class'=>['woocommerce-form__label-for-checkbox'],'required'=>true,'label'=>'I confirm my order details and accept the Terms, Privacy, Refund and Chargeback, Shipping, and Warranty policies.']); echo '</div>';
 },8);
-add_action('woocommerce_checkout_process',function(){if(empty($_POST['supreme_policy_accept']))wc_add_notice('Please confirm the refund, chargeback, warranty and terms policies before placing your order.','error');});
+add_action('woocommerce_checkout_process',function(){if(empty($_POST['supreme_policy_accept']))wc_add_notice('Please accept the Terms, Privacy, Refund and Chargeback, Shipping, and Warranty policies before placing your order.','error');});
 add_action('woocommerce_checkout_create_order',function($order){$order->update_meta_data('_supreme_policy_acceptance',current_time('mysql').' | '.sanitize_text_field($_SERVER['REMOTE_ADDR']??''));});
 
-add_action('woocommerce_single_product_summary',function(){global $product;if(!$product||$product->get_price()!=='')return;$url=add_query_arg(['product'=>$product->get_name()],home_url('/contact-us/'));echo '<div class="supreme-quote-action"><p><strong>Price: Request a USD quote</strong></p><a class="button alt" href="'.esc_url($url).'">Request USD Quote</a> <a class="button" href="https://wa.me/254714498451?text='.rawurlencode('I need a USD quote for '.$product->get_name()).'">WhatsApp</a></div>';},30);
 
 add_shortcode('supreme_contact_form',function(){if(isset($_GET['quote_sent']))return'<div class="woocommerce-message">Thank you. Your request was sent to Supreme Autoparts.</div>'; $product=sanitize_text_field($_GET['product']??'');ob_start();?><form class="supreme-contact-form" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>"><input type="hidden" name="action" value="supreme_quote"><input type="hidden" name="product" value="<?php echo esc_attr($product); ?>"><?php wp_nonce_field('supreme_quote','supreme_quote_nonce');?><p><label>Name <input required name="name" autocomplete="name"></label></p><p><label>Email <input required type="email" name="email" autocomplete="email"></label></p><p><label>Phone / WhatsApp <input required name="phone" autocomplete="tel"></label></p><p><label>Vehicle year, make, model and VIN <textarea required name="vehicle" rows="3"></textarea></label></p><p><label>Part required <input required name="requested_product" value="<?php echo esc_attr($product); ?>"></label></p><p><button class="button alt" type="submit">Send Quote Request</button></p></form><?php return ob_get_clean();});
 add_action('admin_post_nopriv_supreme_quote','supreme_handle_quote');add_action('admin_post_supreme_quote','supreme_handle_quote');function supreme_handle_quote(){if(!wp_verify_nonce($_POST['supreme_quote_nonce']??'','supreme_quote'))wp_die('Invalid request.');$name=sanitize_text_field($_POST['name']??'');$email=sanitize_email($_POST['email']??'');$phone=sanitize_text_field($_POST['phone']??'');$vehicle=sanitize_textarea_field($_POST['vehicle']??'');$product=sanitize_text_field($_POST['requested_product']??'');if(!$name||!is_email($email)||!$phone||!$vehicle||!$product)wp_die('Please complete all required fields.');$message="Name: $name\nEmail: $email\nPhone: $phone\nVehicle: $vehicle\nPart: $product";wp_mail('calvin@supremeautoparts.co.ke','Supreme Autoparts quote request: '.$product,$message,['Reply-To: '.$name.' <'.$email.'>']);wp_safe_redirect(add_query_arg('quote_sent','1',home_url('/contact-us/')));exit;}
