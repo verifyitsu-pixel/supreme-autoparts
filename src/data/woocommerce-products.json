@@ -1,1 +1,350 @@
-[]
+[
+  {
+    "id": 43,
+    "name": "Volkswagen Steering Rack Assembly",
+    "slug": "volkswagen-steering-rack-assembly",
+    "sku": "SUP-STG-VW",
+    "type": "simple",
+    "status": "publish",
+    "priceUsd": 625,
+    "regularPriceUsd": 625,
+    "salePriceUsd": null,
+    "stockStatus": "instock",
+    "stockQuantity": null,
+    "description": "<p>This catalog entry represents a fitment-specific component. Mileage, interchange, warranty and delivery details are confirmed against your vehicle information before shipment. Product images are representative; the supplied unit may vary cosmetically. Professional installation is required.</p>\n",
+    "shortDescription": "<p>Quality-inspected replacement component. Vehicle year, make, model and VIN are verified before fulfillment.</p>\n",
+    "categories": [
+      "Steering &amp; Suspension"
+    ],
+    "images": [
+      {
+        "id": 29,
+        "src": "https://www.supremeautoparts.co.ke/wp-content/uploads/2026/07/supreme-steering-suspension.png",
+        "alt": "Volkswagen Steering Rack Assembly"
+      }
+    ],
+    "attributes": [],
+    "variations": [],
+    "permalink": "https://www.supremeautoparts.co.ke/product/volkswagen-steering-rack-assembly/",
+    "dateModified": "2026-07-16T12:14:14"
+  },
+  {
+    "id": 42,
+    "name": "Kia Starter Motor Assembly",
+    "slug": "kia-starter-motor-assembly",
+    "sku": "SUP-STR-KIA",
+    "type": "simple",
+    "status": "publish",
+    "priceUsd": 245,
+    "regularPriceUsd": 245,
+    "salePriceUsd": null,
+    "stockStatus": "instock",
+    "stockQuantity": null,
+    "description": "<p>This catalog entry represents a fitment-specific component. Mileage, interchange, warranty and delivery details are confirmed against your vehicle information before shipment. Product images are representative; the supplied unit may vary cosmetically. Professional installation is required.</p>\n",
+    "shortDescription": "<p>Quality-inspected replacement component. Vehicle year, make, model and VIN are verified before fulfillment.</p>\n",
+    "categories": [
+      "Electrical"
+    ],
+    "images": [
+      {
+        "id": 28,
+        "src": "https://www.supremeautoparts.co.ke/wp-content/uploads/2026/07/supreme-electrical.png",
+        "alt": "Kia Starter Motor Assembly"
+      }
+    ],
+    "attributes": [],
+    "variations": [],
+    "permalink": "https://www.supremeautoparts.co.ke/product/kia-starter-motor-assembly/",
+    "dateModified": "2026-07-16T12:14:14"
+  },
+  {
+    "id": 41,
+    "name": "Hyundai Alternator Assembly",
+    "slug": "hyundai-alternator-assembly",
+    "sku": "SUP-ALT-HYU",
+    "type": "simple",
+    "status": "publish",
+    "priceUsd": 285,
+    "regularPriceUsd": 285,
+    "salePriceUsd": null,
+    "stockStatus": "instock",
+    "stockQuantity": null,
+    "description": "<p>This catalog entry represents a fitment-specific component. Mileage, interchange, warranty and delivery details are confirmed against your vehicle information before shipment. Product images are representative; the supplied unit may vary cosmetically. Professional installation is required.</p>\n",
+    "shortDescription": "<p>Quality-inspected replacement component. Vehicle year, make, model and VIN are verified before fulfillment.</p>\n",
+    "categories": [
+      "Electrical"
+    ],
+    "images": [
+      {
+        "id": 28,
+        "src": "https://www.supremeautoparts.co.ke/wp-content/uploads/2026/07/supreme-electrical.png",
+        "alt": "Hyundai Alternator Assembly"
+      }
+    ],
+    "attributes": [],
+    "variations": [],
+    "permalink": "https://www.supremeautoparts.co.ke/product/hyundai-alternator-assembly/",
+    "dateModified": "2026-07-16T12:14:13"
+  },
+  {
+    "id": 40,
+    "name": "Subaru Front Axle Assembly",
+    "slug": "subaru-front-axle-assembly",
+    "sku": "SUP-AXL-SUB",
+    "type": "simple",
+    "status": "publish",
+    "priceUsd": 795,
+    "regularPriceUsd": 795,
+    "salePriceUsd": null,
+    "stockStatus": "instock",
+    "stockQuantity": null,
+    "description": "<p>This catalog entry represents a fitment-specific component. Mileage, interchange, warranty and delivery details are confirmed against your vehicle information before shipment. Product images are representative; the supplied unit may vary cosmetically. Professional installation is required.</p>\n",
+    "shortDescription": "<p>Quality-inspected replacement component. Vehicle year, make, model and VIN are verified before fulfillment.</p>\n",
+    "categories": [
+      "Drivetrain"
+    ],
+    "images": [
+      {
+        "id": 27,
+        "src": "https://www.supremeautoparts.co.ke/wp-content/uploads/2026/07/supreme-drivetrain.png",
+        "alt": "Subaru Front Axle Assembly"
+      }
+    ],
+    "attributes": [],
+    "variations": [],
+    "permalink": "https://www.supremeautoparts.co.ke/product/subaru-front-axle-assembly/",
+    "dateModified": "2026-07-16T12:14:13"
+  },
+  {
+    "id": 39,
+    "name": "Land Rover Transfer Case Assembly",
+    "slug": "land-rover-transfer-case-assembly",
+    "sku": "SUP-TCF-LR",
+    "type": "simple",
+    "status": "publish",
+    "priceUsd": 1195,
+    "regularPriceUsd": 1195,
+    "salePriceUsd": null,
+    "stockStatus": "instock",
+    "stockQuantity": null,
+    "description": "<p>This catalog entry represents a fitment-specific component. Mileage, interchange, warranty and delivery details are confirmed against your vehicle information before shipment. Product images are representative; the supplied unit may vary cosmetically. Professional installation is required.</p>\n",
+    "shortDescription": "<p>Quality-inspected replacement component. Vehicle year, make, model and VIN are verified before fulfillment.</p>\n",
+    "categories": [
+      "Drivetrain"
+    ],
+    "images": [
+      {
+        "id": 27,
+        "src": "https://www.supremeautoparts.co.ke/wp-content/uploads/2026/07/supreme-drivetrain.png",
+        "alt": "Land Rover Transfer Case Assembly"
+      }
+    ],
+    "attributes": [],
+    "variations": [],
+    "permalink": "https://www.supremeautoparts.co.ke/product/land-rover-transfer-case-assembly/",
+    "dateModified": "2026-07-16T12:14:12"
+  },
+  {
+    "id": 38,
+    "name": "Mercedes-Benz Rear Differential Assembly",
+    "slug": "mercedes-benz-rear-differential-assembly",
+    "sku": "SUP-DIF-MBZ",
+    "type": "simple",
+    "status": "publish",
+    "priceUsd": 995,
+    "regularPriceUsd": 995,
+    "salePriceUsd": null,
+    "stockStatus": "instock",
+    "stockQuantity": null,
+    "description": "<p>This catalog entry represents a fitment-specific component. Mileage, interchange, warranty and delivery details are confirmed against your vehicle information before shipment. Product images are representative; the supplied unit may vary cosmetically. Professional installation is required.</p>\n",
+    "shortDescription": "<p>Quality-inspected replacement component. Vehicle year, make, model and VIN are verified before fulfillment.</p>\n",
+    "categories": [
+      "Drivetrain"
+    ],
+    "images": [
+      {
+        "id": 27,
+        "src": "https://www.supremeautoparts.co.ke/wp-content/uploads/2026/07/supreme-drivetrain.png",
+        "alt": "Mercedes-Benz Rear Differential Assembly"
+      }
+    ],
+    "attributes": [],
+    "variations": [],
+    "permalink": "https://www.supremeautoparts.co.ke/product/mercedes-benz-rear-differential-assembly/",
+    "dateModified": "2026-07-16T12:14:12"
+  },
+  {
+    "id": 37,
+    "name": "BMW Automatic Transmission Assembly",
+    "slug": "bmw-automatic-transmission-assembly",
+    "sku": "SUP-TRN-BMW",
+    "type": "simple",
+    "status": "publish",
+    "priceUsd": 2795,
+    "regularPriceUsd": 2795,
+    "salePriceUsd": null,
+    "stockStatus": "instock",
+    "stockQuantity": null,
+    "description": "<p>This catalog entry represents a fitment-specific component. Mileage, interchange, warranty and delivery details are confirmed against your vehicle information before shipment. Product images are representative; the supplied unit may vary cosmetically. Professional installation is required.</p>\n",
+    "shortDescription": "<p>Quality-inspected replacement component. Vehicle year, make, model and VIN are verified before fulfillment.</p>\n",
+    "categories": [
+      "Transmissions"
+    ],
+    "images": [
+      {
+        "id": 26,
+        "src": "https://www.supremeautoparts.co.ke/wp-content/uploads/2026/07/supreme-transmissions.png",
+        "alt": "BMW Automatic Transmission Assembly"
+      }
+    ],
+    "attributes": [],
+    "variations": [],
+    "permalink": "https://www.supremeautoparts.co.ke/product/bmw-automatic-transmission-assembly/",
+    "dateModified": "2026-07-16T12:14:11"
+  },
+  {
+    "id": 36,
+    "name": "Nissan CVT Transmission Assembly",
+    "slug": "nissan-cvt-transmission-assembly",
+    "sku": "SUP-TRN-NIS",
+    "type": "simple",
+    "status": "publish",
+    "priceUsd": 1695,
+    "regularPriceUsd": 1695,
+    "salePriceUsd": null,
+    "stockStatus": "instock",
+    "stockQuantity": null,
+    "description": "<p>This catalog entry represents a fitment-specific component. Mileage, interchange, warranty and delivery details are confirmed against your vehicle information before shipment. Product images are representative; the supplied unit may vary cosmetically. Professional installation is required.</p>\n",
+    "shortDescription": "<p>Quality-inspected replacement component. Vehicle year, make, model and VIN are verified before fulfillment.</p>\n",
+    "categories": [
+      "Transmissions"
+    ],
+    "images": [
+      {
+        "id": 26,
+        "src": "https://www.supremeautoparts.co.ke/wp-content/uploads/2026/07/supreme-transmissions.png",
+        "alt": "Nissan CVT Transmission Assembly"
+      }
+    ],
+    "attributes": [],
+    "variations": [],
+    "permalink": "https://www.supremeautoparts.co.ke/product/nissan-cvt-transmission-assembly/",
+    "dateModified": "2026-07-16T12:14:11"
+  },
+  {
+    "id": 35,
+    "name": "Chevrolet Automatic Transmission Assembly",
+    "slug": "chevrolet-automatic-transmission-assembly",
+    "sku": "SUP-TRN-CHV",
+    "type": "simple",
+    "status": "publish",
+    "priceUsd": 1895,
+    "regularPriceUsd": 1895,
+    "salePriceUsd": null,
+    "stockStatus": "instock",
+    "stockQuantity": null,
+    "description": "<p>This catalog entry represents a fitment-specific component. Mileage, interchange, warranty and delivery details are confirmed against your vehicle information before shipment. Product images are representative; the supplied unit may vary cosmetically. Professional installation is required.</p>\n",
+    "shortDescription": "<p>Quality-inspected replacement component. Vehicle year, make, model and VIN are verified before fulfillment.</p>\n",
+    "categories": [
+      "Transmissions"
+    ],
+    "images": [
+      {
+        "id": 26,
+        "src": "https://www.supremeautoparts.co.ke/wp-content/uploads/2026/07/supreme-transmissions.png",
+        "alt": "Chevrolet Automatic Transmission Assembly"
+      }
+    ],
+    "attributes": [],
+    "variations": [],
+    "permalink": "https://www.supremeautoparts.co.ke/product/chevrolet-automatic-transmission-assembly/",
+    "dateModified": "2026-07-16T12:14:10"
+  },
+  {
+    "id": 34,
+    "name": "Ford Remanufactured Engine Assembly",
+    "slug": "ford-remanufactured-engine-assembly",
+    "sku": "SUP-ENG-FOR",
+    "type": "simple",
+    "status": "publish",
+    "priceUsd": 3195,
+    "regularPriceUsd": 3195,
+    "salePriceUsd": null,
+    "stockStatus": "instock",
+    "stockQuantity": null,
+    "description": "<p>This catalog entry represents a fitment-specific component. Mileage, interchange, warranty and delivery details are confirmed against your vehicle information before shipment. Product images are representative; the supplied unit may vary cosmetically. Professional installation is required.</p>\n",
+    "shortDescription": "<p>Quality-inspected replacement component. Vehicle year, make, model and VIN are verified before fulfillment.</p>\n",
+    "categories": [
+      "Engines"
+    ],
+    "images": [
+      {
+        "id": 25,
+        "src": "https://www.supremeautoparts.co.ke/wp-content/uploads/2026/07/supreme-engines.png",
+        "alt": "Ford Remanufactured Engine Assembly"
+      }
+    ],
+    "attributes": [],
+    "variations": [],
+    "permalink": "https://www.supremeautoparts.co.ke/product/ford-remanufactured-engine-assembly/",
+    "dateModified": "2026-07-16T12:14:10"
+  },
+  {
+    "id": 33,
+    "name": "Honda Low-Mileage Used Engine Assembly",
+    "slug": "honda-low-mileage-used-engine-assembly",
+    "sku": "SUP-ENG-HON",
+    "type": "simple",
+    "status": "publish",
+    "priceUsd": 2295,
+    "regularPriceUsd": 2295,
+    "salePriceUsd": null,
+    "stockStatus": "instock",
+    "stockQuantity": null,
+    "description": "<p>This catalog entry represents a fitment-specific component. Mileage, interchange, warranty and delivery details are confirmed against your vehicle information before shipment. Product images are representative; the supplied unit may vary cosmetically. Professional installation is required.</p>\n",
+    "shortDescription": "<p>Quality-inspected replacement component. Vehicle year, make, model and VIN are verified before fulfillment.</p>\n",
+    "categories": [
+      "Engines"
+    ],
+    "images": [
+      {
+        "id": 25,
+        "src": "https://www.supremeautoparts.co.ke/wp-content/uploads/2026/07/supreme-engines.png",
+        "alt": "Honda Low-Mileage Used Engine Assembly"
+      }
+    ],
+    "attributes": [],
+    "variations": [],
+    "permalink": "https://www.supremeautoparts.co.ke/product/honda-low-mileage-used-engine-assembly/",
+    "dateModified": "2026-07-16T12:14:09"
+  },
+  {
+    "id": 32,
+    "name": "Toyota Fitment-Verified Used Engine Assembly",
+    "slug": "toyota-fitment-verified-used-engine-assembly",
+    "sku": "SUP-ENG-TOY",
+    "type": "simple",
+    "status": "publish",
+    "priceUsd": 2495,
+    "regularPriceUsd": 2495,
+    "salePriceUsd": null,
+    "stockStatus": "instock",
+    "stockQuantity": null,
+    "description": "<p>This catalog entry represents a fitment-specific component. Mileage, interchange, warranty and delivery details are confirmed against your vehicle information before shipment. Product images are representative; the supplied unit may vary cosmetically. Professional installation is required.</p>\n",
+    "shortDescription": "<p>Quality-inspected replacement component. Vehicle year, make, model and VIN are verified before fulfillment.</p>\n",
+    "categories": [
+      "Engines"
+    ],
+    "images": [
+      {
+        "id": 25,
+        "src": "https://www.supremeautoparts.co.ke/wp-content/uploads/2026/07/supreme-engines.png",
+        "alt": "Toyota Fitment-Verified Used Engine Assembly"
+      }
+    ],
+    "attributes": [],
+    "variations": [],
+    "permalink": "https://www.supremeautoparts.co.ke/product/toyota-fitment-verified-used-engine-assembly/",
+    "dateModified": "2026-07-16T12:14:08"
+  }
+]
