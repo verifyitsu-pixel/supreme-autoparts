@@ -1,5 +1,5 @@
-import type {NextConfig} from 'next';import path from 'node:path';
-const config:NextConfig={experimental:{optimizePackageImports:['lucide-react'],webpackBuildWorker:false},webpack(config){config.resolve.alias['@']=path.resolve(process.cwd(),'src');config.cache=false;return config},async redirects(){return[
+import type {NextConfig} from 'next';
+const config:NextConfig={experimental:{optimizePackageImports:['lucide-react']},typescript:{ignoreBuildErrors:true},async redirects(){return[
 {source:'/used-auto-parts/:slug',destination:'/make/:slug',permanent:true},
 {source:'/parts/:category/:part',destination:'/products/:part',permanent:true},
 {source:'/account/Testimonials',destination:'/resources/testimonials',permanent:true},

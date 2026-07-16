@@ -11,28 +11,6 @@ importers:
       '@hookform/resolvers':
         specifier: latest
         version: 5.4.0(react-hook-form@7.81.0(react@19.2.7))
-      framer-motion:
-        specifier: latest
-        version: 12.42.2(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      lucide-react:
-        specifier: latest
-        version: 1.24.0(react@19.2.7)
-      next:
-        specifier: latest
-        version: 16.2.10(@babel/core@7.29.7)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      react:
-        specifier: latest
-        version: 19.2.7
-      react-dom:
-        specifier: latest
-        version: 19.2.7(react@19.2.7)
-      react-hook-form:
-        specifier: latest
-        version: 7.81.0(react@19.2.7)
-      zod:
-        specifier: latest
-        version: 4.4.3
-    devDependencies:
       '@tailwindcss/postcss':
         specifier: latest
         version: 4.3.2
@@ -48,18 +26,40 @@ importers:
       autoprefixer:
         specifier: latest
         version: 10.5.3(postcss@8.5.19)
+      framer-motion:
+        specifier: latest
+        version: 12.42.2(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      lucide-react:
+        specifier: latest
+        version: 1.24.0(react@19.2.7)
+      next:
+        specifier: latest
+        version: 16.2.10(@babel/core@7.29.7)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      postcss:
+        specifier: latest
+        version: 8.5.19
+      react:
+        specifier: latest
+        version: 19.2.7
+      react-dom:
+        specifier: latest
+        version: 19.2.7(react@19.2.7)
+      react-hook-form:
+        specifier: latest
+        version: 7.81.0(react@19.2.7)
+      tailwindcss:
+        specifier: latest
+        version: 4.3.2
+      zod:
+        specifier: latest
+        version: 4.4.3
+    devDependencies:
       eslint:
         specifier: latest
         version: 10.7.0(jiti@2.7.0)
       eslint-config-next:
         specifier: latest
         version: 16.2.10(@typescript-eslint/parser@8.64.0(eslint@10.7.0(jiti@2.7.0))(typescript@7.0.2))(eslint@10.7.0(jiti@2.7.0))(typescript@7.0.2)
-      postcss:
-        specifier: latest
-        version: 8.5.19
-      tailwindcss:
-        specifier: latest
-        version: 4.3.2
       typescript:
         specifier: latest
         version: 7.0.2
