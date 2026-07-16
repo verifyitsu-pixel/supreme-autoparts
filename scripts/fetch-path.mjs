@@ -1,0 +1,1 @@
+const url=process.argv[2];const response=await fetch(url,{redirect:'manual'});const body=await response.text();console.log(JSON.stringify({status:response.status,location:response.headers.get('location'),contentType:response.headers.get('content-type'),excerpt:body.replace(/\s+/g,' ').slice(0,2500)},null,2));

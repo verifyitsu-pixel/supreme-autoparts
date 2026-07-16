@@ -10,4 +10,8 @@ document.addEventListener('DOMContentLoaded',()=>{
     const search=()=>{if(make.value&&model.value&&year.value&&part.value)location.href='/shop/?s='+encodeURIComponent([year.value,make.value,model.value,part.value].join(' '))+'&post_type=product'};
     part.addEventListener('change',search);part.addEventListener('keydown',e=>{if(e.key==='Enter')search()});
   });
+  const menuLinks=[['Used Auto Parts','/auto-parts/'],['Used Engines','/engine/'],['Used Transmissions','/transmission/'],['Shop','/shop/'],['Cart','/cart/'],['My Account','/my-account/'],['Contact Us','/contact-us/'],['About Us','/about-us/']];
+  const panel=document.createElement('nav');panel.id='supreme-mobile-panel';panel.setAttribute('aria-label','Mobile navigation');panel.hidden=true;panel.style.cssText='position:fixed;inset:88px 0 auto 0;z-index:9998;background:#090d15;padding:16px;box-shadow:0 14px 30px #0008;max-height:calc(100vh - 88px);overflow:auto';panel.innerHTML=menuLinks.map(([label,href])=>'<a href="'+href+'" style="display:block;color:#fff;padding:13px;border-bottom:1px solid #ffffff22;font-weight:700">'+label+'</a>').join('');document.body.appendChild(panel);
+  document.querySelectorAll('button[aria-label="Open menu"]').forEach(button=>button.addEventListener('click',()=>{panel.hidden=!panel.hidden;button.setAttribute('aria-expanded',String(!panel.hidden))}));
+  document.querySelectorAll('img[alt="Search"][role="button"]').forEach(button=>{button.addEventListener('click',()=>location.href='/shop/');button.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();location.href='/shop/'}})});
 });
