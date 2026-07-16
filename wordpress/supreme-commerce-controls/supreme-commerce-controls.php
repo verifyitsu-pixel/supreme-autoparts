@@ -198,3 +198,11 @@ add_shortcode('supreme_contact_form',function(){if(isset($_GET['quote_sent']))re
 add_action('admin_post_nopriv_supreme_quote','supreme_handle_quote');add_action('admin_post_supreme_quote','supreme_handle_quote');function supreme_handle_quote(){if(!wp_verify_nonce($_POST['supreme_quote_nonce']??'','supreme_quote'))wp_die('Invalid request.');$name=sanitize_text_field($_POST['name']??'');$email=sanitize_email($_POST['email']??'');$phone=sanitize_text_field($_POST['phone']??'');$vehicle=sanitize_textarea_field($_POST['vehicle']??'');$product=sanitize_text_field($_POST['requested_product']??'');if(!$name||!is_email($email)||!$phone||!$vehicle||!$product)wp_die('Please complete all required fields.');$message="Name: $name\nEmail: $email\nPhone: $phone\nVehicle: $vehicle\nPart: $product";wp_mail('calvin@supremeautoparts.co.ke','Supreme Autoparts quote request: '.$product,$message,['Reply-To: '.$name.' <'.$email.'>']);wp_safe_redirect(add_query_arg('quote_sent','1',home_url('/contact-us/')));exit;}
 
 add_action('init',function(){if($page=get_page_by_path('contact-us')){if(strpos($page->post_content,'[supreme_contact_form]')===false)wp_update_post(['ID'=>$page->ID,'post_content'=>'For sales, fitment, payment, delivery, refund or warranty assistance, call or WhatsApp 0714 498 451, email calvin@supremeautoparts.co.ke, or use the form below.[supreme_contact_form]']);}},50);
+
+/* Keep the transactional pages on the classic Woo templates because the fitment and legal-consent
+ * hooks above must be rendered and validated as part of the checkout form. */
+add_action('init',function(){
+  foreach(['cart'=>'[woocommerce_cart]','checkout'=>'[woocommerce_checkout]']as$key=>$shortcode){
+    $id=wc_get_page_id($key);if($id>0){$page=get_post($id);if($page&&strpos($page->post_content,$shortcode)===false)wp_update_post(['ID'=>$id,'post_content'=>$shortcode]);}
+  }
+},60);
