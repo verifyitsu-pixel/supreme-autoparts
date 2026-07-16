@@ -18,3 +18,7 @@ Connect the contact endpoint to your CRM or transactional email provider before 
 ## Catalog audit
 
 The public reference-site crawl is stored in `catalog-audit.json`. The normalized dataset contains 230 product types, 33 makes and 19 categories, generating 7,590 make-specific product routes and 7,872 total catalog routes. All storefront prices are displayed and settled in USD.
+
+## WooCommerce authorization and import
+
+Create a read-only WooCommerce REST API key, set `WOOCOMMERCE_STORE_URL`, `WOOCOMMERCE_CONSUMER_KEY` and `WOOCOMMERCE_CONSUMER_SECRET` locally, then run `pnpm sync:woocommerce`. The importer paginates through every product and category and preserves IDs, SKUs, USD prices, sale prices, stock, descriptions, images, attributes and variations. Never commit real API secrets.
